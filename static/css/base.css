@@ -5,7 +5,7 @@ html {
 body {
     background: url('/media/background-image.jpg') no-repeat center center fixed;
     background-size: cover;
-    height: calc(100vh - 164px);
+    height: 100vh;
     color: #555;
     font-family: 'Muli', sans-serif;
 ;
@@ -17,7 +17,7 @@ body {
     display: inline-flex;
     justify-content: center;
     height: 1.5rem;
-    width: 1.5rem;
+    width: 0.5rem;
 }
 
 .logo-font {
@@ -84,4 +84,8 @@ body {
     .header-container {
         padding-top: 164px;
     }
+    body {
+    height: calc(100vh - 164px);
+   }
+    
 }

@@ -35,16 +35,24 @@
   </head>
   <body>
     <header class="container-fluid fixed-top">
-        <div id="top-nav"class="row bg-white pt-lg-2 d-none d-lg-flex">
-            <div class=" col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left">
-            <a href="/" class="nav-link main-logo-link">
+        <div id="top-nav"class="row bg-white pt-lg-2 d-lg-flex">
+            <div class=" col-12 col-lg-4 my-auto py-1 py-lg-0 text-center text-lg-left d-none d-lg-block">
+                <a href="/" class="nav-link main-logo-link">
                     <h2 class="logo-font text-fuchsia my-0"><strong> furnitart</strong></h2>
                 </a> 
             </div>
             <div class=" col-12 col-lg-4 my-auto text-center py-1 py-lg-0">
-                NAVIGATION BAR 
+                <div class="row bg-white">
+                    <nav class="navbar navbar-expand-lg navbar-light">
+                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span> 
+                        </button>
+                        {% include 'includes/mobile-top-header.html' %}
+                        {% include 'includes/main-nav.html' %}       
+                    </nav> 
+                </div>
             </div>
-            <div class=" col-12 col-lg-4 my-auto py-1 py-lg-0">
+            <div class=" col-12 col-lg-4 my-auto py-1 py-lg-0 d-none d-lg-block">
                 <ul class="list-inline list-unstyled text-center text-lg-right ">
                     <li class="list-inline-item">
                         <div class="nav-link">
