@@ -27,6 +27,5 @@ class Product(models.Model):
     weight = models.IntegerField(default=20)
     is_active = models.BooleanField(default=True)
     
-
     def __str__(self):
         return self.name
