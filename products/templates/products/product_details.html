@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container-fluid" >
+        <div class="row">
+            <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+                <a href="">
+                    <div class="image-container my-5">
+                        {% if product.image %}
+                            <a href="{{ product.image.url }}" target="_blank">
+                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                            </a>
+                            {% else %}
+                            <a href="">
+                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                            </a>
+                        {% endif %}
+                    </div>
+                </a>
+            </div>
+            <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+                <div class="product-details-container mb-5 mt-md-5">
+                    <p class="mb-0 text-uppercase display-4 text-center">{{ product.name }}</p>
+                    <p class="text-muted mb-0 text-center">€{{ product.price }}</p>
+                    <hr class="hr-fuchsia mb-0">
+                    <p class="mt-0 pt-0 text-center">{{ product.description }}</p>
+                    <strong class="mt-5">Size:</strong>
+                    <ul>
+                        <li>High:{{product.height}}</li>
+                        <li>Wide:{{product.width}}</li>
+                        <li>Long:{{product.length}}</li>
+                    </ul>
+                    <small class="text-muted">
+                        <i class="fas fa-truck mr-1"></i>
+                        Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
+                    </small>
+                </div>
+            </div>
+        </div>
+            
+{% endblock %}

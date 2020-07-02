@@ -61,6 +61,19 @@ body {
 .text-fuchsia{
     color: #f1089e;
 }
+.hr-fuchsia{  
+    border-top: 1px solid #f1089e;
+}
+
+.overlay{
+    height: 100%;
+	width: 100%;
+	top: 0;
+	left: 0;
+	position: fixed;
+	background: white;
+	z-index: -1;
+}
 
 /* -------------------------------- Media Queries */
 
@@ -88,4 +101,15 @@ body {
     height: calc(100vh - 164px);
    }
     
+}
+
+/* pad the top a bit when navbar is collapsed on mobile */
+@media (max-width: 991px) {
+    .header-container {
+        padding-top: 116px;
+    }
+
+    body {
+        height: calc(100vh - 116px);
+    }
 }
