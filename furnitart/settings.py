@@ -71,6 +71,7 @@ TEMPLATES = [
                 'django.template.context_processors.request', # `allauth` needs this from django
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.media',
             ],
         },
     },

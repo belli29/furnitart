@@ -5,10 +5,10 @@
                 All Products
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="all-products-link">
-                <a href="" class="dropdown-item">By Price</a>
-                <a href="" class="dropdown-item">By Rating</a>
-                <a href="" class="dropdown-item">By Category</a>
-                <a href="" class="dropdown-item">All Products</a>
+                <a href="{% url 'products' %}?sort=price&direction=asc" class="dropdown-item">By Price</a>
+                <a href="{% url 'products' %}?sort=name&direction=asc" class="dropdown-item">By Name</a>
+                <a href="{% url 'products' %}?sort=size&direction=asc" class="dropdown-item">By Size</a>
+                <a href="{% url 'products' %}" class="dropdown-item">All Products</a>
             </div>
         </li>
 
@@ -17,9 +17,9 @@
                 Areas
             </a>
             <div class="dropdown-menu border-0" aria-labelledby="clothing-link">
-                <a href="" class="dropdown-item">Kitchen </a>
-                <a href="" class="dropdown-item">Living room</a>
-                <a href="" class="dropdown-item">Bedroom</a>
+                <a href="{% url 'products' %}?category=kitchen_living" class="dropdown-item">Kitchen & Living room  </a>
+                <a href="{% url 'products' %}?category=bathroom"class="dropdown-item">Bathroom</a>
+                <a href="{% url 'products' %}?category=bedroom" class="dropdown-item">Bedroom</a>
             </div>
         </li>
 
