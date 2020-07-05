@@ -10,9 +10,28 @@ from .models import Product, Category
 def all_products (request):
     """view showing all products, including sorting and search queried"""
     
+    current_url = request.get_full_path()
+    if '?' in current_url :
+        current_param = current_url.split('?')[1]
+    else:
+        current_param = ""
+    
     products = Product.objects.filter(is_active=True)
     query = None
     category = None
+    sort = None
+    direction = None
+    euro_filter = False
+    image_filter = False
+
+    if 'euro_filter' in request.GET:
+        products = products.filter(euro_shipping=True)
+        euro_filter = True
+    
+    if 'image_filter' in request.GET:
+        products = products.exclude(image = "")
+        image_filter = True
+
 
     if 'sort' in request.GET:
         sortkey = request.GET['sort']
@@ -42,10 +61,16 @@ def all_products (request):
         products = products.filter(category__name=category)
         category = Category.objects.filter(name=category)
 
+    current_sorting = f'{sort}_{direction}'
+
     context ={
         'products': products,
         'search_term': query, 
-        'current_category':category
+        'current_category':category,
+        'current_sorting': current_sorting,
+        'euro_filter_active': euro_filter,
+        'image_filter_active': image_filter,
+        'current_param': current_param
     }
 
     return render(request, 'products/products.html', context )

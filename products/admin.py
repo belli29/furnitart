@@ -11,6 +11,7 @@ class ProductAdmin(admin.ModelAdmin):
         'price',
         'image',
         'euro_shipping',
+         'is_active',
         'available_quantity',
     )
 
