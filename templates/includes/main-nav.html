@@ -1,22 +1,11 @@
 <div class="collapse navbar-collapse" id="main-nav">
     <ul class="navbar-nav w-auto mx-auto text-left text-lg-center">
-        <li class="nav-item dropdown">
-            <a class="logo-font font-weight-bold nav-link text-black mr-lg-5" href="#" id="all-products-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                All Products
-            </a>
-            <div class="dropdown-menu border-0" aria-labelledby="all-products-link">
-                <a href="{% url 'products' %}?sort=price&direction=asc" class="dropdown-item">By Price</a>
-                <a href="{% url 'products' %}?sort=name&direction=asc" class="dropdown-item">By Name</a>
-                <a href="{% url 'products' %}?sort=size&direction=asc" class="dropdown-item">By Size</a>
-                <a href="{% url 'products' %}" class="dropdown-item">All Products</a>
-            </div>
-        </li>
-
+       
         <li class="nav-item dropdown">
             <a class="logo-font font-weight-bold nav-link text-black mr-lg-5" href="#" id="areas-link" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Areas
             </a>
-            <div class="dropdown-menu border-0" aria-labelledby="clothing-link">
+            <div class="dropdown-menu border-0" aria-labelledby="area-link">
                 <a href="{% url 'products' %}?category=kitchen_living" class="dropdown-item">Kitchen & Living room  </a>
                 <a href="{% url 'products' %}?category=bathroom"class="dropdown-item">Bathroom</a>
                 <a href="{% url 'products' %}?category=bedroom" class="dropdown-item">Bedroom</a>

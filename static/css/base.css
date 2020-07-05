@@ -58,12 +58,7 @@ body {
     border: 1px solid black !important;
 }
 
-.text-fuchsia{
-    color: #f1089e;
-}
-.hr-fuchsia{  
-    border-top: 1px solid #f1089e;
-}
+
 
 .overlay{
     height: 100%;
@@ -76,8 +71,24 @@ body {
 }
 
 .opacity{
-    opacity: .5;
+    opacity: .2;
 }
+
+
+/* Primary Color */
+
+.bg-color-pr{
+    background: #f1089e;
+}
+
+.hr-color-pr{  
+    border-top: 1px solid #f1089e;
+}
+
+.text-color-pr{
+    color: #f1089e;
+}
+
 /* -------------------------------- Media Queries */
 
 /* Slightly larger container on xl screens */

@@ -59,7 +59,7 @@ def all_products (request):
     if 'category' in request.GET:
         category = request.GET['category']
         products = products.filter(category__name=category)
-        category = Category.objects.filter(name=category)
+        category = Category.objects.filter(name=category)[0]
 
     current_sorting = f'{sort}_{direction}'
 

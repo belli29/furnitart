@@ -1,0 +1,31 @@
+<div class="d-flex justify-content-center justify-content-md-about filter-bar my-lg-4">
+    
+    <div class="text-center"> 
+        {% if euro_filter_active %}
+            <a href="{% url 'products' %}?{{current_param | cut:'euro_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products' %}?euro_filter=True&{{current_param}}">
+        {% endif %}
+            <div id="euro_filter" class="badge bg-color-pr badge-info {% if not euro_filter_active %}opacity{% endif %}"> Delivery to EU</div>
+        </a>      
+        {% if image_filter_active %}
+            <a href="{% url 'products' %}?{{current_param | cut:'image_filter=True'}}">
+        {% else %}
+            <a href="{% url 'products' %}?image_filter=True&{{current_param}}">
+        {% endif %}
+            <div class="badge bg-color-pr badge-info {% if not image_filter_active %}opacity{% endif %}">Only Images</div>
+        </a> 
+        <a href="{% url 'products' %}">
+            <div class="badge badge-dark{% if image_filter_active or euro_filter_active  %} opacity{% endif %}">All products</div>
+        </a> 
+        <span class="sort-select-wrapper ">
+            <select id="sort-selector" class="badge badge-info bg-color-pr border-0 ">
+                <option value="reset" {% if current_sorting == 'None_None' %}selected{% endif %}>Sort by...</option>
+                <option value="price_asc" {% if current_sorting == 'price_asc' %}selected{% endif %}>Price (low to high)</option>
+                <option value="price_desc" {% if current_sorting == 'price_desc' %}selected{% endif %}>Price (high to low)</option>
+                <option value="name_asc" {% if current_sorting == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+                <option value="name_desc" {% if current_sorting == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+            </select>
+        </span>           
+    </div> 
+</div>
