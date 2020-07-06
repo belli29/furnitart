@@ -13,39 +13,49 @@
     <div class="overlay"></div>
     <div class="container-fluid" >
         <div class="row">
-            <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
-                <a href="">
-                    <div class="image-container my-5">
-                        {% if product.image %}
-                            <a href="{{ product.image.url }}" target="_blank">
-                                <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                            </a>
-                            {% else %}
-                            <a href="">
-                                <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                            </a>
-                        {% endif %}
-                    </div>
-                </a>
+            <div class="col text-center mt-3">
+                <h2 class="logo-font">{{ product.name }}</h2>
+                <div class="text-muted ">€{{ product.price }}</div>
+                <hr class="w-75 mb-1 hr-color-pr">    
             </div>
-            <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
-                <div class="product-details-container mb-5 mt-md-5">
-                    <p class="mb-0 text-uppercase display-4 text-center">{{ product.name }}</p>
-                    <p class="text-muted mb-0 text-center">€{{ product.price }}</p>
-                    <hr class="hr-fuchsia mb-0">
-                    <p class="mt-0 pt-0 text-center">{{ product.description }}</p>
-                    <strong class="mt-5">Size:</strong>
-                    <ul>
-                        <li>High:{{product.h}}</li>
-                        <li>Wide:{{product.w}}</li>
-                        <li>Long:{{product.l}}</li>
-                    </ul>
-                    <small class="text-muted">
-                        <i class="fas fa-truck mr-1"></i>
-                        Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
-                    </small>
+        </div>
+        <div class="row">
+            <div class="product-container col-10 offset-1">
+                <div class="row mt-1 mb-2"></div>
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+                        <a href="">
+                            <div class="image-container my-5">
+                                {% if product.image %}
+                                    <a href="{{ product.image.url }}" target="_blank">
+                                        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
+                                    </a>
+                                    {% else %}
+                                    <a href="">
+                                        <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                    </a>
+                                {% endif %}
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6 col-lg-4 offset-lg-1">
+                        <div class="product-details-container mb-5 mt-md-5">   
+                            <hr class="hr-color-pr mb-0">
+                            <p class="mt-2 pt-0 ">{{ product.description }}</p>
+                            <strong class="mt-5">Size:</strong>
+                            <ul>
+                                <li>High:{{product.h}}</li>
+                                <li>Wide:{{product.w}}</li>
+                                <li>Long:{{product.l}}</li>
+                            </ul>
+                            <small class="text-muted">
+                                <i class="fas fa-truck mr-1"></i>
+                                Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
+                            </small>
+                        </div>
+                    </div>                                   
                 </div>
             </div>
         </div>
-            
+    </div>
 {% endblock %}
