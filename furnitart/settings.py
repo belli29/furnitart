@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'home',
     'products',
+    'bag',
 ]
 
 MIDDLEWARE = [
@@ -72,6 +73,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
+                'bag.contexts.bag_contents',
             ],
         },
     },
@@ -152,3 +154,11 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
+# Delivery variables
+
+FREE_DELIVERY_THRESHOLD = 200
+STANDARD_DELIVERY_PERCENTAGE = 20
+IRL_FREE_DELIVERY_THRESHOLD = 50
+IRL_STANDARD_DELIVERY_PERCENTAGE = 10
