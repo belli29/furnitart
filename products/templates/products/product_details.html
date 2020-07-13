@@ -53,56 +53,28 @@
                                 Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
                             </small>
                         </div>
-                        <form class="form" action="{% url 'add_to_bag' product.id %}" method="POST">
-                            {% csrf_token %}
-                            <div class="form-row">
-                                <div class="col-12">
-                                    <p class="mt-3"><strong>Quantity:</strong></p>
-                                    <div class="form-group">
-                                        <div class="input-group row">
-                                            <div class="input-group-prepend">
-                                                <button class="btn btn-black rounded-0 decrement-qty"
-                                                    data-item_id="{{ product.id}}" id="decrement-qty_{{ product.id }}">
-                                                    <span class="icon">
-                                                        <i class="fas fa-minus"></i>
-                                                    </span>
-                                                </button>
-                                            </div>
-                                            <input class="form-control qty_input col-4" type="number" 
-                                                name="quantity" value="1" min="1" max="{{ product.available_quantity}}" 
-                                                data-item_id="{{ product.id }}" 
-                                                id="id_qty_{{ product.id }}">
-                                            <div class="input-group-append">
-                                                <button class="btn btn-black rounded-0 increment-qty"
-                                                    data-item_id="{{ product.id}}" id="increment-qty_{{ product.id }}">
-                                                    <span class="icon">
-                                                        <i class="fas fa-plus"></i>
-                                                    </span>
-                                                </button>   
-                                            </div>
-                                            <input type="submit" class="ml-1 btn btn-black rounded-0 text-uppercase col-8 " value="Add to Bag" > 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 ">
-                                    <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 btn-lg">
-                                        <span class="icon">
-                                            <i class="fas fa-chevron-left"></i>
-                                        </span>
-                                        <span class="text-uppercase">Keep Shopping</span>
-                                    </a>
-                                </div>
-                                <input type="hidden" name="redirect_url" value="{{ request.path }}">
-                            </div>
-                        </form>
+                        {% include 'products/includes/quantity_form.html' %}
                     </div>
                                                        
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-10 offset-1 text-center text-md-left my-5">
+                <div class="row">
+                    <div class="col-12 col-md-6 col-lg-4 offset-lg-2 ">
+                         <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 btn-lg ">
+                             <span class="icon">
+                                <i class="fas fa-chevron-left"></i>
+                             </span>
+                            <span class="text-uppercase">Keep Shopping</span>
+                        </a>
+                    </div>
+                <div class="row">
+            </div>
+        </div>
     </div>
-    <! -- hidden div for max value quantity item -->
-    <div class="d-none" id="max-qty_{{ product.id }}">{{ product.available_quantity}}</div>
+
 {% endblock %}
 
 {% block postloadjs %}

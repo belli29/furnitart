@@ -1,14 +1,17 @@
 <script type="text/javascript">
 
-    // Disable +/- buttons outside 1-99 range
+    // Disable +/- buttons outside 1-(available quantity - items in bag) range
     function handleEnableDisable(itemId) {
-        var currentValue = parseInt($(`#id_qty_${itemId}`).val());
-        var maxQty = parseInt($(`#max-qty_${itemId}`).text());
-        console.log(maxQty);
+        var currentValue = parseInt($(`#id-qty_${itemId}`).val());
+        var maxQty = parseInt($(`#id-qty_${itemId}`).attr('max'));
         var minusDisabled = currentValue < 2;
-        var plusDisabled = currentValue > (maxQty-2);
+        var plusDisabled = currentValue > (maxQty-1);
         $(`#decrement-qty_${itemId}`).prop('disabled', minusDisabled);
         $(`#increment-qty_${itemId}`).prop('disabled', plusDisabled);
+        $(`#add-to-bag-btt_${itemId}`).prop('disabled',maxQty==0); // Disable 'add to bag' button when remaining quantity is 0
+        if (maxQty==0) {
+             $(`#id-qty_${itemId}`).val(0);
+        }   
     }
 
     // Ensure proper enabling/disabling of all inputs on page load

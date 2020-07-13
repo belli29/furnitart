@@ -20,87 +20,116 @@
             </div>
         </div>
         <div class="row ">
-            <div class="product-container col-10 offset-1  text-center">
+            <div class="col-10 offset-1  text-center">
                 <div class="row mt-1 mb-2"></div>
                 <div class="row">
                     <div class="col-lg-6 offset-lg-3">
                         {% if bag_items %}
                             <div class="table-responsive rounded">
-                                <table class="table   table-borderless">
+                                <table class="table table-borderless">
                                     <thead>
                                         <tr>
                                         <th scope="col">Product</th>
                                         <th scope="col">Quantity</th>
                                         <th scope="col">Price</th>
-                                        <th scope="col">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                    {% for item in bag_items%}
+                                        {% for item in bag_items%}
+                                            <tr>            
+                                                <td>
+                                                    <span>
+                                                        <div class="icon remove-item" id="remove_{{ item.item_id }}">
+                                                            <i class="fas fa-trash" alt="delete"></i>
+                                                        </div>
+                                                    </span>
+                                                    <span class="mx-2">
+                                                        {{item.product.name}}
+                                                    </span>
+                                                    
+                                                </td>
+                                                <td>
+                                                    <form class="form " action="{% url 'update_bag' item.item_id %}" method="POST">
+                                                        {% csrf_token %}
+                                                        <select class="quantity-input" id="quantity_{{ item.item_id }}" name="quantity" >
+                                                            {% for n in item.available_quantity_list%}
+                                                                {% if n == item.quantity %}
+                                                                    <option selected value="{{n}}">{{n}}</option>
+                                                                {% else %}
+                                                                    <option  value="{{n}}">{{n}}</option>
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        </select>
+                                                    </form>             
+                                                </td>
+                                                <td>{{item.total}}</td>
+                                            </tr>
+                                        {% endfor%}
                                         <tr>
-                                            <td>{{item.product.name}}</td>
-                                            <td>{{item.quantity}}</td>
-                                            <td>{{item.product.price}}</td>
-                                            <td>{{item.total}}</td>
-                                        </tr>
-                                    {% endfor%}
-                                        <tr>
-                                            <td colspan="3" class="text-right "></h6><strong>Bag Total:</strong></h6></td>
-                                            <td class=""><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
+                                            <td class="text-center" ></h6><strong>Bag Total:</strong></h6></td>
+                                            <td></td>
+                                            <td class="text-center"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="text-right" ><h6><strong>Delivery:</strong></h6></td>
-                                            <td ><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
+                                            <td class="text-center" ><h6><strong>Delivery:</strong></h6></td>
+                                            <td></td>
+                                            <td class="text-center"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3" class="text-right" ><h4><strong>Grand Total:</strong></h4></td>
-                                            <td ><h4><strong>€{{ grand_total|floatformat:2 }}</strong></h4></td>
+                                            <td class=" text-center " ><h4><strong>Grand Total:</strong></h4></td>
+                                            <td></td>
+                                            <td class="text-center"><h4><strong>€{{ grand_total|floatformat:2 }}</strong></h4></td>
                                         </tr>
-                                                
-                                                {% if free_delivery_delta > 0 %}
-                                                    <p class="mb-1 text-color-pr">
-                                                        You could get free delivery by spending just <strong>€{{ free_delivery_delta }}</strong> more!
-                                                    </p>
-                                                {% endif %}
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                        <td colspan="3" class="text-right">
-                                           
-                                        </td>
-                                    </tr>
+                                        {% if free_delivery_delta > 0 %}
+                                            <tr>
+                                                <p class="mb-1 text-color-pr ">
+                                                    You could get free delivery by spending just <strong>€{{ free_delivery_delta }}</strong> more!
+                                                </p>
+                                            </tr> 
+                                        {% endif %}              
                                     </tbody>
                                 </table>
                             </div>
                         {% else %}
-                            <p class="lead mb-5">Your bag is empty.</p>
-                            
+                            <p class="lead mb-5">Your bag is empty.</p>              
                         {% endif %}
                     </div>                                   
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 offset-lg-3 text-center">
-                        <div class="row">
-                            <div class="col-12 col-lg-6 col-lg order-last order-lg-first">
-                                <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 btn-lg">
-                                    <span class="icon">
-                                        <i class="fas fa-chevron-left"></i>
-                                    </span>
-                                    <span class="text-uppercase">Keep Shopping</span>
-                                </a>
-                            </div>
-                            <div class="col-12 col-lg-6">
-                                <a href="" class="btn btn-black rounded-0 btn-lg">
-                                    <span class="text-uppercase">Secure Checkout</span>
-                                    <span class="icon">
-                                        <i class="fas fa-lock"></i>
-                                    </span>
-                                </a>
-                            </div>
-                        </div>             
-                    </div>
-                </div>
+                </div>          
             </div>
         </div>
+        <div class="row">
+            <div class="col-10 offset-1 text-center my-5">
+                <div class="row">
+                    <div class="col-12 col-md-6 order-last order-md-first">
+                         <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 btn-lg mt-3 mt-md-0">
+                             <span class="icon">
+                                <i class="fas fa-chevron-left"></i>
+                             </span>
+                            <span class="text-uppercase">Keep Shopping</span>
+                        </a>
+                    </div>
+                    <div class="col-12 col-md-6  text-center">
+                        <a href="" class="btn btn-outline-dark rounded-0 btn-lg">
+                            <span class="text-uppercase">Secure Checkout</span>
+                            <span class="icon">
+                                <i class="fas fa-lock"></i>
+                            </span>
+                        </a>
+                    </div>             
+                </div>
+            </div>   
+        </div>
     </div>
+    {{request.session.bag}}
+    <hr>
+    {{ bag_items }}
+{% endblock %}
+
+{% block postloadjs %}
+{{ block.super}}
+<script type="text/javascript">
+    $('.quantity-input').change(function () { 
+        $(this.form).submit();
+    })
+</script>
 {% endblock %}

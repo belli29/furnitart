@@ -15,12 +15,25 @@ def bag_contents(request):
         subtotal = quantity * product.price
         total += subtotal
         product_count += quantity
+        remaining_qty = product.available_quantity - quantity
+        """ 
+        creates a list with number of avaialable items
+        """ 
+        available_quantity_list = []
+        n = 1
+        while n <= product.available_quantity:
+            available_quantity_list.append(n)
+            n+=1
+
         bag_items.append({
             'item_id': item_id,
             'quantity': quantity,
+            'remaining_qty': remaining_qty,
             'product': product,
             'total':subtotal,
+            'available_quantity_list': available_quantity_list
         })
+
 
 
     def delivery_calculation (free_delivery_treshold, standard_delivery_percentage):

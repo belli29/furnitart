@@ -79,8 +79,14 @@ def product_details (request, product_id):
     """view showing details of the selected product"""
     
     product = get_object_or_404(Product, pk=product_id)
+    bag_qty = 0
+    if 'bag' in list(request.session.keys()):
+        if product_id in list(request.session.get("bag").keys()):
+            bag_qty = request.session.get("bag")[product_id]
+    remaining_qty = product.available_quantity - bag_qty
     context ={
-        'product': product
+        'product': product,
+        'remaining_qty': remaining_qty
     }
 
     return render(request, 'products/product_details.html', context )
