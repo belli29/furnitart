@@ -39,7 +39,7 @@
                                             <tr>            
                                                 <td>
                                                     <span>
-                                                        <div class="icon remove-item" id="remove_{{ item.item_id }}">
+                                                        <div class="icon remove-item" id="remove_{{ item.item_id }}" data-item_id="{{ item.item_id}}">
                                                             <i class="fas fa-trash" alt="delete"></i>
                                                         </div>
                                                     </span>
@@ -130,6 +130,14 @@
 <script type="text/javascript">
     $('.quantity-input').change(function () { 
         $(this.form).submit();
-    })
+    });
+    $('.remove-item').click(function () { 
+        var itemId = $(this).data('item_id');
+        var url = `/bag/remove/${itemId}`;
+        $.get(url)
+         .done(function() {
+             location.reload();
+        });
+    });
 </script>
 {% endblock %}
