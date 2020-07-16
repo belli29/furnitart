@@ -29,7 +29,7 @@ def all_products (request):
         euro_filter = True
     
     if 'image_filter' in request.GET:
-        products = products.exclude(image = "")
+        products = products.exclude(image ="")
         image_filter = True
 
 
