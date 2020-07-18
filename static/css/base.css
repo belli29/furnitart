@@ -74,9 +74,15 @@ body {
     opacity: .2;
 }
 
-.remove-item {
+.remove-item,
+.payment-option {
     cursor: pointer;
 }
+/* ------------------------------- testing tools */
+.test{
+    background-color: yellowgreen;
+}
+
 
 /* ------------------------------- bootstrap toasts */
 
@@ -145,6 +151,12 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+.checkout-notification-wrapper {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
 
 /* Black classes*/
 

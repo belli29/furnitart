@@ -70,6 +70,7 @@ def bag_contents(request):
         'free_delivery_delta': free_delivery_delta,
         'free_delivery_threshold': free_delivery_treshold,
         'grand_total': grand_total,
+        'discount': settings.PAY_PAL_DISCOUNT
     }
 
     return context
