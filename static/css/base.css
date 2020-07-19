@@ -78,6 +78,24 @@ body {
 .payment-option {
     cursor: pointer;
 }
+/* ------------------------------- forms */
+.form-control{
+    border-radius:0;
+    border-color: black;
+}
+
+.form-grup{
+    color: black;
+}
+
+.form-control:focus {
+    border-color: "#f1089e" !important;
+    box-shadow: "none" !important;
+    outline: none !important;
+}
+
+
+
 /* ------------------------------- testing tools */
 .test{
     background-color: yellowgreen;
@@ -185,6 +203,8 @@ body {
 .text-color-pr{
     color: #f1089e;
 }
+
+
 
 /* -------------------------------- Media Queries */
 

@@ -2,6 +2,9 @@
 {% load static %}
 {% load checkout_tools %}
 
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'checkout/css/checkout.css' %}">
+{% endblock %}
 
 {% block page_header %}
     <div class="container header-container">
@@ -22,113 +25,29 @@
             </div>
         </div>
         <div class="row ">
-            <div class="col-9 mx-auto">
+            <div class="col-9 mx-auto px-0 ">
                 <div class="row mt-1 mb-2"></div>
-                <div class="row">
-                    <div class="col-12 col-md-9">
+                <div class="row" >
+                    <div class="col-12 col-md-9 payment-form-top">
                         <form action="{% url 'checkout' %}" method="POST" id="payment-form">
                             {% csrf_token %}
-                            <fieldset class="rounded px-3 mb-5">
-                                <legend class="fieldset-label small text-black px-2 w-auto">Details</legend>
-                                {{ order_form.full_name | as_crispy_field }}
-                                {{ order_form.email | as_crispy_field }}
-                            </fieldset>
-                            <fieldset class="rounded px-3 mb-5">
-                                <legend class="fieldset-label small text-black px-2 w-auto">Delivery</legend>
-                                {{ order_form.phone_number | as_crispy_field }}
-                                {{ order_form.country | as_crispy_field }}
-                                {{ order_form.postcode | as_crispy_field }}
-                                {{ order_form.town_or_city | as_crispy_field }}
-                                {{ order_form.street_address1 | as_crispy_field }}
-                                {{ order_form.street_address2 | as_crispy_field }}
-                                {{ order_form.county | as_crispy_field }}
-                                <div class="form-check form-check-inline float-right mr-0 ">
-                                        {% if user.is_authenticated %}
-                                            <label class="form-check-label" for="id-save-info">Save this delivery information to my profile</label>
-                                            <input class="form-check-input ml-2 mr-0 " type="checkbox" id="id-save-info" name="save-info" checked>
-                                        {% else %}
-                                            <label class="form-check-label" for="id-save-info">
-                                                <a class="text-info" href="{% url 'account_signup' %}">Create an account</a> or 
-                                                <a class="text-info" href="{% url 'account_login' %}">login</a> to save this information
-                                            </label>
-                                        {% endif %}
-                                </div>
-                            </fieldset>
-                            <div class="col-12 col-md-9 mx-auto jumbotron">
-                                <table class="table table-borderless">
-                                    <tbody>
-                                        <tr>
-                                            <td class="text-center" ></h6><strong>Bag Total:</strong></h6></td>
-                                            <td class="text-center"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="text-center" ><h6><strong>Delivery:</strong></h6></td>
-                                            <td class="text-center"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
-                                        </tr>
-                                        <tr>
-                                            <td class=" text-center " >
-                                                <h4>
-                                                    <strong>Grand Total:</strong>
-                                                    <p class="paypal-total d-none">
-                                                        <small>(PayPal discount applied)</small>
-                                                    </p>
-                                                </h4>
-                                            </td>
-                                            <td class="text-center">
-                                                <h4>
-                                                    <strong class="checkout-total">€{{ grand_total|floatformat:2 }}</strong>
-                                                    <p class="paypal-total d-none">
-                                                        <strong>€{{ grand_total|calc_discount:discount |floatformat:2 }}</strong>
-                                                    </p>
-                                                </h4>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <p class="text-color-pr text-center">
-                                                    (You could get free delivery by spending just <strong>€{{ free_delivery_delta }}</strong> more!)
-                                                </p>
-                                            </td>
-                                        </tr>              
-                                    </tbody>
-                                </table> 
-                            </div>
-                            <fieldset class="px-3">
-                                <legend class="fieldset-label small text-black px-2 w-auto">Payment options</legend>
-                                <div class="row">
-                                    <div class="col-6 text-center">
-                                        <i class="fa fa-cc-paypal fa-5x payment-option"  id="paypal-payment" aria-hidden="true"></i>
-                                        <p class="text-muted"> Get a discount!</p>
-                                    </div>
-                                    <div class="col-6 text-center">
-                                        <i class="fa fa-cc-stripe fa-5x payment-option " id="stripe-payment" aria-hidden="true"></i>
-                                        <!-- A Stripe card element will go here -->
-                                        <div class="mb-3" id="card-element"></div>
-                                        <!-- Used to display form errors -->
-                                        <div class="mb-3 text-danger" id="card-errors" role="alert"></div>
-                                    </div>
-                                </div>     
-                            </fieldset>
+                            {% include 'includes/details_delivery_fieldsets.html' %}
                         </form>
                     </div>
-                    <div class="d-none d-md-block col-md-3 ">
-                        <p class="logo-font bg-white text-black py-1">Your Bag ({{ product_count }})</p>
-                        <div class="checkout-notification-wrapper">
-                            {% for item in bag_items %}
-                                <div class="row">
-                                    <div class="col-4 my-1">
-                                        <img class="w-100" src="{{ item.product.image.url }}">
-                                    </div>
-                                    <div class="col-8">
-                                        <p class="my-0"><strong>{{ item.product.name }}</strong></p>
-                                        <p class="my-0 small text-muted">Qty: {{ item.quantity }}</p>
-                                    </div>
-                                </div>
-                            {% endfor %}
-                        </div>
-                    </div>                                  
-                </div>          
-            </div>
+                    <div class="d-none d-md-block col-md-3 payment-form-top" id="payment-bag">
+                        {% include 'includes/payment_bag.html' %}
+                    </div> 
+                </div>
+                <hr class="w-100 mb-5 hr-color-pr"> 
+                <div class="row">
+                    <div class="col-12 col-md-9 mx-auto jumbotron">
+                        {% include 'includes/total_resume.html' %}
+                    </div>
+                    <div class="col-12 col-md-9 mx-auto">
+                        {% include 'includes/payment_methods_fieldset.html' %}       
+                    </div>
+                </div>                                     
+            </div>          
         </div>
         <div class="row">
             <div class="col-9 mx-auto my-5">
@@ -142,12 +61,12 @@
                         </a>
                     </div>
                     <div class="col-6 col-md-2 offset-md-8 pr-0 text-right">
-                        <a href="" class="btn btn-outline-dark rounded-0 mx-auto ">
+                        <button type="submit" form="payment-form"class="btn btn-outline-dark rounded-0 mx-auto ">
                             <span class="text-uppercase">secure payment</span>
                             <span class="icon">
                                 <i class="fas fa-lock"></i>
                             </span>
-                        </a>
+                        </button>
                     </div>             
                 </div>
             </div>   
@@ -157,23 +76,10 @@
 {% endblock %}
 
 {% block postloadjs %}
-{{ block.super}}
-<script type="text/javascript">
-    // payment options UI 
-    $('.payment-option').click(function () { 
-        $(this).addClass("text-color-pr");
-        var other_methods = $(this).closest('.row').find('.payment-option').not(this);
-        $(other_methods).removeClass("text-color-pr");
-    });
-    // triggers Paypal payment discount
-    $('#paypal-payment').click(function () { 
-        $(".paypal-total").removeClass("d-none");
-        $(".checkout-total").css("text-decoration", "line-through");
-    });
-    // hide Paypal payment discount
-    $('#stripe-payment').click(function () { 
-        $(".paypal-total").addClass("d-none");
-        $(".checkout-total").removeAttr("class");
-    });
-</script>
+    {{ block.super}}
+    <script src="{% static 'checkout/js/payment_choice.js' %}"></script>
+    <!-- Stripe scripts -->
+    {{ stripe_public_key|json_script:"id_stripe_public_key" }}
+    {{ client_secret|json_script:"id_client_secret" }}
+    <script src="{% static 'checkout/js/stripe_elements.js' %}"></script>
 {% endblock %}
