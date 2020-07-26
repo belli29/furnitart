@@ -7,6 +7,7 @@ from .forms import OrderForm
 from .models import Order, OrderLineItem
 from products.models import Product
 from bag.contexts import bag_contents
+from profiles.models import UserProfile
 
 import stripe
 import json
@@ -24,7 +25,7 @@ def checkout(request):
             'town_or_city': request.POST['town_or_city'],
             'street_address1': request.POST['street_address1'],
             'street_address2': request.POST['street_address2'],
-            'county': request.POST['county'], 
+            'county': request.POST['county'],
         } 
         order_form = OrderForm(form_data)
         if order_form.is_valid():
@@ -88,6 +89,12 @@ def checkout_success(request, order_number):
     """
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
+    # Attach the user's profile to the order if user is authenticated
+    if request.user.is_authenticated:
+            profile = UserProfile.objects.get(user=request.user)
+            order.user_profile = profile
+            order.save()
+
     messages.success(request, f'Order successfully processed! \
         Your order number is {order_number}. A confirmation \
         email will be sent to {order.email}.')
