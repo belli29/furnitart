@@ -4,6 +4,7 @@ from django.db.models import Q, F
 from django.db.models.functions import Lower
 
 from .models import Product, Category
+from .forms import ProductForm
 
 # Create your views here.
 
@@ -90,3 +91,24 @@ def product_details (request, product_id):
     }
 
     return render(request, 'products/product_details.html', context )
+
+# products management
+def add_product (request):
+    """view adding a new product """
+    
+    if request.method == 'POST':
+        form = ProductForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'You succesfully added a product!')
+            return redirect (reverse('add_product'))
+        else:
+           messages.error(request, 'Something went wrong. We could not add the product.') 
+        
+    else:
+        form = ProductForm()
+        context = {
+            "form": form
+        }
+        template = 'products/add_product.html'
+        return render (request, template, context)
