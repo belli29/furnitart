@@ -257,7 +257,15 @@ body {
     color: #f1089e;
 }
 
+a.text-color-pr:hover{ 
+    color:#F833FF;
+}
 
+/* a */
+
+a:hover{
+    text-decoration: none;
+}
 
 /* -------------------------------- Media Queries */
 

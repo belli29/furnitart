@@ -14,18 +14,21 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3">
-                <h2 class="logo-font">{{ product.name }}</h2>
-                {% if request.user.issuperuser %}
-                    <span> 
-                        <a href="{% url 'delete_product' product.id%}">
-                            <i class="fas fa-trash" alt="delete"></i>
-                        </a>
-                    </span>
-                    <span>
-                        <a href="{% url 'edit_product' product.id%}">
-                            <i class="fas fa-pencil-alt" alt="edit"></i>
-                        </a>
-                    </span>
+                <h2 class="logo-font d-inline">{{ product.name }}</h2>
+                {% if request.user.is_superuser %}
+                    <div class=" mx-2 d-inline">
+                        <span> 
+                            <a href="{% url 'delete_product' product.id%}" >
+                                <i class="fas fa-trash text-color-pr mx-2 " alt="delete"></i>
+                            </a>
+                        </span>
+                        <span>
+                            <a href="{% url 'edit_product' product.id%}">
+                                <i class="fas fa-pencil-alt text-color-pr mx-2" alt="edit"></i>
+                            </a>
+                        </span>
+                    </div>
+                    
                 {% endif %}
                 <div class="text-muted ">€{{ product.price }}</div>
                 <hr class="w-75 mb-1 hr-color-pr">    

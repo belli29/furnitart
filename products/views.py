@@ -95,6 +95,17 @@ def product_details (request, product_id):
 
 # products management
 @login_required
+def management (request):
+    """view allowing super users to manage inventory """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+    template = 'products/management.html'
+    return render(request, template )
+
+
+
+@login_required
 def add_product (request):
     """view adding a new product """
     if not request.user.is_superuser:

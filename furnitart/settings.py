@@ -25,7 +25,7 @@ SECRET_KEY = 'r_ecixy58(57f1b)+atbgh)p)o!3r*n@0d60(*7k@_st4r#=-$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost', '.gitpod.io', '127.0.0.1', '0.0.0.0']
 
 
 # Application definition
@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'django.contrib.sites' ,
+    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'checkout',
     'crispy_forms',
     'profiles',
+    
 ]
 
 MIDDLEWARE = [

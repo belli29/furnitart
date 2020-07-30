@@ -13,10 +13,9 @@
             <tr>
                 <td class="text-center d-none d-md-block"><strong>Your order</strong></td>
                 <td class="text-left text-md-center ">
-                    {% for item in bag  %}
-                        <p class="d-md-none"><strong>Your order</strong></p>
-                        <p> {{ item.name }} * {{ item.quantity }} </p>
-                    {% endfor  %}
+                    {% for item in order.lineitems.all %}
+                        {{ item.product.name }} * {{ item.quantity }}, 
+                    {% endfor  %}                   
                 </td>
             </tr>
             <tr>
