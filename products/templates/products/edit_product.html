@@ -21,9 +21,10 @@
         </div>
         <div class="row ">
             <div class="col-9 mx-auto px-0 ">
-                <form action="{% url 'edit_product' product.id %}" method="POST"  enctype='multipart/form-data' id="add-product-form">
+                <form action="{% url 'edit_product' product.id %}?from_management={{ from_management }}" method="POST"  enctype='multipart/form-data' id="add-product-form">
                     {% csrf_token %}
                     {{ form | crispy}}
+                    <input type="hidden" name="from_management" value="{{ from_management }}">
                 </form>
             </div>     
         </div>

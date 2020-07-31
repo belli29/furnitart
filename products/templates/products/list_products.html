@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block page_header %}
+    <div class="container header-container">
+        <div class="row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+    <div class="overlay"></div>
+    <div class="container-fluid" >
+        <div class="row">
+            <div class="col text-center mt-3 px-0">
+                <h2 class="logo-font">List of products</h2>
+                <div class="text-muted ">Click on the icons to delete or edit the product</div>
+                <hr class="w-75 mb-1 hr-color-pr">    
+            </div>
+        </div>
+        <div class="row ">
+            <div class="col-9 mx-auto px-0 ">
+                <div class="row mt-1 mb-2"></div>
+                <div class="row">
+                     <div class="col-lg-6 offset-lg-3">
+                        {% if products %}
+                            <div class="table-responsive rounded">
+                                <table class="table table-borderless">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Quantity</th>
+                                            <th scope="col">Sold in 2020</th>
+                                            <th scope="col">Active</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for product in products%}
+                                            <tr> 
+                                                <td>
+                                                    <span>
+                                                        <a class="mx-2 text-color-pr" href="{% url 'delete_product' product.id %}">
+                                                            <i class="fas fa-trash" alt="delete"></i>
+                                                        </a>
+                                                    </span>
+                                                    <span>
+                                                        <a class="mx-2 text-color-pr" href="{% url 'edit_product' product.id%}?from_management=True">
+                                                            <i class="fas fa-pencil-alt" alt="edit"></i>
+                                                        </a>
+                                                    </span>
+                                                </td>           
+                                                <td>     
+                                                    {{product.name}}    
+                                                </td>
+                                                <td>
+                                                    {{product.available_quantity}}        
+                                                </td>
+                                                <td>25</td>
+                                                <td>
+                                                    {% if product.is_active %}
+                                                    <i class="fas fa-check text-color-pr" alt="active"></i>
+                                                    {%endif%}
+                                                </td>
+                                            </tr>
+                                        {% endfor%}                                                 
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% else %}
+                            <p class="lead mb-5">Your have no products</p>              
+                        {% endif %}
+                    </div>               
+                </div>     
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-9 mx-auto my-5">
+                <div class="row">
+                    <div class="col-6 col-md-2 px-0 ">
+                        <a href="{% url 'products_management' %}" class="btn btn-outline-dark rounded-0 mx-auto h-100">
+                            <span class="icon">
+                                <i class="fas fa-chevron-left"></i>
+                            </span>
+                            <span class="text-uppercase">Back to management</span>
+                        </a>
+                    </div>           
+                </div>
+            </div>   
+        </div>
+    </div>           
+    {% endblock %}

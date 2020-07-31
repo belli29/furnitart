@@ -3,9 +3,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models.functions import Lower
+from django.http import HttpResponseRedirect
 
 from .models import Product, Category
 from .forms import ProductForm
+from checkout.models import Order
 
 # Create your views here.
 
@@ -94,14 +96,19 @@ def product_details (request, product_id):
     return render(request, 'products/product_details.html', context )
 
 # products management
+
 @login_required
 def management (request):
     """view allowing super users to manage inventory """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
+    all_orders = Order.objects.all()
+    context = {
+        'orders': all_orders,
+    }
     template = 'products/management.html'
-    return render(request, template )
+    return render(request, template, context )
 
 
 
@@ -129,6 +136,19 @@ def add_product (request):
         return render (request, template, context)
 
 @login_required
+def list_products (request):
+    """view listing all products """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+    all_products = Product.objects.all()
+    context = {
+            "products": all_products
+        }
+    template = 'products/list_products.html'
+    return render (request, template, context)
+
+@login_required
 def edit_product(request, product_id):
     """ Edit a product in the store """
     if not request.user.is_superuser:
@@ -140,17 +160,24 @@ def edit_product(request, product_id):
         if form.is_valid():
             form.save()
             messages.success(request, 'Successfully updated product!')
-            return redirect(reverse('product_details', args=[product.id]))
+            # identify if the user was coming from management dashboard
+            from_management = request.POST['from_management']
+            if from_management == True:  
+                return redirect(reverse('list_products'))
+            else:
+                return redirect(reverse('product_details', args=[product.id]))
         else:
             messages.error(request, 'Failed to update product. Please ensure the form is valid.')
     else:
         form = ProductForm(instance=product)
         messages.info(request, f'You are editing {product.name}')
-
     template = 'products/edit_product.html'
+    # define if the user is coming from management dashboard
+    from_management = request.GET.get("from_management", False)
     context = {
         'form': form,
         'product': product,
+        'from_management': from_management,
     }
 
     return render(request, template, context)
