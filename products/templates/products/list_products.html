@@ -40,12 +40,12 @@
                                         {% for product in products%}
                                             <tr> 
                                                 <td>
-                                                    <a class="mx-2 text-color-pr" href="{% url 'delete_product' product.id %}">
+                                                    <a class="mx-2 text-color-pr remove-product" href="{% url 'delete_product' product.id %}?from_management=True">
                                                         <i class="fas fa-trash" alt="delete"></i>
                                                     </a>     
                                                 </td>           
                                                 <td> 
-                                                    <a href="{% url 'edit_product' product.id%}?from_management=True">
+                                                    <a href="{% url 'edit_product' product.id%}?from_managemeproduct.id%}?from_management=True">
                                                         {{product.name}}  
                                                     </a>          
                                                 </td>
@@ -91,4 +91,4 @@
             </div>   
         </div>
     </div>           
-    {% endblock %}
+{% endblock %}

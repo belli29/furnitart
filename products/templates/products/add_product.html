@@ -24,6 +24,7 @@
                 <form action="{% url 'add_product' %}" method="POST"  enctype='multipart/form-data' id="add-product-form">
                     {% csrf_token %}
                     {{ form | crispy}}
+                    <input type="hidden" name="from_management" value="{{ from_management }}">
                 </form>
             </div>     
         </div>

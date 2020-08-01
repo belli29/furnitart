@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect,reverse
+from django.shortcuts import render, get_object_or_404, redirect,reverse, HttpResponse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
@@ -123,14 +123,23 @@ def add_product (request):
         if form.is_valid():
             product = form.save()
             messages.success(request, 'You succesfully added a product!')
-            return redirect (reverse("product_details", args=[product.id]))
+            # identify if the user was coming from management dashboard
+            from_management = request.POST['from_management']
+            print(from_management)
+            if from_management:  
+                return redirect(reverse('list_products'))
+            else:
+                return redirect (reverse("product_details", args=[product.id]))
         else:
            messages.error(request, 'Something went wrong. We could not add the product.') 
         
     else:
         form = ProductForm()
+        # define if the user is coming from management dashboard
+        from_management = request.GET.get("from_management", False)
         context = {
-            "form": form
+            "form": form,
+            "from_management": from_management,
         }
         template = 'products/add_product.html'
         return render (request, template, context)
@@ -143,7 +152,7 @@ def list_products (request):
         return redirect(reverse('home'))
     all_products = Product.objects.all()
     context = {
-            "products": all_products
+            "products": all_products,
         }
     template = 'products/list_products.html'
     return render (request, template, context)
@@ -162,7 +171,7 @@ def edit_product(request, product_id):
             messages.success(request, 'Successfully updated product!')
             # identify if the user was coming from management dashboard
             from_management = request.POST['from_management']
-            if from_management == True:  
+            if from_management:
                 return redirect(reverse('list_products'))
             else:
                 return redirect(reverse('product_details', args=[product.id]))
@@ -191,7 +200,12 @@ def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     product.delete()
     messages.success(request, f'Product {product.name} deleted!')
-    return redirect(reverse('products'))
+    # identify if the user was coming from management dashboard
+    from_management = request.GET.get('from_management', False)
+    if from_management:
+        return redirect(reverse('list_products'))
+    else:
+        return redirect(reverse('products'))
 
 @login_required
 def toggle_active(request, product_id):

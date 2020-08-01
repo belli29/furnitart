@@ -153,13 +153,20 @@ body {
 .test{
     background-color: yellowgreen;
 }
+.test2{
+    background-color: orange;
+}
+.test3{
+    background-color: blue;
+}
+
 
 
 /* ------------------------------- bootstrap toasts */
 
 .message-container {
     position: fixed;
-    top: 80px;
+    top: 85px;
     right: 15px;
     z-index: 99999999999;
 }
@@ -181,7 +188,7 @@ body {
     border-bottom: 10px solid black;
     position: absolute;
     top: -10px;
-    right: 36px;
+    right: 2px;
 }
 
 /* Convenience classes - colors copied from Bootstrap */
@@ -194,7 +201,7 @@ body {
 }
 
 .arrow-success {
-    border-bottom-color: #28a745 !important;
+    border-bottom-color: #f1089e !important;
 }
 
 .arrow-danger {
