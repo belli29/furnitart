@@ -253,18 +253,15 @@ body {
     border-top: 1px solid #f1089e;
 }
 
-.text-color-pr{
-    color: #f1089e;
-}
-
-a.text-color-pr:hover{ 
-    color:#F833FF;
-}
-
 /* a */
 
 a:hover{
     text-decoration: none;
+    color: #F833FF;
+}
+
+a {
+    color: #f1089e;
 }
 
 /* -------------------------------- Media Queries */

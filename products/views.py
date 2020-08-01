@@ -192,3 +192,19 @@ def delete_product(request, product_id):
     product.delete()
     messages.success(request, f'Product {product.name} deleted!')
     return redirect(reverse('products'))
+
+@login_required
+def toggle_active(request, product_id):
+    """ Toggle a product is_active field """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+    product = get_object_or_404(Product, pk=product_id)
+    if product.is_active:
+        product.is_active = False
+        product.save()
+    else:
+        product.is_active = True
+        product.save()
+    template = 'products/list_products.html'
+    return redirect(reverse('list_products'))
