@@ -1,5 +1,7 @@
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
 from .models import Order, OrderLineItem
+from products.models import Product
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from products.models import Product
@@ -57,7 +59,16 @@ class StripeWH_Handler:
         for f, v in shipping_details.items():
             if v == "":
                 shipping_details[f] == None
-
+        
+        # update avaiable quantity of products
+        bag_dict = json.loads(bag)  
+        for p, quantity_purchased in bag_dict.items():
+            product = get_object_or_404(Product, pk=p)    
+            initial_quantity = product.available_quantity
+            available_quantity = initial_quantity - quantity_purchased
+            product.available_quantity = available_quantity
+            product.save()
+        
         # Update profile information if save_info was checked
         profile = None
         username = intent.metadata.username
