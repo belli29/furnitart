@@ -2,6 +2,9 @@ from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpR
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.template.response import TemplateResponse
 
 from .forms import OrderForm
 from .models import Order, OrderLineItem
@@ -15,6 +18,7 @@ import json
 
 def checkout(request):
     if request.method == 'POST':
+        payment_choice = request.POST['payment-choice']
         bag = request.session.get('bag', {})
         # collect data from the form
         form_data = {
@@ -33,9 +37,10 @@ def checkout(request):
         if order_form.is_valid():
             order = order_form.save()
             # add pid and original bag to order
-            pid = request.POST.get('client_secret').split('_secret')[0]
-            order.stripe_pid = pid
-            order.original_bag = json.dumps(bag)
+            if payment_choice == 'stripe':
+                pid = request.POST.get('client_secret').split('_secret')[0]
+                order.stripe_pid = pid
+                order.original_bag = json.dumps(bag)
             # add line items to order
             for item_id, item_quantity in bag.items():
                 try:
@@ -57,25 +62,35 @@ def checkout(request):
             messages.error(request, 'There was an error with your form. \
                 Please double check your information.')
         request.session['save_info'] = 'save-info' in request.POST
-        return redirect(reverse('checkout_success', args=[order.order_number]))
+        if payment_choice == 'stripe':
+            return redirect(reverse('checkout_success', args=[order.order_number]))
+        if payment_choice == 'paypal':
+            email = request.POST['email']
+            return redirect(reverse('invoice_confirmation',  args=[order.order_number]))
+            
     # GET request
     else:
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
         stripe_secret_key = settings.STRIPE_SECRET_KEY
+        payment_choice = None
+        intent = None
+        if 'payment-choice' in  request.GET:
+            payment_choice = request.GET['payment-choice']
         bag = request.session.get('bag', {})
         if not bag:
             messages.error(request, "There's nothing in your bag")
             return redirect(reverse('products'))
 
         current_bag = bag_contents(request)
-        grand_total = current_bag['grand_total']
-        # Stripe intent
-        stripe_total = round(grand_total*100)
-        stripe.api_key = stripe_secret_key
-        intent = stripe.PaymentIntent.create(
-            amount=stripe_total,
-            currency=settings.STRIPE_CURRENCY,
-        )
+        grand_total = current_bag['grand_total'] 
+        if payment_choice == "stripe": 
+            # Stripe intent
+            stripe_total = round(grand_total*100)
+            stripe.api_key = stripe_secret_key
+            intent = stripe.PaymentIntent.create(
+                amount=stripe_total,
+                currency=settings.STRIPE_CURRENCY,
+            )
         # generate form 
         if request.user.is_authenticated:
             try:
@@ -97,13 +112,18 @@ def checkout(request):
             order_form = OrderForm()
         
         template = 'checkout/checkout.html'
+        if hasattr(intent,'client_secret'):
+            client_secret = intent.client_secret
+        else:
+            client_secret = "non"
         context = {
             'order_form': order_form,
             'stripe_public_key': stripe_public_key,
-            'client_secret': intent.client_secret,
+            'client_secret': client_secret ,
         }
-
-    return render(request, template, context)
+        context.update({'client_secret': client_secret })
+        print(context['client_secret'])
+        return TemplateResponse(request, template, context)
 
 def checkout_success(request, order_number):
     """
@@ -171,3 +191,62 @@ def cache_checkout_data(request):
         messages.error(request, "There was something wrong with your payment.\
             Please try later")
         return HttpResponse(status=400)
+
+def invoice_confirmation(request, order_number):
+    """
+    handle invoice confirmation when user selects paypal payment method
+    """
+    order = get_object_or_404(Order, order_number=order_number )
+    
+    # send email
+    cust_email = order.email
+    subject = render_to_string(
+        'checkout/confirmation_emails/invoice_confirmation_email_subject.txt',
+        {'order': order})
+    body = render_to_string(
+        'checkout/confirmation_emails/invoice_confirmation_email_body.txt',
+        {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+        
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [cust_email]
+    )
+    
+    # update avaiable quantity of products      
+    for p, quantity_purchased in request.session['bag'].items():
+        product = get_object_or_404(Product, pk=p)
+        initial_quantity = product.available_quantity
+        available_quantity = initial_quantity - quantity_purchased
+        product.available_quantity = available_quantity
+        product.save() 
+    
+    # Attach the user's profile to the order if user is authenticated
+    profile = None
+    if request.user.is_authenticated:
+        profile = UserProfile.objects.get(user=request.user)
+        order.user_profile = profile
+        order.save()
+        # save info if user has checked save-info box
+        if request.session['save_info']:
+            username = request.user.username
+            profile = UserProfile.objects.get(user__username=username)
+            profile.default_phone_number = order.phone_number
+            profile.default_country = order.country
+            profile.default_postcode = order.postcode
+            profile.default_town_or_city = order.town_or_city
+            profile.default_street_address1 = order.street_address1
+            profile.default_street_address2 = order.street_address2
+            profile.default_county = order.county
+            profile.save()
+
+    # delete session bag 
+    if 'bag' in request.session: 
+        del request.session['bag']
+
+    # add success message
+    messages.success(request, f'You will soon receive the invoice at {cust_email}.')
+
+    template = 'checkout/invoice_confirmation.html'
+    return render(request, template)

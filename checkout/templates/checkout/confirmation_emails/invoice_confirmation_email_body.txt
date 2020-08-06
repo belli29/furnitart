@@ -1,0 +1,24 @@
+
+Hello {{ order.full_name }}!
+
+Here is the invoice for you pre-order {{ order.order_number }}
+
+If you want us to process your order make a payment for EUR {{ order.grand_total }} to the papaypal account associated to the following email:
+
+{{ contact_email }}
+
+Remember to add your pre-order number {{ order.order_number }} !
+
+Here below a small summary of your pre-order
+
+Shipping adress : {{ order.street_address1 }} in {{ order.town_or_city }}, {{ order.country }}
+Grand Total: ${{ order.grand_total }}
+
+We've got your phone number on file as {{ order.phone_number }}.
+
+If you have any questions, feel free to contact us at {{ contact_email }}.
+
+
+Sincerely,
+
+Furnitart
