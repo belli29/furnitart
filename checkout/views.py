@@ -72,10 +72,6 @@ def checkout(request):
     else:
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
         stripe_secret_key = settings.STRIPE_SECRET_KEY
-        payment_choice = None
-        intent = None
-        if 'payment-choice' in  request.GET:
-            payment_choice = request.GET['payment-choice']
         bag = request.session.get('bag', {})
         if not bag:
             messages.error(request, "There's nothing in your bag")
@@ -83,14 +79,14 @@ def checkout(request):
 
         current_bag = bag_contents(request)
         grand_total = current_bag['grand_total'] 
-        if payment_choice == "stripe": 
-            # Stripe intent
-            stripe_total = round(grand_total*100)
-            stripe.api_key = stripe_secret_key
-            intent = stripe.PaymentIntent.create(
-                amount=stripe_total,
-                currency=settings.STRIPE_CURRENCY,
-            )
+        # Stripe intent
+        stripe_total = round(grand_total*100)
+        stripe.api_key = stripe_secret_key
+        intent = stripe.PaymentIntent.create(
+            amount=stripe_total,
+            currency=settings.STRIPE_CURRENCY,
+        )
+        client_secret = intent.client_secret
         # generate form 
         if request.user.is_authenticated:
             try:
@@ -112,18 +108,12 @@ def checkout(request):
             order_form = OrderForm()
         
         template = 'checkout/checkout.html'
-        if hasattr(intent,'client_secret'):
-            client_secret = intent.client_secret
-        else:
-            client_secret = "non"
         context = {
             'order_form': order_form,
             'stripe_public_key': stripe_public_key,
-            'client_secret': client_secret ,
-        }
-        context.update({'client_secret': client_secret })
-        print(context['client_secret'])
-        return TemplateResponse(request, template, context)
+            'client_secret':  client_secret
+            }
+        return render(request, template, context)        
 
 def checkout_success(request, order_number):
     """

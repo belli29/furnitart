@@ -10,7 +10,8 @@ $('#paypal-payment').click(function () {
     $(".paypal-total").removeClass("d-none"); // display discounted total
     $(".checkout-total").css("text-decoration", "line-through");// total barred 
     $("#paypal_p").removeClass("d-none");// display paypal payment info
-    $("#card-element,#card-errors").addClass("d-none");// remove Stripe cc field 
+    $("#card-element,#card-errors").addClass("d-none");// remove Stripe cc field
+    $("#submit-button").removeClass("d-none").html("<span class='text-uppercase'>get invoice </span><span class='icon'><i class='fas fa-chevron-right'></i></span>");
 });
 // Stripe payment
 $('#stripe-payment').click(function () { 
@@ -23,4 +24,5 @@ $('#stripe-payment').click(function () {
     $(".checkout-total").css("text-decoration", "none");// total unbarred 
     $("#card-element").removeClass("d-none");// display Stripe cc field 
     $("#paypal_p").addClass("d-none");// remove paypal payment info
+    $("#submit-button").removeClass("d-none").html("<span class='text-uppercase'>secure checkout</span><span class='icon'><i class='fas fa-lock'></i></span>");
 });
