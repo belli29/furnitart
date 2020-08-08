@@ -5,9 +5,10 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.template.response import TemplateResponse
+from django.contrib.auth.decorators import login_required
 
-from .forms import OrderForm
-from .models import Order, OrderLineItem
+from .forms import OrderForm, PreOrderForm
+from .models import Order, OrderLineItem, PreOrder, PreOrderLineItem
 from products.models import Product
 from bag.contexts import bag_contents
 from profiles.models import UserProfile
@@ -32,41 +33,66 @@ def checkout(request):
             'street_address2': request.POST['street_address2'],
             'county': request.POST['county'],
         }
-        # validate form 
-        order_form = OrderForm(form_data)
-        if order_form.is_valid():
-            order = order_form.save()
-            # add pid and original bag to order
-            if payment_choice == 'stripe':
+        # stripe
+        if payment_choice == "stripe":
+            # validate form 
+            order_form = OrderForm(form_data)
+            if order_form.is_valid():
+                order = order_form.save()
+                # add pid and original bag to order
                 pid = request.POST.get('client_secret').split('_secret')[0]
                 order.stripe_pid = pid
                 order.original_bag = json.dumps(bag)
-            # add line items to order
-            for item_id, item_quantity in bag.items():
-                try:
-                    product = Product.objects.get(id=item_id)
-                    order_line_item = OrderLineItem(
-                                order=order,
-                                product=product,
-                                quantity=item_quantity,
-                            )
-                    order_line_item.save()
-                except Product.DoesNotExist:
-                    messages.error(request, (
-                        "One of the products in your bag wasn't found in our database. "
-                        "Contact us for assistance!")
-                    )
-                    order.delete()
-                    return redirect(reverse('view_bag'))    
-        else:
-            messages.error(request, 'There was an error with your form. \
-                Please double check your information.')
-        request.session['save_info'] = 'save-info' in request.POST
-        if payment_choice == 'stripe':
+                # add line items to order
+                for item_id, item_quantity in bag.items():
+                    try:
+                        product = Product.objects.get(id=item_id)
+                        order_line_item = OrderLineItem(
+                                    order=order,
+                                    product=product,
+                                    quantity=item_quantity,
+                                )
+                        order_line_item.save()
+                    except Product.DoesNotExist:
+                        messages.error(request, (
+                            "One of the products in your bag wasn't found in our database. "
+                            "Contact us for assistance!")
+                        )
+                        order.delete()
+                        return redirect(reverse('view_bag'))    
+            else:
+                messages.error(request, 'There was an error with your form. \
+                    Please double check your information.')
+            request.session['save_info'] = 'save-info' in request.POST
             return redirect(reverse('checkout_success', args=[order.order_number]))
+        # paypal
         if payment_choice == 'paypal':
-            email = request.POST['email']
-            return redirect(reverse('invoice_confirmation',  args=[order.order_number]))
+            # validate form 
+            pre_order_form = PreOrderForm(form_data)
+            if pre_order_form.is_valid():
+                pre_order = pre_order_form.save()
+                # add line items to preorder
+                for item_id, item_quantity in bag.items():
+                    try:
+                        product = Product.objects.get(id=item_id)
+                        pre_order_line_item = PreOrderLineItem(
+                                    order=pre_order,
+                                    product=product,
+                                    quantity=item_quantity,
+                                )
+                        pre_order_line_item.save()
+                    except Product.DoesNotExist:
+                        messages.error(request, (
+                            "One of the products in your bag wasn't found in our database. "
+                            "Contact us for assistance!")
+                        )
+                        pre_order.delete()
+                        return redirect(reverse('view_bag')) 
+            else:
+                messages.error(request, 'There was an error with your form. \
+                Please double check your information.')
+            request.session['save_info'] = 'save-info' in request.POST
+            return redirect(reverse('invoice_confirmation',  args=[pre_order.order_number]))
             
     # GET request
     else:
@@ -90,6 +116,8 @@ def checkout(request):
         if request.user.is_authenticated:
             try:
                 profile = UserProfile.objects.get(user=request.user)
+
+
                 order_form = OrderForm(initial={
                     'full_name': profile.user.get_full_name(),
                     'email': profile.user.email,
@@ -181,11 +209,11 @@ def cache_checkout_data(request):
             Please try later")
         return HttpResponse(status=400)
 
-def invoice_confirmation(request, order_number):
+def invoice_confirmation(request, pre_order_number):
     """
     handle invoice confirmation when user selects paypal payment method
     """
-    order = get_object_or_404(Order, order_number=order_number )
+    order = get_object_or_404(PreOrder, order_number=pre_order_number )
     
     # send email
     cust_email = order.email
@@ -211,7 +239,7 @@ def invoice_confirmation(request, order_number):
         product.available_quantity = available_quantity
         product.save() 
     
-    # Attach the user's profile to the order if user is authenticated
+    # Attach the user's profile to the pre order if user is authenticated
     profile = None
     if request.user.is_authenticated:
         profile = UserProfile.objects.get(user=request.user)
@@ -240,5 +268,18 @@ def invoice_confirmation(request, order_number):
     template = 'checkout/invoice_confirmation.html'
     return render(request, template)
 
-
+@login_required
+def toggle_shipped(request, order_id):
+    """ Toggle a product shipped field """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+    order = get_object_or_404(Order, pk=order_id)
+    if order.shipped:
+        order.shipped = False
+        order.save()
+    else:
+        order.shipped = True
+        order.save()
+    return redirect(reverse('products_management'))
     

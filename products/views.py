@@ -220,5 +220,4 @@ def toggle_active(request, product_id):
     else:
         product.is_active = True
         product.save()
-    template = 'products/list_products.html'
     return redirect(reverse('list_products'))
