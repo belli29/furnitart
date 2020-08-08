@@ -8,7 +8,7 @@ def bag_contents(request):
     bag_items = []
     total = 0
     product_count = 0
-    irl_delivery = False
+    ie_delivery = False
     bag = request.session.get('bag', {})
     for item_id, quantity in bag.items():
         product = get_object_or_404(Product, pk=item_id)
@@ -37,6 +37,7 @@ def bag_contents(request):
 
 
     def delivery_calculation (free_delivery_treshold, standard_delivery_percentage):
+        
         if total < free_delivery_treshold:
             delivery = total * Decimal(standard_delivery_percentage/ 100)
             free_delivery_delta = free_delivery_treshold- total
@@ -50,7 +51,7 @@ def bag_contents(request):
         }
         return results
 
-    if irl_delivery == False:
+    if ie_delivery == False:
         results = delivery_calculation(settings.FREE_DELIVERY_THRESHOLD, settings.STANDARD_DELIVERY_PERCENTAGE)
     
     else:

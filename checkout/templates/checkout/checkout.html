@@ -81,6 +81,7 @@
 {% block postloadjs %}
     {{ block.super}}
     <script src="{% static 'checkout/js/payment_choice.js' %}"></script>
+    <script src="{% static 'checkout/js/shipping_verification.js' %}"></script>
     <!-- Stripe scripts -->
     {{ stripe_public_key|json_script:"id_stripe_public_key" }}
     {{ client_secret|json_script:"id_client_secret" }}
