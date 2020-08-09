@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 
 from .models import Product, Category
 from .forms import ProductForm
-from checkout.models import Order
+from checkout.models import Order,PreOrder
 
 # Create your views here.
 
@@ -103,9 +103,11 @@ def management (request):
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
-    all_orders = Order.objects.all()
+    orders = Order.objects.all()
+    preorders = PreOrder.objects.all()
     context = {
-        'orders': all_orders,
+        'orders': orders,
+        'preorders': preorders,
     }
     template = 'products/management.html'
     return render(request, template, context )

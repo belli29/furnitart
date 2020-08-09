@@ -1,0 +1,61 @@
+<div id="orders-section"  class="col-12 col-md-6 ">
+    <hr class="w-100 mb-1 hr-color-pr d-block d-md-none">
+    <div class="row">
+        <h5 class="col-4 offset-4 text-center text-nowrap">Orders</h5>
+        <div class="col-4 text-right text-nowrap">
+            <div id="switch-to-preorders"class="switch-orders badge badge-info bg-color-pr border-0">Pre-orders </div>
+        </div>
+    </div>
+     {% if orders.all %}
+        <div class="order-history table-responsive">
+            <table class="table table-sm table-borderless">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Order Total</th>
+                        <th>Shipped</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'order_history' order.order_number %}"
+                                title="{{ order.order_number }}">
+                                    {{ order.order_number|truncatechars:6 }}
+                                </a>
+                            </td>
+                            <td>{{ order.date }}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    {% for item in order.lineitems.all %}
+                                        <li class="small">
+                                            {{ item.product.name }}*{{ item.quantity }},
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>€ {{ order.grand_total }}</td>
+                            <td class="text-center">
+                                {% if order.shipped %}
+                                    <a href="{% url 'toggle_shipped' order.id %}">
+                                        <i class="fas fa-check text-color-pr" alt="active"></i>
+                                    </a>
+                                {% else %}
+                                    <a href="{% url 'toggle_shipped' order.id %}">
+                                        <i class="fas fa-times text-black" alt="inactive"></i>
+                                    </a>
+                                {%endif%}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p> You have no orders at the moment</p>
+    {% endif %}
+</div>

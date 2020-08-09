@@ -1,0 +1,48 @@
+<div id="preorders-section" class="col-12 col-md-6 d-none">
+    <hr class="w-100 mb-1 hr-color-pr d-block d-md-none">
+    <div class="row">
+        <h5 class="col-4 offset-4 text-center text-nowrap">Pre-orders</h5>
+        <div class="col-4 text-right text-nowrap">
+            <div id="switch-to-orders" class="switch-orders badge badge-info bg-color-pr border-0">Orders </div>
+        </div>
+    </div>
+     {% if preorders.all %}
+        <div class="order-history table-responsive">
+            <table class="table table-sm table-borderless">
+                <thead>
+                    <tr>
+                        <th>Order Number</th>
+                        <th>Date</th>
+                        <th>Items</th>
+                        <th>Order Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in preorders %}
+                        <tr>
+                            <td>
+                                <a href="{% url 'order_history' order.order_number %}"
+                                title="{{ order.order_number }}">
+                                    {{ order.order_number|truncatechars:6 }}
+                                </a>
+                            </td>
+                            <td>{{ order.date }}</td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    {% for item in order.lineitems.all %}
+                                        <li class="small">
+                                            {{ item.product.name }}*{{ item.quantity }},
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>€ {{ order.grand_total }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p> You have no orders at the moment</p>
+    {% endif %}
+</div>

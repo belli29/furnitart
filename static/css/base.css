@@ -74,6 +74,7 @@ body {
     opacity: .2;
 }
 
+.switch-orders,
 .remove-item,
 .payment-option {
     cursor: pointer;
