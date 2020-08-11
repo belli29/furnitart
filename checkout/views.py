@@ -266,7 +266,10 @@ def invoice_confirmation(request, pre_order_number):
     messages.success(request, f'You will soon receive the invoice at {cust_email}.')
 
     template = 'checkout/invoice_confirmation.html'
-    return render(request, template)
+    context = {
+        "order": order,
+    }
+    return render(request, template, context)
 
 @login_required
 def toggle_shipped(request, order_id):

@@ -18,23 +18,46 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3 px-0">
-                <h2 class="logo-font">Thank you!</h2>
-                <div class="text-muted ">
-                    Your will soon receive an invoice by email with all the instructions to complete the payment through PayPal.
-                </div>
+                {% if not from_profile %}
+                    <h2 class="logo-font">Thank you!</h2>
+                    <div class="text-muted ">
+                        Your pre order information is below. Paymment instructions will be sent to <strong>{{ order.email }}</strong>.
+                    </div>
+                {% endif %}
                 <hr class="w-75 mb-1 hr-color-pr px-0">    
             </div>
+        </div>
+        <div class="row ">
+            <div class="col-9 mx-auto px-0 ">
+                <div class="row mt-1 mb-2"></div>
+                <div class="row" >
+                    <div class="col-12 col-md-9 mx-auto jumbotron">
+                        {% include 'includes/checkout_success_order.html' %}
+                    </div>
+                </div>
+                <hr class="w-100 mb-5 hr-color-pr">                                   
+            </div>          
         </div>
         <div class="row">
             <div class="col-9 mx-auto my-5">
                 <div class="row">
                     <div class="col-12 px-0 ">
-                        <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 mx-auto">
-                            <span class="icon mr-2">
-                                <i class=" fas fa-chevron-left"></i>
-                            </span>
-                            <span class="text-uppercase">Keep shopping</span>
-                        </a>                    
+                        {% if from_profile %}
+                            <a href="{% url 'profile' %}" class="btn btn-outline-dark rounded-0 mx-auto">
+                                <span class="icon mr-2">
+                                    <i class="fas fa-angle-left"></i>
+                                </span>
+                                <span class="text-uppercase">Back to Profile</span>
+                            </a>
+                        {% else %}
+                            <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 mx-auto">
+                                <span class="icon mr-2">
+                                    <i class=" fas fa-chevron-left"></i>
+                                </span>
+                                <span class="text-uppercase">Keep shopping</span>
+                            </a>
+                        {% endif %}
+                            
                     </div>             
                 </div>
             </div>   

@@ -18,7 +18,7 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3 px-0">
-                {% if not from_profile %}
+                {% if not from_profile or not from_management %}
                     <h2 class="logo-font">Thank you!</h2>
                     <div class="text-muted ">
                         Your order information is below. A confirmation email will be sent to <strong>{{ order.email }}</strong>.
@@ -49,8 +49,15 @@
                                 </span>
                                 <span class="text-uppercase">Back to Profile</span>
                             </a>
+                        {% elif from_management %}
+                            <a href="{% url 'products_management' %}" class="btn btn-outline-dark rounded-0 mx-auto">
+                                <span class="icon mr-2">
+                                    <i class="fas fa-angle-left"></i>
+                                </span>
+                                <span class="text-uppercase">Back to Management</span>
+                            </a>
                         {% else %}
-                            <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 mx-auto">
+                            <a href="{% url 'products_management' %}" class="btn btn-outline-dark rounded-0 mx-auto">
                                 <span class="icon mr-2">
                                     <i class=" fas fa-chevron-left"></i>
                                 </span>
