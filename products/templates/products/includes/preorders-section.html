@@ -1,11 +1,4 @@
-<div id="preorders-section" class="col-12 col-md-6 d-none">
-    <hr class="w-100 mb-1 hr-color-pr d-block d-md-none">
-    <div class="row">
-        <h5 class="col-4 offset-4 text-center text-nowrap">Pre-orders</h5>
-        <div class="col-4 text-right text-nowrap">
-            <div id="switch-to-orders" class="switch-orders badge badge-info bg-color-pr border-0">Orders </div>
-        </div>
-    </div>
+<div id="preorders-section" class="col">
      {% if preorders.all %}
         <div class="order-history table-responsive">
             <table class="table table-sm table-borderless">
@@ -38,7 +31,14 @@
                                 </ul>
                             </td>
                             <td>€ {{ order.grand_total }}</td>
-                            <td><span>Pending</span><span><a href="{% url 'confirm_pre_order' order.order_number %}">Confirm</a></span></td>
+                            <td>
+                                <span>Pending</span>
+                                <span>
+                                    <a href="{% url 'confirm_pre_order' order.order_number %}" alt="confirm pre order">
+                                        <i class="fas fa-check-double"></i>
+                                    </a>
+                                </span>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

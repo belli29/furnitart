@@ -13,7 +13,7 @@ from checkout.models import Order, OrderLineItem, PreOrder, PreOrderLineItem
 
 def all_products (request):
     """view showing all products, including sorting and search queried"""
-    
+    # save current parameters in a variable 
     current_url = request.get_full_path()
     if '?' in current_url :
         current_param = current_url.split('?')[1]
@@ -103,11 +103,34 @@ def management (request):
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
+    # orders section
     orders = Order.objects.all()
+    pay_pal_filter = False
+    shipped_filter = False
+    view_preorders = False
+    if 'view_preorders' in request.GET:    
+        view_preorders = True
+    if 'pay_pal_filter' in request.GET:
+        orders = orders.filter(pay_pal_order=True)
+        pay_pal_filter = True
+    if 'shipped_filter' in request.GET:
+        orders = orders.filter(shipped=True)
+        shipped_filter = True
+    # save current parameters in a variable 
+    current_url = request.get_full_path()
+    if '?' in current_url :
+        current_param = current_url.split('?')[1]
+    else:
+        current_param = ""
+
     preorders = PreOrder.objects.all()
     context = {
+        'view_preorders': view_preorders,
         'orders': orders,
         'preorders': preorders,
+        'pay_pal_filter_active': pay_pal_filter,
+        'shipped_filter_active': shipped_filter,
+        'current_param': current_param,
     }
     template = 'products/management.html'
     return render(request, template, context )
@@ -149,6 +172,7 @@ def add_product (request):
 @login_required
 def list_products (request):
     """view listing all products """
+    
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))

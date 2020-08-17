@@ -19,49 +19,59 @@
         <div class="row">
             <div class="col text-center mt-3 px-0">
                 <h2 class="logo-font">Products and orders Management</h2>
-                <hr class="w-75 mb-1 hr-color-pr"> 
             </div>
         </div>
         <div class="row">
             <div class="col-9 mx-auto px-0">
                 <div class="row mt-1 mb-2"></div>
-                <div class="row ">
-                    <div class="col-12 col-md-6 text-center px-5">
-                        <h5>Products Management</h5>
-                        <p class="text-left mt-3">
-                            <a href="{% url 'add_product' %}?from_management=True" class="btn btn-outline-dark rounded-0 mx-auto btn-lg">
+                <div class="d-flex justify-content-center justify-content-md-about filter-bar my-lg-4">
+                    
+                    <div class="col text-center px-5">
+                        
+                            <a href="{% url 'add_product' %}?from_management=True" class="badge bg-color-pr badge-info">
                                 <span class="text-uppercase">Add product </span>
                                 <span class="icon mx-2">
                                     <i class="fas fa-plus" ></i>
                                 </span>
                             </a>
-                        </p>
-                        <p class="text-left">
-                            <a href="{% url 'list_products' %}" class="btn btn-outline-dark rounded-0 mx-auto btn-lg">
+                        
+                        
+                            <a href="{% url 'list_products' %}" class="badge bg-color-pr badge-info">
                                 <span class="text-uppercase">See list of products </span>
                                 <span class="icon mx-2">
                                     <i class="fas fa-list" ></i>
                                 </span>
                             </a>
-                        </p>
-                        <p class="text-left">
-                            <a href="{% url 'list_products' %}" class="btn btn-outline-dark rounded-0 mx-auto btn-lg">
+                        
+                            <a href="{% url 'list_products' %}" class="badge bg-color-pr badge-info">
                                 <span class="text-uppercase">Sales stats </span>
                                 <span class="icon mx-2">
                                     <i class="fas fa-user-edit" ></i>
                                 </span>
                             </a>
-                        </p>
-                    </div>    
-                    {% include 'products/includes/orders-section.html' %}
-                    {% include 'products/includes/preorders-section.html' %}    
+                        
+                    </div>
+                </div> 
+                <div class="row">
+                    <hr class="w-100 mb-1 hr-color-pr"> 
+                    <div class="col text-center px-5">
+                        <div class="row ">
+                            {% include 'products/includes/filter-bar-orders.html' %}
+                        </div>
+                        <div class="row {% if view_preorders%} d-none {% endif %}"> 
+                            {% include 'products/includes/orders-section.html' %}
+                        </div>
+                        <div class="row {% if not view_preorders%} d-none {% endif %}"> 
+                            {% include 'products/includes/preorders-section.html' %}
+                        </div>
+                    </div>     
                 </div>
             </div>
         </div>
     
 {% endblock %}
 
-{% block postloadjs %}
+<!-- {% block postloadjs %}
     {{ block.super}}
     <script src="{% static 'profiles/js/orders_switcher.js' %}"></script>
-{% endblock %}
+{% endblock %} -->

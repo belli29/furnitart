@@ -1,12 +1,5 @@
-<div id="orders-section"  class="col-12 col-md-6 ">
-    <hr class="w-100 mb-1 hr-color-pr d-block d-md-none">
-    <div class="row">
-        <h5 class="col-4 offset-4 text-center text-nowrap">Orders</h5>
-        <div class="col-4 text-right text-nowrap">
-            <div id="switch-to-preorders"class="switch-orders badge badge-info bg-color-pr border-0">Pre-orders </div>
-        </div>
-    </div>
-     {% if orders.all %}
+<div id="orders-section"  class="col">
+    {% if orders.all %}
         <div class="order-history table-responsive">
             <table class="table table-sm table-borderless">
                 <thead>
