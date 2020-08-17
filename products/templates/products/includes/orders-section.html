@@ -38,7 +38,14 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <td>€ {{ order.grand_total }}</td>
+                            <td>
+                                € {{ order.grand_total }}
+                                {% if order.pay_pal_order%}
+                                    <p class="text-center">
+                                        <i class="fa fa-cc-paypal text-color-pr text-center" aria-hidden="true"></i>
+                                    </p>
+                                {% endif %}
+                            </td>
                             <td class="text-center">
                                 {% if order.shipped %}
                                     <a href="{% url 'toggle_shipped' order.id %}">

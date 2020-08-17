@@ -7,7 +7,7 @@ from django.http import HttpResponseRedirect
 
 from .models import Product, Category
 from .forms import ProductForm
-from checkout.models import Order,PreOrder
+from checkout.models import Order, OrderLineItem, PreOrder, PreOrderLineItem
 
 # Create your views here.
 
@@ -244,6 +244,7 @@ def order_history(request, order_number):
 
     return render(request, template, context)
 
+@login_required
 def pre_order_history(request, order_number):
     """ show speficic pre order """
     if not request.user.is_superuser:
@@ -262,4 +263,43 @@ def pre_order_history(request, order_number):
         }
 
     return render(request, template, context)
-    
+
+@login_required
+def confirm_pre_order(request, order_number):
+    """ view deleting preorder and creating a corresponding order """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can see that.')
+        return redirect(reverse('home'))
+    pre_order = get_object_or_404(PreOrder, order_number=order_number)
+    order = Order(
+        user_profile=pre_order.user_profile,
+        full_name=pre_order.full_name,
+        email=pre_order.email,
+        phone_number=pre_order.phone_number,
+        country=pre_order.country,
+        postcode=pre_order.postcode,
+        town_or_city=pre_order.town_or_city,
+        street_address1=pre_order.street_address1,
+        street_address2=pre_order.street_address2,
+        county=pre_order.county,
+        delivery_cost=pre_order.delivery_cost,
+        order_total=pre_order.order_total,
+        grand_total=pre_order.grand_total,
+        pay_pal_order=True
+        
+    )
+    # save order
+    order.save()
+    # copy line items from preorder to order
+    for li in pre_order.lineitems.all():
+        order_line_item = OrderLineItem(
+            order=order,
+            product=li.product,
+            quantity=li.quantity,
+        )
+        order_line_item.save()
+    # delete preorder
+    pre_order.delete()
+    # success message
+    messages.success(request, f'pre_order {pre_order.order_number} deleted. New order {order.order_number} confirmed')
+    return redirect(reverse('products_management'))

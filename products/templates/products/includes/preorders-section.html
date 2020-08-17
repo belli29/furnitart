@@ -15,6 +15,7 @@
                         <th>Date</th>
                         <th>Items</th>
                         <th>Order Total</th>
+                        <th>Status</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -37,6 +38,7 @@
                                 </ul>
                             </td>
                             <td>€ {{ order.grand_total }}</td>
+                            <td><span>Pending</span><span><a href="{% url 'confirm_pre_order' order.order_number %}">Confirm</a></span></td>
                         </tr>
                     {% endfor %}
                 </tbody>
