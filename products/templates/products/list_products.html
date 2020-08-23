@@ -40,9 +40,9 @@
                                         {% for product in products%}
                                             <tr> 
                                                 <td>
-                                                    <a class="mx-2 text-color-pr remove-product" href="{% url 'delete_product' product.id %}?from_management=True">
+                                                    <a href="" class="mx-2 text-color-pr remove-product" data-toggle="modal" data-target="#delete-product-{{product.id}}">
                                                         <i class="fas fa-trash" alt="delete"></i>
-                                                    </a>     
+                                                    </a>       
                                                 </td>           
                                                 <td> 
                                                     <a href="{% url 'edit_product' product.id%}?from_managemeproduct.id%}?from_management=True">
@@ -65,6 +65,8 @@
                                                     {%endif%}
                                                 </td>
                                             </tr>
+                                            {% include 'products/includes/modal_window.html' %}
+                                             
                                         {% endfor%}                                                 
                                     </tbody>
                                 </table>
@@ -90,5 +92,6 @@
                 </div>
             </div>   
         </div>
-    </div>           
+    </div>
+            
 {% endblock %}

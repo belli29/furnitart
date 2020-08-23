@@ -162,9 +162,13 @@
             $('.toast').toast('show');
         </script>
         <!-- change chevron icon in menu -->
-        <script type="text/javascript">        
-            $('#areas').on ("click", function(){
+        <script type="text/javascript"> 
+            $(document).ready(function (){       
+            $('#areas').click (function(){
+                console.log("23")
                 $("#areas-icon").toggleClass('fa-chevron-up fa-chevron-down');
+                $("#areas-icon").removeClass('fa-chevron-down');
+            });
             });
         </script>
     {% endblock %}

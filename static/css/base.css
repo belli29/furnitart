@@ -265,6 +265,10 @@ body {
     color: #f1089e;
 }
 
+.border-color-pr{  
+    border-color: #f1089e;
+}
+
 /* a */
 
 a:hover{

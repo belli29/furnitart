@@ -18,12 +18,12 @@
                 {% if request.user.is_superuser %}
                     <div class=" mx-2 d-inline">
                         <span> 
-                            <a href="{% url 'delete_product' product.id%}" >
+                            <a href="" data-toggle="modal" data-target="#delete-product-{{product.id}}">
                                 <i class="fas fa-trash text-color-pr mx-2 " alt="delete"></i>
                             </a>
                         </span>
                         <span>
-                            <a href="{% url 'edit_product' product.id%}">
+                            <a href="{% url 'edit_product' product.id%}" >
                                 <i class="fas fa-pencil-alt text-color-pr mx-2" alt="edit"></i>
                             </a>
                         </span>
@@ -37,21 +37,19 @@
         <div class="row">
             <div class="product-container col-10 offset-1">
                 <div class="row mt-1 mb-2"></div>
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
-                        <a href="">
-                            <div class="image-container my-5">
-                                {% if product.image %}
-                                    <a href="{{ product.image.url }}" target="_blank">
-                                        <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
-                                    </a>
-                                    {% else %}
-                                    <a href="">
-                                        <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
-                                    </a>
-                                {% endif %}
-                            </div>
-                        </a>
+                <div class="row d-flex">
+                    <div class="col-12 col-md-6 col-lg-4 offset-lg-2 ">
+                        <div class="image-container my-5  ">
+                            {% if product.image %}
+                                <a href="{{ product.image.url }}" target="_blank">
+                                    <img class="card-img-top img-fluid  " src="{{ product.image.url }}" alt="{{ product.name }}">
+                                </a>
+                            {% else %}
+                                <a href="">
+                                    <img class="card-img-top img-fluid" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                </a>
+                            {% endif %}
+                        </div>
                     </div>
                     <div class="col-12 col-md-6 col-lg-4 offset-lg-1">
                         <div class="product-details-container mb-5 mt-md-5">   
@@ -89,6 +87,7 @@
             </div>
         </div>
     </div>
+    {% include 'products/includes/modal_window.html' %}
 
 {% endblock %}
 
