@@ -273,16 +273,55 @@ def invoice_confirmation(request, pre_order_number):
 
 @login_required
 def toggle_shipped(request, order_id):
-    """ Toggle a product shipped field """
+    """ Toggle a product shipped field, add shipping code and inform user by email """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
     order = get_object_or_404(Order, pk=order_id)
-    if order.shipped:
-        order.shipped = False
-        order.save()
-    else:
+    # amend order as shipped 
+    if request.method == 'POST':
         order.shipped = True
+        shipping_code = request.POST.get("shipping_code")
+        order.shipping_code = shipping_code
         order.save()
+        messages.success(request, (
+            f"Order {order.order_number} confirmed as shipped!")
+        )
+        # send email to customer
+        cust_email = order.email
+        subject = render_to_string(
+            'checkout/confirmation_emails/order_shipped_subject.txt',
+            {'order': order})
+        body = render_to_string(
+            'checkout/confirmation_emails/order_shipped_body.txt',
+            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+            
+        send_mail(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [cust_email]
+        )
+    # amend order as not shipped 
+    if request.method == 'GET' :
+        order.shipped = False
+        order.shipping_code = ""
+        order.save()
+        messages.success(request, 'customer has been informed there was an error: order has not been shipped yet.')
+        # email customer :order was marked as shipped by mistake 
+        cust_email = order.email
+        subject = render_to_string(
+            'checkout/confirmation_emails/order_not_shipped_subject.txt',
+            {'order': order})
+        body = render_to_string(
+            'checkout/confirmation_emails/order_not_shipped_body.txt',
+            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+            
+        send_mail(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [cust_email]
+        )
     return redirect(reverse('products_management'))
     

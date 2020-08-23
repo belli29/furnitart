@@ -13,8 +13,8 @@
                     <tr>
                         <th>Order Number</th>
                         <th>Date</th>
-                        <th>Items</th>
                         <th>Order Total</th>
+                        <th>Shipped</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,16 +27,14 @@
                                 </a>
                             </td>
                             <td>{{ order.date }}</td>
-                            <td>
-                                <ul class="list-unstyled">
-                                    {% for item in order.lineitems.all %}
-                                        <li class="small">
-                                            {{ item.product.name }}*{{ item.quantity }},
-                                        </li>
-                                    {% endfor %}
-                                </ul>
-                            </td>
                             <td>€ {{ order.grand_total }}</td>
+                            <td>
+                                {% if order.shipped %}
+                                    <i class="fas fa-check text-color-pr" alt="shipped"></i> {{order.shipping_code|upper}}
+                                {% else %}
+                                    Pending
+                                {% endif %}   
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

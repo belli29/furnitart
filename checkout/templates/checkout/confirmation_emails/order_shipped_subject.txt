@@ -1,0 +1,1 @@
+Furnitart: You order {{ order.order_number }} has been sent!

@@ -41,16 +41,17 @@
                             </td>
                             <td class="text-center">
                                 {% if order.shipped %}
-                                    <a href="{% url 'toggle_shipped' order.id %}">
-                                        <i class="fas fa-check text-color-pr" alt="active"></i>
+                                    <a href="{% url 'toggle_shipped' order.id%}">
+                                        <i class="fas fa-check text-color-pr" alt="shipped"></i>
                                     </a>
                                 {% else %}
-                                    <a href="{% url 'toggle_shipped' order.id %}">
-                                        <i class="fas fa-times text-black" alt="inactive"></i>
+                                    <a a href="" data-toggle="modal" data-target="#ship-order-{{order.id}}">
+                                        <i class="fas fa-times text-black" alt="not-shipped"></i>
                                     </a>
                                 {%endif%}
                             </td>
                         </tr>
+                        {% include 'products/includes/modal_window_shipped.html' %}
                     {% endfor %}
                 </tbody>
             </table>
