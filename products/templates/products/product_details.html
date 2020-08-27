@@ -30,15 +30,14 @@
                     </div>
                     
                 {% endif %}
-                <div class="text-muted ">€{{ product.price }}</div>
-                <hr class="w-75 mb-1 hr-color-pr">    
+                <div class="text-muted ">€{{ product.price }}</div> 
             </div>
         </div>
         <div class="row">
             <div class="product-container col-10 offset-1">
                 <div class="row mt-1 mb-2"></div>
-                <div class="row d-flex">
-                    <div class="col-12 col-md-6 col-lg-4 offset-lg-2 ">
+                <div class="row  d-flex">
+                    <div class=" col-12 col-md-6 col-lg-4 offset-lg-2 ">
                         <div class="image-container my-5  ">
                             {% if product.image %}
                                 <a href="{{ product.image.url }}" target="_blank">
@@ -51,10 +50,10 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-12 col-md-6 col-lg-4 offset-lg-1">
-                        <div class="product-details-container mb-5 mt-md-5">   
+                    <div class="col-12 col-md-6 col-lg-4 offset-lg-1 ">
+                        <div class="product-details-container my-5">   
                             <hr class="hr-color-pr mb-0">
-                            <p class="mt-2 pt-0 ">{{ product.description }}</p>
+                            <p class=" mx-auto mt-2 pt-0 ">{{ product.description }}</p>
                             <strong class="mt-5">Size:</strong>
                             <ul>
                                 <li>High:{{product.h}}</li>
@@ -65,25 +64,23 @@
                                 <i class="fas fa-truck mr-1"></i>
                                 Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
                             </small>
-                        </div>
-                        {% include 'products/includes/quantity_form.html' %}
+                            <div class="mt-5">
+                                {% include 'products/includes/quantity_form.html' %}
+                            </div>
+                            
+                            <div class=" mt-5">
+                                <a href="{% url 'products' %}" class=" btn btn-outline-pr rounded-0 btn-lg ">
+                                    <span class="icon">
+                                        <i class="fas fa-chevron-left"></i>
+                                    </span>
+                                    <span class="text-uppercase">Keep Shopping</span>
+                                </a>
+                            </div>
+                        </div>     
                     </div>
                                                        
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-10 offset-1 text-center text-md-left my-5">
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-4 offset-lg-2 ">
-                         <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 btn-lg ">
-                             <span class="icon">
-                                <i class="fas fa-chevron-left"></i>
-                             </span>
-                            <span class="text-uppercase">Keep Shopping</span>
-                        </a>
-                    </div>
-                <div class="row">
+                
             </div>
         </div>
     </div>

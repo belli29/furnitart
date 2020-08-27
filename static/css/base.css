@@ -253,6 +253,23 @@ body {
 
 /* Primary Color */
 
+.btn-outline-pr{
+    color: #f1089e;
+    border-color: #f1089e;
+}
+
+.btn-outline-pr:hover{
+    color: white;
+    border-color: #f1089e;
+    background-color: #f1089e;
+}
+.btn-outline-pr:focus{
+    color: white;
+    border-color: #f1089e;
+    background-color: #f1089e;
+    box-shadow: none;
+}
+
 .bg-color-pr{
     background: #f1089e;
 }

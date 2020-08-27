@@ -29,29 +29,29 @@
                                 <table class="table table-borderless">
                                     <thead>
                                         <tr>
-                                        <th scope="col">Product</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Price</th>
+                                        <th scope="col" class="text-left">Product</th>
+                                        <th scope="col" class="text-center">Quantity</th>
+                                        <th scope="col" class="text-right d-none d-sm-block">Price</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for item in bag_items%}
-                                            <tr>            
+                                            <tr class="text-left">            
                                                 <td>
                                                     <span>
-                                                        <div class="icon remove-item" id="remove_{{ item.item_id }}" data-item_id="{{ item.item_id}}">
+                                                        <div class="icon remove-item text-color-pr" id="remove_{{ item.item_id }}" data-item_id="{{ item.item_id}}">
                                                             <i class="fas fa-trash" alt="delete"></i>
                                                         </div>
                                                     </span>
-                                                    <span class="mx-2">
+                                                    <span class="mx-0 mx-sm-2">
                                                         {{item.product.name}}
                                                     </span>
                                                     
                                                 </td>
-                                                <td>
+                                                <td class="text-center ">
                                                     <form class="form " action="{% url 'update_bag' item.item_id %}" method="POST">
                                                         {% csrf_token %}
-                                                        <select class="quantity-input" id="quantity_{{ item.item_id }}" name="quantity" >
+                                                        <select class="quantity-input w-25" id="quantity_{{ item.item_id }}" name="quantity" >
                                                             {% for n in item.available_quantity_list%}
                                                                 {% if n == item.quantity %}
                                                                     <option selected value="{{n}}">{{n}}</option>
@@ -62,23 +62,25 @@
                                                         </select>
                                                     </form>             
                                                 </td>
-                                                <td>{{item.total}}</td>
+                                                <td  class="text-right d-none d-sm-block">
+                                                    {{item.total}}
+                                                </td>
                                             </tr>
                                         {% endfor%}
                                         <tr>
-                                            <td class="text-center" ></h6><strong>Bag Total:</strong></h6></td>
-                                            <td></td>
-                                            <td class="text-center"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
+                                            <td class="d-none d-sm-block"></td>
+                                            <td class="text-left text-sm-center" ></h6><strong>Bag Total:</strong></h6></td>
+                                            <td class="text-center text-sm-right"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
                                         </tr>
                                         <tr>
-                                            <td class="text-center" ><h6><strong>Delivery:</strong></h6></td>
-                                            <td></td>
-                                            <td class="text-center"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
+                                            <td class="d-none d-sm-block"></td>
+                                            <td class="text-left text-sm-center" ><h6><strong>Delivery:</strong></h6></td>
+                                            <td class="text-center text-sm-right"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
                                         </tr>
                                         <tr>
-                                            <td class=" text-center " ><h4><strong>Grand Total:</strong></h4></td>
-                                            <td></td>
-                                            <td class="text-center"><h4><strong>€{{ grand_total|floatformat:2 }}</strong></h4></td>
+                                            <td class="d-none d-sm-block"></td>
+                                            <td class="text-left text-sm-center" ><h4><strong>Grand Total:</strong></h4></td>
+                                            <td class="text-right"><h4><strong>€{{ grand_total|floatformat:2 }}</strong></h4></td>
                                         </tr>
                                         {% if free_delivery_delta > 0 %}
                                             <tr>
@@ -101,7 +103,7 @@
             <div class="col-9 mx-auto my-5">
                 <div class="row">
                     <div class="col-6 col-md-2 px-0 ">
-                         <a href="{% url 'products' %}" class="btn btn-outline-dark rounded-0 mx-auto h-100">
+                         <a href="{% url 'products' %}" class="btn btn-outline-pr rounded-0 mx-auto h-100">
                              <span class="icon">
                                 <i class="fas fa-chevron-left"></i>
                              </span>
@@ -109,7 +111,7 @@
                         </a>
                     </div>
                     <div class="col-6 col-md-2 offset-md-8 pr-0 text-right">
-                        <a href="{% url 'checkout'%}" class="btn btn-outline-dark rounded-0 mx-auto ">
+                        <a href="{% url 'checkout'%}" class="btn btn-outline-pr rounded-0 mx-auto ">
                             <span class="text-uppercase">Secure Checkout</span>
                             <span class="icon">
                                 <i class="fas fa-lock"></i>
