@@ -252,16 +252,21 @@ body {
 }
 
 /* Primary Color */
+.toggler-pr:focus{
+    border-color: #f1089e !important;
+
+}
 
 .btn-outline-pr{
-    color: #f1089e;
-    border-color: #f1089e;
+    color: #f1089e !important;
+    border-color: #f1089e !important;
+    background-color:white!important;
 }
 
 .btn-outline-pr:hover{
-    color: white;
-    border-color: #f1089e;
-    background-color: #f1089e;
+    color: white !important;
+    border-color: #f1089e !important;
+    background-color: #f1089e!important;
 }
 .btn-outline-pr:focus{
     color: white;
@@ -284,6 +289,10 @@ body {
 
 .border-color-pr{  
     border-color: #f1089e;
+}
+
+.dropdown-item-pr:focus{
+    background-color: #f1089e;
 }
 
 /* a */

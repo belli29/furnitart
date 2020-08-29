@@ -12,8 +12,8 @@
                 <thead>
                     <tr>
                         <th>Order Number</th>
-                        <th>Date</th>
-                        <th>Order Total</th>
+                        <th class="d-none d-sm-table-cell">Date</th>
+                        <th class="d-none d-sm-table-cell"> Order Total</th>
                         <th>Shipped</th>
                     </tr>
                 </thead>
@@ -26,8 +26,8 @@
                                     {{ order.order_number|truncatechars:6 }}
                                 </a>
                             </td>
-                            <td>{{ order.date }}</td>
-                            <td>€ {{ order.grand_total }}</td>
+                            <td class="d-none d-sm-table-cell">{{ order.date }}</td>
+                            <td class="d-none d-sm-table-cell">€ {{ order.grand_total }}</td>
                             <td>
                                 {% if order.shipped %}
                                     <i class="fas fa-check text-color-pr" alt="shipped"></i> {{order.shipping_code|upper }}

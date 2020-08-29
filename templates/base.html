@@ -52,8 +52,8 @@
                     <!-- navbar  -->
                     <div class=" col-6 col-sm-1 col-lg-4 my-auto text-left text-lg-center ">
                         <nav class="navbar navbar-expand-lg navbar-light ">
-                            <button class="navbar-toggler " type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span> 
+                            <button class="navbar-toggler toggler-pr " type="button" data-toggle="collapse" data-target="#main-nav" aria-controls="main-nav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class=" navbar-toggler-icon"></span> 
                             </button>
                             {% include 'includes/main-nav.html' %}           
                         </nav> 
@@ -98,13 +98,13 @@
                             <div class="dropdown-menu border-0" aria-labelledby="user-options">
                                 {% if request.user.is_authenticated %}
                                     {% if request.user.is_superuser %}
-                                        <a href="{% url 'products_management' %}" class="dropdown-item">Management</a>
+                                        <a href="{% url 'products_management' %}" class="dropdown-item dropdown-item-pr">Management</a>
                                     {% endif %}
-                                    <a href="{% url 'profile' %}" class="dropdown-item">My Profile</a>
-                                    <a href="{% url 'account_logout' %}" class="dropdown-item">Logout</a>
+                                    <a href="{% url 'profile' %}" class="dropdown-item dropdown-item dropdown-item-pr">My Profile</a>
+                                    <a href="{% url 'account_logout' %}" class="dropdown-item dropdown-item dropdown-item-pr">Logout</a>
                                 {% else %}
-                                    <a href="{% url 'account_signup' %}" class="dropdown-item">Register</a>
-                                    <a href="{% url 'account_login' %}" class="dropdown-item">Login</a>
+                                    <a href="{% url 'account_signup' %}" class="dropdown-item dropdown-item dropdown-item-pr">Register</a>
+                                    <a href="{% url 'account_login' %}" class="dropdown-item dropdown-item dropdown-item-pr">Login</a>
                                 {% endif %}
                             </div>
                         </li>
@@ -165,7 +165,6 @@
         <script type="text/javascript"> 
             $(document).ready(function (){       
             $('#areas').click (function(){
-                console.log("23")
                 $("#areas-icon").toggleClass('fa-chevron-up fa-chevron-down');
                 $("#areas-icon").removeClass('fa-chevron-down');
             });
