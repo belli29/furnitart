@@ -60,13 +60,16 @@ class StripeWH_Handler:
             if v == "":
                 shipping_details[f] == None
         
-        # update avaiable quantity of products
+        # update available quantity and sold quantity of products   
         bag_dict = json.loads(bag)  
         for p, quantity_purchased in bag_dict.items():
             product = get_object_or_404(Product, pk=p)    
             initial_quantity = product.available_quantity
+            initial_sold = product.sold
+            sold = initial_sold + quantity_purchased
             available_quantity = initial_quantity - quantity_purchased
             product.available_quantity = available_quantity
+            product.sold = sold
             product.save()
         
         # Update profile information if save_info was checked

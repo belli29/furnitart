@@ -52,7 +52,9 @@
                                                 <td class="text-center d-none d-md-table-cell">
                                                     {{product.available_quantity}}        
                                                 </td>
-                                                <td class="text-center d-none d-md-table-cell">25</td>
+                                                <td class="text-center d-none d-md-table-cell">
+                                                    {{product.sold}}    
+                                                </td>
                                                 <td class="text-center">
                                                     {% if product.is_active %}
                                                         <a href="{% url 'toggle_active' product.id %}">
