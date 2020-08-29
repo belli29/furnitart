@@ -5,9 +5,9 @@
                 <thead>
                     <tr>
                         <th>Order Number</th>
-                        <th>Date</th>
-                        <th>Items</th>
-                        <th>Order Total</th>
+                        <th class="d-none d-sm-table-cell">Date</th>
+                        <th class="d-none d-sm-table-cell">Items</th>
+                        <th class="d-none d-sm-table-cell">Order Total</th>
                         <th>Shipped</th>
                         
                     </tr>
@@ -21,8 +21,8 @@
                                     {{ order.order_number|truncatechars:6 }}
                                 </a>
                             </td>
-                            <td>{{ order.date }}</td>
-                            <td>
+                            <td class="d-none d-sm-table-cell">{{ order.date }}</td>
+                            <td class="d-none d-sm-table-cell">
                                 <ul class="list-unstyled">
                                     {% for item in order.lineitems.all %}
                                         <li class="small">
@@ -31,11 +31,11 @@
                                     {% endfor %}
                                 </ul>
                             </td>
-                            <td>
+                            <td class="d-none d-sm-table-cell">
                                 € {{ order.grand_total }}
                                 {% if order.pay_pal_order%}
                                     <p class="text-center">
-                                        <i class="fa fa-cc-paypal text-color-pr text-center" aria-hidden="true"></i>
+                                        <i class="fab fa-paypal text-color-pr text-center" aria-hidden="true"></i>
                                     </p>
                                 {% endif %}
                             </td>
