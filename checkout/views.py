@@ -209,6 +209,17 @@ def cache_checkout_data(request):
             Please try later")
         return HttpResponse(status=400)
 
+def shipping_error(request):
+    messages.error(request, 'Some items in your bag cannot be delivered to your shipping destination. \
+            Go back to you bag and delete them or change your shipping address to Ireland.')
+    order_form = OrderForm()
+    print("final check")
+    template = 'checkout/checkout.html'
+    context = {
+        'order_form': order_form,
+    }
+    return HttpResponse(status=200)
+    
 def invoice_confirmation(request, pre_order_number):
     """
     handle invoice confirmation when user selects paypal payment method
