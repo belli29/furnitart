@@ -112,8 +112,10 @@
                             <a class="{% if grand_total %}text-color-pr font-weight-bold{% else %}text-black{% endif %} nav-link px-0  " href="{% url 'view_bag'%}">
                                 <div class="text-center">
                                     <div><i class="fas fa-shopping-bag fa-lg"></i></div>
-                                    <p class="my-0 d-none d-md-block">
-                                        {% if grand_total %}
+                                    <p id="base-total" class="my-0 d-none d-md-block">
+                                        {% if delivery_problem %}
+                                            &nbsp
+                                        {% elif grand_total %}
                                             €{{ grand_total|floatformat:2 }}
                                         {% else %}
                                             €0.00
@@ -170,6 +172,7 @@
             });
             });
         </script>
+        
     {% endblock %}
 
   </body>

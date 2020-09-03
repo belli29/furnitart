@@ -39,7 +39,7 @@
                     </div> 
                 </div>
                 <hr class="w-100 mb-5 hr-color-pr"> 
-                <div class="row" id="resume-section">
+                <div class="row {% if delivery_problem %} d-none {% endif %}">
                     <div class="col-12 col-md-9 mx-auto jumbotron">
                         {% include 'includes/total_resume.html' %}
                     </div>
@@ -75,7 +75,8 @@
             </span>
         </h1>
     </div>
-    
+    <!-- to be used by the js module attached -->
+    <div id="delivery_problem" class="d-none">{{delivery_problem}}</div>    
 {% endblock %}
 
 {% block postloadjs %}

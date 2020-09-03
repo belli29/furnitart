@@ -9,8 +9,11 @@ def bag_contents(request):
     total = 0
     product_count = 0
     bag = request.session.get('bag', {})
+    only_ie_delivery = False
     for item_id, quantity in bag.items():
         product = get_object_or_404(Product, pk=item_id)
+        if product.euro_shipping == False:
+            only_ie_delivery = True
         subtotal = quantity * product.price
         total += subtotal
         product_count += quantity
@@ -59,11 +62,16 @@ def bag_contents(request):
         else:
             delivery = 0
             free_delivery_delta = 0
+        # define if there is a delivery problem
+        delivery_problem = False
+        if only_ie_delivery == True and ie_delivery == False:
+            delivery_problem = True
         results = {
             'delivery': delivery,
             'free_delivery_delta': free_delivery_delta,
             'free_delivery_threshold': free_delivery_treshold,
-            'ie_delivery': ie_delivery,      
+            'ie_delivery': ie_delivery,
+            'delivery_problem': delivery_problem      
         }
         return results
     results = delivery_calculation(request)
@@ -71,6 +79,7 @@ def bag_contents(request):
     free_delivery_delta = results['free_delivery_delta']
     free_delivery_treshold = results['free_delivery_threshold']
     ie_delivery = results['ie_delivery']
+    delivery_problem = results['delivery_problem']   
     grand_total = delivery + total
     
     
@@ -83,7 +92,8 @@ def bag_contents(request):
         'free_delivery_threshold': free_delivery_treshold,
         'grand_total': grand_total,
         'discount': settings.PAY_PAL_DISCOUNT,
-        'ie_delivery': ie_delivery
+        'ie_delivery': ie_delivery,
+        'delivery_problem': delivery_problem,
         
     }
 

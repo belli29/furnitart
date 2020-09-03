@@ -98,7 +98,7 @@ def checkout(request):
     else:
         change_country = False 
         #check if there was some delivery issue
-        if "delivery_issue" in request.GET:
+        if "delivery_problem" in request.GET:
             messages.error(request, 'Some items in your bag cannot be delivered to your shipping destination. \
             Go back to you bag and delete them or change your shipping address to Ireland.')
         #check if user amended the country
@@ -137,11 +137,8 @@ def checkout(request):
                     'street_address2': new_data['street_address2'],
                     'county': new_data['county'],
                 })
-            print("ok")
-
         else:
             if request.user.is_authenticated :
-                print("error")
                 try:
                     profile = UserProfile.objects.get(user=request.user)
                     order_form = OrderForm(initial={
@@ -235,12 +232,6 @@ def cache_checkout_data(request):
         messages.error(request, "There was something wrong with your payment.\
             Please try later")
         return HttpResponse(status=400)
-
-def delivery_issue(request):
-    messages.error(request, 'Some items in your bag cannot be delivered to your shipping destination. \
-            Go back to you bag and delete them or change your shipping address to Ireland.')
-    print("ciao!")
-    return HttpResponse(status=200)
     
 def invoice_confirmation(request, pre_order_number):
     """
@@ -360,4 +351,10 @@ def toggle_shipped(request, order_id):
             [cust_email]
         )
     return redirect(reverse('products_management'))
+
+def change_country(request, country):
+    chosen_country = request.session.get('chosen_country')
+    request.session['chosen_country'] = country
+    print (  request.session['chosen_country'] )
+    return HttpResponse(status = 200)
 
