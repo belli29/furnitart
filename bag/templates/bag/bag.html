@@ -37,7 +37,7 @@
                                     <tbody>
                                         {% for item in bag_items%}
                                             <tr class="text-left">            
-                                                <td>
+                                                <td class="text-nowrap">
                                                     <span>
                                                         <div class="icon remove-item text-color-pr" id="remove_{{ item.item_id }}" data-item_id="{{ item.item_id}}">
                                                             <i class="fas fa-trash" alt="delete"></i>
@@ -66,18 +66,23 @@
                                                     {{item.total}}
                                                 </td>
                                             </tr>
+                                            <div class="d-none euro-shipping" >{{item.product.euro_shipping}}</div>
                                         {% endfor%}
                                         <tr>
                                             <td class="d-none d-sm-block"></td>
                                             <td class="text-left text-sm-center" ></h6><strong>Bag Total:</strong></h6></td>
                                             <td class="text-center text-sm-right"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="delivery-table-row">
                                             <td class="d-none d-sm-block"></td>
-                                            <td class="text-left text-sm-center" ><h6><strong>Delivery:</strong></h6></td>
+                                            <td class="text-left text-sm-center" >
+                                                <h6>
+                                                    <strong>Delivery{% if ie_delivery%}(Ireland){% else%}(EU country){% endif %}:</strong>
+                                                </h6>
+                                            </td>
                                             <td class="text-center text-sm-right"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
                                         </tr>
-                                        <tr>
+                                        <tr id="grand-total-table-row">
                                             <td class="d-none d-sm-block"></td>
                                             <td class="text-left text-sm-center" ><h4><strong>Grand Total:</strong></h4></td>
                                             <td class="text-right"><h4><strong>€{{ grand_total|floatformat:2 }}</strong></h4></td>
@@ -88,7 +93,8 @@
                                                     You could get free delivery by spending just <strong>€{{ free_delivery_delta }}</strong> more!
                                                 </p>
                                             </tr> 
-                                        {% endif %}              
+                                        {% endif %}
+                                        <div class=" d-none ie-delivery" >{{ie_delivery}}</div>              
                                     </tbody>
                                 </table>
                             </div>
@@ -140,4 +146,5 @@
         });
     });
 </script>
+<script src="{% static 'bag/js/delivery.js' %}"></script>
 {% endblock %}

@@ -2,13 +2,12 @@ from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product
+from django.contrib.auth.models import User
 
 def bag_contents(request):
-
     bag_items = []
     total = 0
     product_count = 0
-    ie_delivery = False
     bag = request.session.get('bag', {})
     for item_id, quantity in bag.items():
         product = get_object_or_404(Product, pk=item_id)
@@ -33,13 +32,29 @@ def bag_contents(request):
             'total':subtotal,
             'available_quantity_list': available_quantity_list
         })
-
-
-
-    def delivery_calculation (free_delivery_treshold, standard_delivery_percentage):
         
+    def delivery_calculation (request,): 
+        """ evaluates if discount for delivery to Ireland applies and calculates delivery cost and treshold """
+        ie_delivery = False
+        # user has not selected any country but he is already authenticated
+        if request.user.is_authenticated:
+            if request.user.userprofile.default_country == "IE":
+                ie_delivery = True
+        # user selected a delivery country in the checkout page
+        elif "chosen_country" in request.session:
+            delivery_country = request.session["chosen_country"]
+            if delivery_country == "IE":
+                ie_delivery = True
+        # apply different delivery rates and treshold
+        if ie_delivery:
+            free_delivery_treshold = settings.IRL_FREE_DELIVERY_THRESHOLD
+            delivery_percentage = settings.IRL_STANDARD_DELIVERY_PERCENTAGE
+        else:
+            free_delivery_treshold = settings.FREE_DELIVERY_THRESHOLD
+            delivery_percentage = settings.STANDARD_DELIVERY_PERCENTAGE
+        # calculate delivery percentage and free delivery delta
         if total < free_delivery_treshold:
-            delivery = total * Decimal(standard_delivery_percentage/ 100)
+            delivery = total * Decimal(delivery_percentage/ 100)
             free_delivery_delta = free_delivery_treshold- total
         else:
             delivery = 0
@@ -48,18 +63,14 @@ def bag_contents(request):
             'delivery': delivery,
             'free_delivery_delta': free_delivery_delta,
             'free_delivery_threshold': free_delivery_treshold,
+            'ie_delivery': ie_delivery,      
         }
         return results
-
-    if ie_delivery == False:
-        results = delivery_calculation(settings.FREE_DELIVERY_THRESHOLD, settings.STANDARD_DELIVERY_PERCENTAGE)
-    
-    else:
-        results = delivery_calculation(settings.IRL_FREE_DELIVERY_THRESHOLD, settings.IRL_STANDARD_DELIVERY_PERCENTAGE)
-    
+    results = delivery_calculation(request)
     delivery = results['delivery']
     free_delivery_delta = results['free_delivery_delta']
-    free_delivery_treshold = results['free_delivery_threshold']   
+    free_delivery_treshold = results['free_delivery_threshold']
+    ie_delivery = results['ie_delivery']
     grand_total = delivery + total
     
     
@@ -71,7 +82,9 @@ def bag_contents(request):
         'free_delivery_delta': free_delivery_delta,
         'free_delivery_threshold': free_delivery_treshold,
         'grand_total': grand_total,
-        'discount': settings.PAY_PAL_DISCOUNT
+        'discount': settings.PAY_PAL_DISCOUNT,
+        'ie_delivery': ie_delivery
+        
     }
 
     return context

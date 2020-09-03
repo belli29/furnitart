@@ -6,7 +6,7 @@
                 <td class="text-center"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
             </tr>
             <tr>
-                <td class="text-center" ><h6><strong>Delivery:</strong></h6></td>
+                <td class="text-center" ><h6><strong>Delivery{% if ie_delivery%}(Ireland){% else%}(EU country){% endif %}:</strong></h6></td>
                 <td class="text-center">
                     <h6>
                         <strong>
