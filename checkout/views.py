@@ -96,11 +96,13 @@ def checkout(request):
             
     # GET request
     else:
-        change_country = False 
-        #check if there was some delivery issue
+        change_country = False
+
+        #check if there was some delivery problem
         if "delivery_problem" in request.GET:
             messages.error(request, 'Some items in your bag cannot be delivered to your shipping destination. \
             Go back to you bag and delete them or change your shipping address to Ireland.')
+        
         #check if user amended the country
         if "country" in request.GET:
             change_country = True
@@ -115,7 +117,7 @@ def checkout(request):
             return redirect(reverse('products'))
         current_bag = bag_contents(request)
         grand_total = current_bag['grand_total']
-        print(grand_total)
+
         # Stripe intent
         stripe_total = round(grand_total*100)
         stripe.api_key = stripe_secret_key
@@ -125,18 +127,20 @@ def checkout(request):
         )
         client_secret = intent.client_secret
         # generate form
+        # request comes from change country
         if change_country:
             order_form = OrderForm({
                     'full_name': new_data['full_name'],
                     'email': new_data['email'],
                     'phone_number': new_data['phone_number'],
                     'country': new_data['country'],
-                    'postcode': new_data['postcode'],
+                    'postcode':new_data['postcode'],
                     'town_or_city': new_data['town_or_city'],
                     'street_address1': new_data['street_address1'],
                     'street_address2': new_data['street_address2'],
                     'county': new_data['county'],
                 })
+        # request does not come from change country
         else:
             if request.user.is_authenticated :
                 try:
@@ -351,10 +355,3 @@ def toggle_shipped(request, order_id):
             [cust_email]
         )
     return redirect(reverse('products_management'))
-
-def change_country(request, country):
-    chosen_country = request.session.get('chosen_country')
-    request.session['chosen_country'] = country
-    print (  request.session['chosen_country'] )
-    return HttpResponse(status = 200)
-

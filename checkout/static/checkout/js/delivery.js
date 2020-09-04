@@ -1,8 +1,6 @@
 
 // check if the new shiping destination creates problems and recalculates shipping fees
 $('select[name="country"]').change( function(){
-    var delivery_problem = $('#delivery_problem').text();
-    if ( delivery_problem == 'True' ){
         // colleting current delivery selection
         var getData = {
                 'full_name': $('input[name="full_name"]').val(),
@@ -16,8 +14,16 @@ $('select[name="country"]').change( function(){
                 'county': $('input[name="county"]').val(),
             };
         var parameters = $.param( getData );
-        window.location.href = `/checkout/?${parameters}`
-    }
+        window.location.href = `/checkout/?${parameters}`;
+    })
 
-    
-})
+// avoid displaying error messages in case of change country
+
+$( document ).ready(function() {
+    changeCountry = $('#change_country').text()
+    console.log(changeCountry);
+    if (changeCountry=='True'){
+        $('input').removeClass("is-invalid");
+        $('#change_country').text("False");
+    }   
+});
