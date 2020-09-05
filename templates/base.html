@@ -164,32 +164,22 @@
     {% endblock %}
 
     {% block postloadjs %}
-        <script type="text/javascript">
-            $('.toast').toast('show');
-        </script>
-        <!-- change chevron icon in menu -->
-        <script type="text/javascript"> 
-            $(document).ready(function (){       
-            $('#areas').click (function(){
-                $("#areas-icon").toggleClass('fa-chevron-up fa-chevron-down');
-                $("#areas-icon").removeClass('fa-chevron-down');
-            });
-            });
-        </script>
-        <!-- change form of burger button
-        from https://codepen.io/designcouch/pen/Atyop -->
         <script>
-            $(document).ready(function(){
-                $('#nav-icon').click(function(){
+			$(document).ready(function() {
+                $('.toast').toast('show');
+
+                 // change chevron icon in menu
+                $('#areas-clickable').on("click", function() {
+                    $(this).children("i").toggleClass("fa-chevron-down fa-chevron-up");      
+                });
+                // change form of burger button - from https://codepen.io/designcouch/pen/Atyop
+                $('#nav-icon').on("click", function() {
                     $(this).toggleClass('open');
+                    // give space to the expanded burger button
+                    $('.top-title').toggleClass("more-space-for-menu");
                 });
-            });
-        </script>
-        <!-- give space to the expanded burger button -->
-        <script>
-            $("#nav-icon").click(function(){
-                $('.top-title').css("margin-top","15rem");
-                });
+
+			});
         </script>
     {% endblock %}
 

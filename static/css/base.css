@@ -87,6 +87,10 @@ body {
     -o-transition: .5s ease-in-out;
     transition: .5s ease-in-out;
 }
+
+.more-space-for-menu{
+    margin-top: 15rem;
+}
 /* ------------------------------- forms */
 .form-control{
     border-radius:0;
