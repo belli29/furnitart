@@ -10,23 +10,21 @@ def get_bag_context(self):
 
  
 class TestView (TestCase):
-        def test_profiles(self):
-            """testing if the bag page works and template used"""
-            #when user is not logged in
-            response = self.client.get('/profiles/')
-            self.assertEqual(response.status_code, 302) 
-            #when user is logged in 
-            user = User.objects.create(username='testuser')
-            user.set_password('12345')
-            user.save()
-            logged_in = self.client.login(username='testuser', password='12345')
-            response = self.client.get('/profiles/')
-            self.assertEqual(response.status_code, 200)
-            self.assertTemplateUsed(response, 'profiles/profile.html')
+    def test_profiles(self):
+        """testing if the bag page works and template used"""
+        #when user is not logged in
+        response = self.client.get('/profiles/')
+        self.assertEqual(response.status_code, 302) 
+        #when user is logged in 
+        user = User.objects.create(username='testuser')
+        user.set_password('12345')
+        user.save()
+        logged_in = self.client.login(username='testuser', password='12345')
+        response = self.client.get('/profiles/')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'profiles/profile.html')
             
-
-    
-    def _shows_correct_orders(self):
+    def test_show_correct_orders(self):
         """testing if orders shown are correctly associated to profile"""
         user = User.objects.create(username='testuser')
         user.set_password('12345')
