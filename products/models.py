@@ -20,6 +20,7 @@ class Product(models.Model):
     description = models.TextField()
     available_quantity = models.IntegerField(default=20)
     sold = models.IntegerField(default=0)
+    reserved = models.IntegerField(default=0)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     image = models.ImageField(null=True, blank=True)
     euro_shipping = models.BooleanField(default=True)
@@ -31,3 +32,4 @@ class Product(models.Model):
     
     def __str__(self):
         return self.name
+

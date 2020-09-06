@@ -14,7 +14,7 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3 px-0">
-                <h2 class="logo-font">List of products</h2>
+                <h2 class="logo-font top-title">List of products</h2>
                 <div class="text-muted ">Click on the icons to delete or to active/incactive, on product name to edit</div>
                 <hr class="w-75 mb-1 hr-color-pr">    
             </div>
@@ -33,6 +33,7 @@
                                             <th scope="col">Product</th>
                                             <th scope="col" class="text-center d-none d-md-table-cell ">Quantity</th>
                                             <th scope="col" class="text-center d-none d-md-table-cell">Sold </th>
+                                            <th scope="col" class="text-center d-none d-md-table-cell">Reserved </th>
                                             <th scope="col" class="text-center d-none d-md-table-cell">Active</th>
                                         </tr>
                                     </thead>
@@ -54,6 +55,9 @@
                                                 </td>
                                                 <td class="text-center d-none d-md-table-cell">
                                                     {{product.sold}}    
+                                                </td>
+                                                <td class="text-center d-none d-md-table-cell">
+                                                    {{product.reserved}}    
                                                 </td>
                                                 <td class="text-center">
                                                     {% if product.is_active %}

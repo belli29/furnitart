@@ -259,15 +259,15 @@ def invoice_confirmation(request, pre_order_number):
         [cust_email]
     )
     
-    # update available quantity and sold quantity of products      
-    for p, quantity_purchased in request.session['bag'].items():
+    # update available quantity and reserved quantity of products      
+    for p, quantity_reserved in request.session['bag'].items():
         product = get_object_or_404(Product, pk=p)
         initial_quantity = product.available_quantity
-        initial_sold = product.sold
-        sold = initial_sold + quantity_purchased
-        available_quantity = initial_quantity - quantity_purchased
+        initial_reserved  = product.reserved
+        reserved  = initial_reserved + quantity_reserved
+        available_quantity = initial_quantity - quantity_reserved
         product.available_quantity = available_quantity
-        product.sold = sold
+        product.reserved = reserved 
         product.save() 
     
     # Attach the user's profile to the pre order if user is authenticated

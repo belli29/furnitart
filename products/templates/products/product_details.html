@@ -14,9 +14,10 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3">
-                <h2 class="logo-font d-inline">{{ product.name }}</h2>
+                <h2 class=" top-title logo-font ">{{ product.name }}</h2>
+                <div class="text-muted ">€{{ product.price }}</div> 
                 {% if request.user.is_superuser %}
-                    <div class=" mx-2 d-inline">
+                    <div class=" mx-2">
                         <span> 
                             <a href="" data-toggle="modal" data-target="#delete-product-{{product.id}}">
                                 <i class="fas fa-trash text-color-pr mx-2 " alt="delete"></i>
@@ -30,7 +31,7 @@
                     </div>
                     
                 {% endif %}
-                <div class="text-muted ">€{{ product.price }}</div> 
+                
             </div>
         </div>
         <div class="row">
