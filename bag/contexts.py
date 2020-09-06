@@ -12,7 +12,7 @@ def bag_contents(request):
     only_ie_delivery = False
     for item_id, quantity in bag.items():
         product = get_object_or_404(Product, pk=item_id)
-        if product.euro_shipping == False:
+        if product.euro_shipping is False:
             only_ie_delivery = True
         subtotal = quantity * product.price
         total += subtotal
@@ -64,7 +64,7 @@ def bag_contents(request):
             free_delivery_delta = 0
         # define if there is a delivery problem
         delivery_problem = False
-        if only_ie_delivery == True and ie_delivery == False:
+        if only_ie_delivery is True and ie_delivery is False:
             delivery_problem = True
         results = {
             'delivery': delivery,

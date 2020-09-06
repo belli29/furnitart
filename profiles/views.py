@@ -30,8 +30,6 @@ def profile(request):
         'on_profile_page': True,
         
     }
-    for order in orders:
-        print(order.lineitems)
     return render(request, template, context)
 
 def order_history(request, order_number):
