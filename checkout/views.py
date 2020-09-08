@@ -97,18 +97,18 @@ def checkout(request):
     # GET request
     else:
         change_country = False
-
-        #check if there was some delivery problem
-        if "delivery_problem" in request.GET:
-            messages.error(request, 'Some items in your bag cannot be delivered to your shipping destination. \
-            Go back to you bag and delete them or change your shipping address to Ireland.')
-        
         #check if user amended the country
         if "country" in request.GET:
             change_country = True
             chosen_country = request.session.get('chosen_country')
             request.session['chosen_country'] = request.GET['country']
-            new_data = request.GET
+        
+        #check if there is some delivery problem
+        context = bag_contents(request)
+        delivery_problem = context["delivery_problem"]
+        if delivery_problem :
+            messages.error(request, 'Some items in your bag cannot be delivered to your shipping destination. \
+            Go back to you bag and delete them or change your shipping address to Ireland.')  
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
         stripe_secret_key = settings.STRIPE_SECRET_KEY
         bag = request.session.get('bag', {})
@@ -129,6 +129,7 @@ def checkout(request):
         # generate form
         # request comes from change country
         if change_country:
+            new_data = request.GET
             order_form = OrderForm({
                     'full_name': new_data['full_name'],
                     'email': new_data['email'],
@@ -166,7 +167,7 @@ def checkout(request):
             'order_form': order_form,
             'stripe_public_key': stripe_public_key,
             'client_secret':  client_secret,
-            'change_country': change_country
+            'change_country': change_country,
             }
         return render(request, template, context)        
 
@@ -355,3 +356,7 @@ def toggle_shipped(request, order_id):
             [cust_email]
         )
     return redirect(reverse('products_management'))
+
+def delete_session_chosen_country(request):
+    del request.session['chosen_country']
+    return HttpResponse(status=200) 

@@ -39,14 +39,14 @@ def bag_contents(request):
     def delivery_calculation (request,): 
         """ evaluates if discount for delivery to Ireland applies and calculates delivery cost and treshold """
         ie_delivery = False
-        # user has not selected any country but he is already authenticated
-        if request.user.is_authenticated:
-            if request.user.userprofile.default_country == "IE":
-                ie_delivery = True
         # user selected a delivery country in the checkout page
-        elif "chosen_country" in request.session:
+        if "chosen_country" in request.session:
             delivery_country = request.session["chosen_country"]
             if delivery_country == "IE":
+                ie_delivery = True
+        # user has not selected any country but he is already authenticated
+        elif request.user.is_authenticated :
+            if request.user.userprofile.default_country == "IE":
                 ie_delivery = True
         # apply different delivery rates and treshold
         if ie_delivery:
@@ -73,6 +73,7 @@ def bag_contents(request):
             'ie_delivery': ie_delivery,
             'delivery_problem': delivery_problem      
         }
+        
         return results
     results = delivery_calculation(request)
     delivery = results['delivery']

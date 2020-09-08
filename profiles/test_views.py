@@ -31,14 +31,14 @@ class TestView (TestCase):
         user.save()
         userprofile = user.userprofile
         logged_in = self.client.login(username='testuser', password='12345')
-        order1 = Order(user_profile= userprofile, full_name='test', email="test", phone_number="1", country="test", town_or_city="test", street_address1="test", delivery_cost=1, order_total=1, grand_total=1)
-        order1.save
-        user_orders = user.userprofile.orders
-        print(str(user_orders))
+        order = Order(user_profile= userprofile, full_name='test', email="test", phone_number="1", country="test", town_or_city="test", street_address1="test", delivery_cost=1, order_total=1, grand_total=1)
+        order.save()
+        order2 = Order(user_profile= userprofile, full_name='test', email="test", phone_number="1", country="test", town_or_city="test", street_address1="test", delivery_cost=1, order_total=1, grand_total=1)
+        order2.save()
+        user_orders = user.userprofile.orders.all()
         response = self.client.get('/profiles/')
         self.assertEqual(response.status_code, 200)
-        print(str(response.context['orders']))
         context_orders = response.context['orders']
-        self.assertEqual(context_orders, user_orders)
+        self.assertEqual(str(context_orders), str(user_orders))
 
     

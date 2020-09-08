@@ -25,5 +25,8 @@ $( document ).ready(function() {
     if (changeCountry=='True'){
         $('input').removeClass("is-invalid");
         $('#change_country').text("False");
+        // delete session variable chosen country in order to avoid possible conflicts with standard deliver address of logged in users
+        url="/checkout/delete_session_chosen_country";
+        $.get(url);
     }   
 });
