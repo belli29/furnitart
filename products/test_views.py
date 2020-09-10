@@ -1,6 +1,8 @@
 from django.test import TestCase
 from bag.contexts import bag_contents
 from .models import Product
+from checkout.models import Order
+from django.contrib.auth.models import User
 
 def get_bag_context(self):
     response = self.client.get('/bag/')
@@ -52,3 +54,32 @@ class TestView (TestCase):
         product.save()
         response = self.client.get(f'/products/', {"image_filter": True})
         self.assertNotIn(product, response.context["products"])
+
+
+
+    def test_order_shipped(self):
+        product = Product(name="test name", price=0, image="", available_quantity = 10, reserved = 2)
+        product.save()
+        order = Order(
+                full_name = "test",
+                email = "test",
+                phone_number = "12",
+                country = "test",
+                postcode = "test",
+                town_or_city = "test",
+                street_address1 = "test",
+                street_address2 = "test",
+                county = "test",
+                delivery_cost = 10,
+                order_total = 10,
+                grand_total = 10,
+                original_bag = "test"            
+        )
+        order.save()
+        self.assertFalse(order.shipped)
+        user = User.objects.create_superuser(username='testuser')
+        user.set_password('12345')
+        user.save()
+        response = self.client.get(f'/checkout/toggle_shipped/{order.id}')
+        logged_in = self.client.login(username='testuser', password='12345')
+        self.assertTrue(order.shipped)

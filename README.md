@@ -1,12 +1,56 @@
 # Furnitart
 
-One or two paragraphs providing an overview of your project.
+Furnitart is the website of a furniture shop based in Ireland that wants to start selling on the e-market.
+The e-store is allows shipping all around Europe at different shipping rates. 
 
-Essentially, this part is your sales pitch.
  
 ## UX
  
-Use this section to provide insight into your UX process, focusing on who this website is for, what it is that they want to achieve and how your project is the best way to help them achieve these things.
+This website is thought for 2 different users : the customer and the seller.
+### Customer
+The customer is able to view all different products and order them with using various filters.
+
+The customer can buy various items and finanlly pay for them (Stripe). In this case he/she will recieve a notification that the order is being processed.
+The seller will send a noftification when the order is shipped  
+
+The customer can also decide to request a Paypay invoice that generates an invoice, payable in the following 3 days. Once paid he/she is supposed to contact the seller in order to upgrade the preorder into an order( then previous flow applies).
+This option is suggested to the customer as it does not lead to any processing fee for the seller.
+
+The customer can also register. As a plus he will be able to take track of all his/ orders on the secion My profile 
+
+-user story1:
+
+User is looking for a new table with a very reduced size for his studio. User searches for table and order results for size (smaller to bigger).
+
+Finally he finds a product that he likes. He is tempted to pay by Stripe but notices that payment by PayPal invoice has a nice discount.
+
+He makes the preorder, makes a payment on Paypal and emails the payment number to the seller.
+
+After few days he is informed that the the payment was confirmed. After foew more days he recieved an email confirming the shipment with a shipping tracking code.
+
+
+### Seller
+
+After logging in the seller will be able to control orders preorders and the inventory.
+
+The seller will be able to handle the processing of the orders and send info to the customers about the orders.
+
+The seller will also be able to add / delete / modify products and will always have control over the number of items available
+
+-seller story 1:
+
+The seller has 2 units of a product that, due to its size, can only be delivered to Ireland 
+The seller receives a preorder for 1 unit to be shipped to Ireland. The available quantity is now only 1 on the website.
+After 3 days, he has not recieved any information about the payment from the customer . He, then, decides to delete the prepayment in order to increase the product availability.
+
+-seller story 2:
+
+The seller has 2 units of a product that, due to its size, can only be delivered to Ireland 
+The seller receives a preorder for 1 unit to be shipped to Ireland. The available quantity is now only 1 on the website.
+After 2 days, he receives an email from the guest with the payment invoice. The seller conforms through the app that payment has been received.
+After 1 day he has shipped the item and can confirm the shipment with a shipping code.
+
+
 
 In particular, as part of this section we recommend that you provide a list of User Stories, with the following general structure:
 - As a user type, I want to perform an action, so that I can achieve a goal.
@@ -17,9 +61,12 @@ This section is also where you would share links to any wireframes, mockups, dia
 
 In this section, you should go over the different parts of your project, and describe each in a sentence or so.
  
+
 ### Existing Features
-- Feature 1 - allows users X to achieve Y, by having them fill out Z
-- ...
+- Management : allows sellers to keep track of the full inventory. allows sellers to keep track of orders and preorders
+- Profile : allows users to keep track of orders and preorders
+- Prducts :allowa user to filter products or order them 
+
 
 For some/all of your features, you may choose to reference the specific project files that implement them, although this is entirely optional.
 

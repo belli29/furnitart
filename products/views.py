@@ -314,7 +314,7 @@ def confirm_pre_order(request, order_number):
     )
     # save order
     order.save()
-    # copy line items from preorder to order
+    # copy line items from preorder to order 
     for li in pre_order.lineitems.all():
         order_line_item = OrderLineItem(
             order=order,
@@ -322,8 +322,51 @@ def confirm_pre_order(request, order_number):
             quantity=li.quantity,
         )
         order_line_item.save()
+        # update product reserved, sold
+        product=li.product
+        quantity=li.quantity
+        product.sold =  product.sold + quantity
+        product.reserved = product.reserved - quantity
+        product.save()
     # delete preorder
     pre_order.delete()
     # success message
     messages.success(request, f'pre_order {pre_order.order_number} deleted. New order {order.order_number} confirmed')
+    return redirect(reverse('products_management'))
+
+@login_required
+def delete_pre_order(request, order_number):
+    """ view deleting preorder and creating a corresponding order """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can see that.')
+        return redirect(reverse('home'))
+    pre_order = get_object_or_404(PreOrder, order_number=order_number)
+    order = Order(
+        user_profile=pre_order.user_profile,
+        full_name=pre_order.full_name,
+        email=pre_order.email,
+        phone_number=pre_order.phone_number,
+        country=pre_order.country,
+        postcode=pre_order.postcode,
+        town_or_city=pre_order.town_or_city,
+        street_address1=pre_order.street_address1,
+        street_address2=pre_order.street_address2,
+        county=pre_order.county,
+        delivery_cost=pre_order.delivery_cost,
+        order_total=pre_order.order_total,
+        grand_total=pre_order.grand_total,
+        pay_pal_order=True
+        
+    )
+    # update producte avaiable, reserved
+    for li in pre_order.lineitems.all():
+        product=li.product
+        quantity=li.quantity
+        product.available_quantity =  product.available_quantity + quantity
+        product.reserved = product.reserved - quantity
+        product.save()
+    # delete preorder
+    pre_order.delete()
+    # success message
+    messages.success(request, f'pre_order {pre_order.order_number} deleted.')
     return redirect(reverse('products_management'))

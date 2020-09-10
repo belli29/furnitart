@@ -37,10 +37,13 @@
                                     <a href="" data-toggle="modal" data-target="#confirm-order-{{order.id}}">
                                         <i class="fas fa-level-up-alt"></i>
                                     </a>
+                                    <a href="" data-toggle="modal" data-target="#delete-order-{{order.id}}">
+                                        <i class="fas fa-level-down-alt"></i>
+                                    </a>                                    
                                 </span>
                             </td>
                         </tr>
-                        {% include 'products/includes/modal_window_confirm_preorder.html' %}
+                        {% include 'products/includes/modal_window_preorder.html' %}
                     {% endfor %}
                 </tbody>
             </table>

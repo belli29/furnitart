@@ -13,4 +13,5 @@ urlpatterns = [
     path('management_order_history/<order_number>', views.order_history, name='management_order_history'),
     path('management_pre_order_history/<order_number>', views.pre_order_history, name='management_pre_order_history'),
     path('confirm_pre_order/<order_number>', views.confirm_pre_order, name='confirm_pre_order'),
+    path('delete_pre_order/<order_number>', views.delete_pre_order, name='delete_pre_order'),
 ]   
