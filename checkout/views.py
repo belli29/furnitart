@@ -335,7 +335,7 @@ def toggle_shipped(request, order_id):
             [cust_email]
         )
     # amend order as not shipped 
-    if request.method == 'GET' :
+    if request.method == 'GET':
         order.shipped = False
         order.shipping_code = ""
         order.save()

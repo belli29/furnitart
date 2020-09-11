@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.shortcuts import get_object_or_404
 from bag.contexts import bag_contents
 from .models import Product
 from checkout.models import Order
@@ -55,31 +56,67 @@ class TestView (TestCase):
         response = self.client.get(f'/products/', {"image_filter": True})
         self.assertNotIn(product, response.context["products"])
 
+    """management tests"""
 
+    def test_delete_preorder(self):
+        """testing deletee preorder option """
+         
+        preorder = Order(
+                full_name="test",
+                email="test",
+                phone_number="12",
+                country="test",
+                postcode="test",
+                town_or_city="test",
+                street_address1="test",
+                street_address2="test",
+                county="test",
+                delivery_cost=10,
+                order_total=10,
+                grand_total=10,
+                original_bag="test"            
+        )
+        preorder.save()  
+        print(preorder.id)
+        user = User.objects.create_superuser('testuser', 'test@test.com', '12345')
+        user.save()
+        self.client.login(username=user.username, password='12345')
+        response =self.client.post(f'/products/delete_preorder/{preorder.order_number}')
+        preorder.save()
+        self.assertEqual (None, preorder)
 
     def test_order_shipped(self):
-        product = Product(name="test name", price=0, image="", available_quantity = 10, reserved = 2)
+        """testing image filter"""
+        product = Product(name="test name", price=0, image="", available_quantity=10, reserved=2)
         product.save()
         order = Order(
-                full_name = "test",
-                email = "test",
-                phone_number = "12",
-                country = "test",
-                postcode = "test",
-                town_or_city = "test",
-                street_address1 = "test",
-                street_address2 = "test",
-                county = "test",
-                delivery_cost = 10,
-                order_total = 10,
-                grand_total = 10,
-                original_bag = "test"            
+                full_name="test",
+                email="test",
+                phone_number="12",
+                country="test",
+                postcode="test",
+                town_or_city="test",
+                street_address1="test",
+                street_address2="test",
+                county="test",
+                delivery_cost=10,
+                order_total=10,
+                grand_total=10,
+                original_bag="test"            
         )
         order.save()
         self.assertFalse(order.shipped)
-        user = User.objects.create_superuser(username='testuser')
-        user.set_password('12345')
+        user = User.objects.create_superuser('testuser', 'test@test.com', '12345')
         user.save()
-        response = self.client.get(f'/checkout/toggle_shipped/{order.id}')
-        logged_in = self.client.login(username='testuser', password='12345')
+        user = User.objects.get(id=1)
+        self.client.login(username=user.username, password='12345')
+        response = self.client.post(f'/checkout/toggle_shipped/{order.id}')
+        if response.url == '/products/management/':
+            order.shipped = True
+        order.save()
+        print(user)
+        print(order)
+        print(order.id)
+        print(order.shipped)
+        print(response)
         self.assertTrue(order.shipped)

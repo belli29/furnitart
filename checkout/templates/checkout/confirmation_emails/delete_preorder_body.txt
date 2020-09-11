@@ -1,0 +1,14 @@
+
+Hello {{ order.full_name }}!
+
+We have not heard from you in the last 3 days.
+
+Unfortunately your preorder has been deleted.
+
+If you wish to buy it again, please, got to our website and check avaialability. 
+
+If you have any questions, feel free to contact us at {{ contact_email }}.
+
+Sincerely,
+
+Furnitart

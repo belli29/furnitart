@@ -14,5 +14,4 @@ class TestProductModel(TestCase):
         product.save()
         self.assertEqual(product.name, "Create a Test")
         self.assertTrue(product.euro_shipping)
-    
-  
+

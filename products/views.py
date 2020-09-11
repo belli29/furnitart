@@ -4,6 +4,9 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models.functions import Lower
 from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
 
 from .models import Product, Category
 from .forms import ProductForm
@@ -358,13 +361,29 @@ def delete_pre_order(request, order_number):
         pay_pal_order=True
         
     )
-    # update producte avaiable, reserved
+    # update product avaiable, reserved
     for li in pre_order.lineitems.all():
         product=li.product
         quantity=li.quantity
         product.available_quantity =  product.available_quantity + quantity
         product.reserved = product.reserved - quantity
         product.save()
+    
+    # email user
+    cust_email = order.email
+    subject = render_to_string(
+        'checkout/confirmation_emails/delete_preorder_subject.txt',
+        {'preorder': order})
+    body = render_to_string(
+        'checkout/confirmation_emails/delete_preorder_body.txt',
+        {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+            
+    send_mail(
+        subject,
+        body,
+        settings.DEFAULT_FROM_EMAIL,
+        [cust_email]
+    )
     # delete preorder
     pre_order.delete()
     # success message

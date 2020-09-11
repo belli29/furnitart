@@ -1,35 +1,34 @@
 # Furnitart
 
 Furnitart is the website of a furniture shop based in Ireland that wants to start selling on the e-market.
-The e-store is allows shipping all around Europe at different shipping rates. 
+The e-store allows shipping all around Europe at different shipping rates. 
 
  
 ## UX
  
 This website is thought for 2 different users : the customer and the seller.
-### Customer
+- Customer
 The customer is able to view all different products and order them with using various filters.
+He/she can buy prodcuts and finanlly pay for them via Stripe. In this case he/she will recieve an instant notification that the order is being processed.
+The seller will send a notification when the order is shipped.
 
-The customer can buy various items and finanlly pay for them (Stripe). In this case he/she will recieve a notification that the order is being processed.
-The seller will send a noftification when the order is shipped  
-
-The customer can also decide to request a Paypay invoice that generates an invoice, payable in the following 3 days. Once paid he/she is supposed to contact the seller in order to upgrade the preorder into an order( then previous flow applies).
+The customer can also decide to request a Paypay invoice that generates an invoice, payable in the following 3 days. Once paid he/she is supposed to contact the seller to upgrade the preorder into an order( then previous flow applies).
 This option is suggested to the customer as it does not lead to any processing fee for the seller.
 
-The customer can also register. As a plus he will be able to take track of all his/ orders on the secion My profile 
+The customer can also register. From the profile page he/she will be able to keep track of all his/ orders on the secion My profile 
 
--user story1:
+- user story1:
 
-User is looking for a new table with a very reduced size for his studio. User searches for table and order results for size (smaller to bigger).
+User is looking for a new table but has rvery reduced space in his studio. User searches for table and order results for size (smaller to bigger).
 
-Finally he finds a product that he likes. He is tempted to pay by Stripe but notices that payment by PayPal invoice has a nice discount.
+Finally he finds a product that he likes. He verifies the size and decides to purchase it. Intially he would like to pay by Stripe but notices that payment by PayPal invoice has a nice discount.
 
 He makes the preorder, makes a payment on Paypal and emails the payment number to the seller.
 
-After few days he is informed that the the payment was confirmed. After foew more days he recieved an email confirming the shipment with a shipping tracking code.
+After few days he receves an email, confirming payment has been confirmed. After few more days he recieves an email confirming the shipment with a shipping tracking code.
 
 
-### Seller
+- Seller
 
 After logging in the seller will be able to control orders preorders and the inventory.
 
@@ -37,7 +36,7 @@ The seller will be able to handle the processing of the orders and send info to 
 
 The seller will also be able to add / delete / modify products and will always have control over the number of items available
 
--seller story 1:
+- seller story 1:
 
 The seller has 2 units of a product that, due to its size, can only be delivered to Ireland 
 The seller receives a preorder for 1 unit to be shipped to Ireland. The available quantity is now only 1 on the website.
@@ -47,15 +46,8 @@ After 3 days, he has not recieved any information about the payment from the cus
 
 The seller has 2 units of a product that, due to its size, can only be delivered to Ireland 
 The seller receives a preorder for 1 unit to be shipped to Ireland. The available quantity is now only 1 on the website.
-After 2 days, he receives an email from the guest with the payment invoice. The seller conforms through the app that payment has been received.
+After 2 days, he receives an email from the guest with the payment invoice. The seller confirms through the app that payment has been received.
 After 1 day he has shipped the item and can confirm the shipment with a shipping code.
-
-
-
-In particular, as part of this section we recommend that you provide a list of User Stories, with the following general structure:
-- As a user type, I want to perform an action, so that I can achieve a goal.
-
-This section is also where you would share links to any wireframes, mockups, diagrams etc. that you created as part of the design process. These files should themselves either be included as a pdf file in the project itself (in an separate directory), or just hosted elsewhere online and can be in any format that is viewable inside the browser.
 
 ## Features
 
@@ -73,7 +65,10 @@ For some/all of your features, you may choose to reference the specific project 
 In addition, you may also use this section to discuss plans for additional features to be implemented in the future:
 
 ### Features Left to Implement
-- Another feature idea
+- the shipping logic should be more complex providing differnt rates that adapt to different countries and sizes of the items shipped
+- customer should be able to add the payment code directly in the app 
+- the app should have the otpion to change laguage in order to result more customer friendly
+
 
 ## Technologies Used
 
