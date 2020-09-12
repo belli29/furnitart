@@ -1,9 +1,13 @@
 from django.test import TestCase
 from django.shortcuts import get_object_or_404
 from bag.contexts import bag_contents
+from django.contrib import messages
 from .models import Product
-from checkout.models import Order
+from checkout.models import Order, PreOrder
 from django.contrib.auth.models import User
+from checkout.views import  toggle_shipped
+from products.views import  delete_pre_order
+from home.views import  index
 
 def get_bag_context(self):
     response = self.client.get('/bag/')
@@ -59,9 +63,9 @@ class TestView (TestCase):
     """management tests"""
 
     def test_delete_preorder(self):
-        """testing deletee preorder option """
+        """testing delete preorder option """
          
-        preorder = Order(
+        preorder = PreOrder(
                 full_name="test",
                 email="test",
                 phone_number="12",
@@ -73,20 +77,22 @@ class TestView (TestCase):
                 county="test",
                 delivery_cost=10,
                 order_total=10,
-                grand_total=10,
-                original_bag="test"            
+                grand_total=10,           
         )
         preorder.save()  
-        print(preorder.id)
         user = User.objects.create_superuser('testuser', 'test@test.com', '12345')
         user.save()
         self.client.login(username=user.username, password='12345')
-        response =self.client.post(f'/products/delete_preorder/{preorder.order_number}')
-        preorder.save()
-        self.assertEqual (None, preorder)
+        response =self.client.post(f'/products/delete_pre_order/{preorder.order_number}')
+        try:
+            preorder = PreOrder.objects.get(pk=preorder.id)
+        except PreOrder.DoesNotExist:
+            preorder = None
+        self.assertEqual(None, preorder )
+        
 
     def test_order_shipped(self):
-        """testing image filter"""
+        """testing if order is maked as shipped correctly"""
         product = Product(name="test name", price=0, image="", available_quantity=10, reserved=2)
         product.save()
         order = Order(
@@ -105,18 +111,9 @@ class TestView (TestCase):
                 original_bag="test"            
         )
         order.save()
-        self.assertFalse(order.shipped)
         user = User.objects.create_superuser('testuser', 'test@test.com', '12345')
         user.save()
-        user = User.objects.get(id=1)
         self.client.login(username=user.username, password='12345')
         response = self.client.post(f'/checkout/toggle_shipped/{order.id}')
-        if response.url == '/products/management/':
-            order.shipped = True
-        order.save()
-        print(user)
-        print(order)
-        print(order.id)
-        print(order.shipped)
-        print(response)
+        order =Order.objects.get(pk=order.id)
         self.assertTrue(order.shipped)
