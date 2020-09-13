@@ -58,7 +58,7 @@ In this section, you should go over the different parts of your project, and des
 - Management : allows sellers to keep track of the full inventory.It allows sellers to keep track of orders and preorders
 - Profile : allows users to keep track of orders and preorders
 - Products :allows user to filter products or order them 
-- Checkout :allows user get a paypal invoice or to pay directly (Stripe). The Stripe payment is done using the support of a webhooker. This ensures that orderes are always correctly registered in the server 
+- Checkout :allows user get a paypal invoice or to pay directly (Stripe). The Stripe payment is done using the support of a webhooker. This ensures that orderes are always correctly registered in the server.
 
 For some/all of your features, you may choose to reference the specific project files that implement them, although this is entirely optional.
 

@@ -18,6 +18,7 @@ def bag_contents(request):
         total += subtotal
         product_count += quantity
         remaining_qty = product.available_quantity - quantity
+        
         """ 
         creates a list with number of avaialable items
         """ 

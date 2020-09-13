@@ -88,8 +88,9 @@ def product_details (request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     bag_qty = 0
     if 'bag' in list(request.session.keys()):
-        if product_id in list(request.session.get("bag").keys()):
-            bag_qty = request.session.get("bag")[product_id]
+        if str(product_id) in list(request.session.get("bag").keys()):
+            print('ok')   
+            bag_qty = request.session.get("bag")[str(product_id)]
     remaining_qty = product.available_quantity - bag_qty
     context ={
         'product': product,

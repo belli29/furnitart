@@ -9,4 +9,5 @@ urlpatterns = [
     path('invoice_confirmation/<pre_order_number>', views.invoice_confirmation, name='invoice_confirmation'),
     path('toggle_shipped/<int:order_id>', views.toggle_shipped, name='toggle_shipped'),
     path('delete_session_chosen_country', views.delete_session_chosen_country, name='delete_session_chosen_country'),
+    path('quantity_problem', views.quantity_problem, name='quantity_problem'),
 ]

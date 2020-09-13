@@ -360,3 +360,17 @@ def toggle_shipped(request, order_id):
 def delete_session_chosen_country(request):
     del request.session['chosen_country']
     return HttpResponse(status=200) 
+
+def quantity_problem(request):
+    """check if the quantity of the items does not exceed the quantity available"""
+    quantity_problem = False
+    bag = request.session.get('bag', {})
+    for item_id, item_quantity in bag.items():
+        product = Product.objects.get(id=item_id) 
+        if item_quantity >= product.available_quantity:
+            quantity_problem = True
+            break
+    if quantity_problem == False:
+        return HttpResponse(status=200) 
+    else:
+        return HttpResponse(status=404) 

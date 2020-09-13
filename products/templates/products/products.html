@@ -32,7 +32,7 @@
                     {% for product in products  %}
                         <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3">
                             <div class="card h-100 border-0">
-                                {% if product.available_quantity != 0 %}
+                                {% if product.available_quantity > 0 %}
                                     <a  href="{% url 'product_details' product.id %}">
                                     {% if product.image %}
                                         <img class="card-img-top img-fluid" src="{{ product.image.url }}" alt="{{ product.name }}">
@@ -45,11 +45,16 @@
                                         <div>
                                             <img class="card-img-top img-fluid opacity" src="{{ product.image.url }}" alt="{{ product.name }}">
                                             <div class="not-available-banner">
-                                            Not Available 
+                                                Not Available 
                                             </div>
                                         </div>
                                     {% else %}
-                                        <img class="card-img-top img-fluid opacity" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                        <div>
+                                            <img class="card-img-top img-fluid opacity" src="{{ MEDIA_URL }}noimage.png" alt="{{ product.name }}">
+                                            <div class="not-available-banner">
+                                                Not Available 
+                                            </div>
+                                        </div>    
                                     {% endif %}
                                 {% endif %}
                                 
