@@ -98,7 +98,7 @@ body {
     text-align: center;
     width: 100%;
     height: 100%;
-    color: red;
+    color: #f1089e;
     font-weight: bolder;
     font-size:x-large;
     
@@ -388,7 +388,9 @@ from https://codepen.io/designcouch/pen/Atyop */
 
 /* z-indexes for dropdown menu */
 
-#areas {
+#areas,
+#about-link,
+#contact-link {
     z-index: 100;
 }
 /* -------------------------------- Media Queries */

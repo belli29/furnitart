@@ -69,23 +69,31 @@ In addition, you may also use this section to discuss plans for additional featu
 - customer should be able to add the payment code directly in the app 
 - the app should have the otpion to change laguage in order to result more customer friendly
 - the bag should be emptied after a certain time of user inactivity 
+- login possible also with Facebook
 
 
 ## Technologies Used
 
-In this section, you should mention all of the languages, frameworks, libraries, and any other tools that you have used to construct this project. For each, provide its name, a link to its official site and a short sentence of why it was used.
-
 - [JQuery](https://jquery.com)
     - The project uses **JQuery** to simplify DOM manipulation.
-
+- [Django3](https://docs.djangoproject.com/)
+    - The project uses **Django 3** to .
+- [Bootstrap4](https://getbootstrap.com/)
+    - The project uses **Bootstrap 4** to  .
 
 ## Testing
 
-In this section, you need to convince the assessor that you have conducted enough testing to legitimately believe that the site works well. Essentially, in this part you will want to go over all of your user stories from the UX section and ensure that they all work as intended, with the project providing an easy and straightforward way for the users to achieve their goals.
+Most of the webiste has been automated - tested with TestCase
 
-Whenever it is feasible, prefer to automate your tests, and if you've done so, provide a brief explanation of your approach, link to the test file(s) and explain how to run them.
+The section tested have been Profile, Products, Chekout and Bag.
 
-For any scenarios that have not been automated, test the user stories manually and provide as much detail as is relevant. A particularly useful form for describing your testing process is via scenarios, such as:
+In all these sections I have run tests for views, forms and models.
+
+Tu run the tests ? 
+
+The project has also been tested manually.
+
+Following few test that have been carried on manually:
 
 1. Contact form:
     1. Go to the "Contact Us" page
@@ -93,15 +101,24 @@ For any scenarios that have not been automated, test the user stories manually a
     3. Try to submit the form with an invalid email address and verify that a relevant error message appears
     4. Try to submit the form with all inputs valid and verify that a success message appears.
 
-In addition, you should mention in this section how your project looks and works on different browsers and screen sizes.
+The project is responsive to different sceens . All test concerning responsiveness have been carried out using Chrome Inspector. The mimimum screen considered has been 320px*640px
 
-You should also mention in this section any interesting bugs or problems you discovered during your testing, even if you haven't addressed them yet.
+### Bugs
 
-If this section grows too long, you may want to split it off into a separate file and link to it from here.
+- Availability
+- Delivery problems
+Some products can only be delivered to Ireland . On top of it delivery to Ireland is also chepar compared to the one to different countries.
+Obviously the information about a possible delivery problem and aabout delivery fees had to be constant during the whole purchasing process.
+In order to achieve that I decided to use a reference for the delivery the one saved in the use profile. 
+This was made possible through the use of session variable and template tagging. At the checkout, anyhow, the user had to have the possibility to change delivery country.
+I had then to create a new session variable that reflected this choice.
+All the logic that assigned a specifi delivery fee or detected  a delivery problem takes palces inside the context file (bag).
+ 
+- 
 
 ## Deployment
 
-This section should describe the process you went through to deploy the project to a hosting platform (e.g. GitHub Pages or Heroku).
+The project has been deployed on [Heroku](https://heroku.com/) and on AMS
 
 In particular, you should provide all details of the differences between the deployed version and the development version, if any, including:
 - Different values for environment variables (Heroku Config Vars)?
@@ -117,8 +134,8 @@ In addition, if it is not obvious, you should also describe how to run your code
 - The text for section Y was copied from the [Wikipedia article Z](https://en.wikipedia.org/wiki/Z)
 
 ### Media
-- The photos used in this site were obtained from ...
+- The photos used in this site were obtained from [Unsplash](https://unsplash.com/)
 
 ### Acknowledgements
 
-- I received inspiration for this project from X
+- I received inspiration for this project from the E-commerce project developed at the end on my Full-stack Code Institute course
