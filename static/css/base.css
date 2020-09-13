@@ -91,6 +91,19 @@ body {
 .more-space-for-menu{
     margin-top:15rem;
 }
+
+.not-available-banner{
+    position: absolute;
+    top: 40%;
+    text-align: center;
+    width: 100%;
+    height: 100%;
+    color: red;
+    font-weight: bolder;
+    font-size:x-large;
+    
+    
+}
 /* ------------------------------- forms */
 .form-control{
     border-radius:0;

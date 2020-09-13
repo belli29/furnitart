@@ -19,13 +19,13 @@ The customer can also register. From the profile page he/she will be able to kee
 
 - user story1:
 
-User is looking for a new table but has rvery reduced space in his studio. User searches for table and order results for size (smaller to bigger).
+User is looking for a new table but has very reduced space in his studio. User searches for table and order results for size (smaller to bigger).
 
 Finally he finds a product that he likes. He verifies the size and decides to purchase it. Intially he would like to pay by Stripe but notices that payment by PayPal invoice has a nice discount.
 
 He makes the preorder, makes a payment on Paypal and emails the payment number to the seller.
 
-After few days he receves an email, confirming payment has been confirmed. After few more days he recieves an email confirming the shipment with a shipping tracking code.
+After few days he receives an email, confirming payment has been confirmed. After few more days he recieves an email confirming the shipment with a shipping tracking code.
 
 
 - Seller
@@ -38,7 +38,7 @@ The seller will also be able to add / delete / modify products and will always h
 
 - seller story 1:
 
-The seller has 2 units of a product that, due to its size, can only be delivered to Ireland 
+The seller has 2 units of a product that, due to its size, can only be delivered to Ireland. 
 The seller receives a preorder for 1 unit to be shipped to Ireland. The available quantity is now only 1 on the website.
 After 3 days, he has not recieved any information about the payment from the customer . He, then, decides to delete the prepayment in order to increase the product availability.
 
@@ -55,19 +55,20 @@ In this section, you should go over the different parts of your project, and des
  
 
 ### Existing Features
-- Management : allows sellers to keep track of the full inventory. allows sellers to keep track of orders and preorders
+- Management : allows sellers to keep track of the full inventory.It allows sellers to keep track of orders and preorders
 - Profile : allows users to keep track of orders and preorders
-- Prducts :allowa user to filter products or order them 
-
+- Products :allows user to filter products or order them 
+- Checkout :allows user get a paypal invoice or to pay directly (Stripe). The Stripe payment is done using the support of a webhooker. This ensures that orderes are always correctly registered in the server 
 
 For some/all of your features, you may choose to reference the specific project files that implement them, although this is entirely optional.
 
 In addition, you may also use this section to discuss plans for additional features to be implemented in the future:
 
 ### Features Left to Implement
-- the shipping logic should be more complex providing differnt rates that adapt to different countries and sizes of the items shipped
+- the shipping logic should be more complex providing different rates that adapt to different countries and sizes of the items shipped
 - customer should be able to add the payment code directly in the app 
 - the app should have the otpion to change laguage in order to result more customer friendly
+- the bag should be emptied after a certain time of user inactivity 
 
 
 ## Technologies Used
