@@ -79,6 +79,8 @@ In addition, you may also use this section to discuss plans for additional featu
 
 ## Testing
 
+### How to test the project
+
 To test the project the following accounts should be used
 
 - customer
@@ -95,7 +97,9 @@ NUMBER: 4242 4242 4242 4242
 EXP: 02 /22
 CVC: 424
 
-Most of the webiste has been automated-tested with Django TestCase
+### How project was tested 
+
+Most of the project has been automated-tested with Django TestCase
 
 The section tested have been Profile, Products, Chekout and Bag.
 
@@ -105,9 +109,9 @@ Tu run the tests ?
 
 The project has also been tested manually.
 
-These tests have been carried on manually adn can be reproduced:
+These tests have been carried on manually and can be reproduced:
 
-1. Product Availabilioty decreases after an order:
+1. Product Availability decreases after an order:
     1. As superuser creates product "Test" and sets availability to 3
     2. Add to the bag 3 items of product "Test"
     3. Verify that you can't add more items of this product
@@ -115,9 +119,14 @@ These tests have been carried on manually adn can be reproduced:
     5. Verify that bag is now empty
     6. Go to "products" and verify that the product is now marked as not avaialable
 
-The project is responsive to different sceens . All test concerning responsiveness have been carried out using Chrome Inspector. The mimimum screen considered has been 320*640px
+2. Profile dispalys
+
+### Layout responsiveness
+The project is responsive to different screens . All test concerning responsiveness have been carried out using Chrome Inspector. The mimimum screen considered has been 320*640px
 
 ### Bugs and problems
+
+#### Problems solved 
 
 - Availability
 - Delivery problems
@@ -133,6 +142,12 @@ All the logic that assigned a specific delivery fee or detected  a delivery prob
 The whole checkout page had to be made responsive to the decision of the guest to pay either by Paypal or Stripe.
 This was graphically achieved with scripts, whereas different view handles the logic.
 
+#### Known bugs 
+
+- Areas 
+
+In the top nave a small area of space around the word 'Areas ^' , when clicked,  opens the dropdown menu but does not change Chevron icon orientation.
+The issue was not adressed due to lack of time and low relevance
 
 ## Deployment
 

@@ -1,0 +1,7 @@
+[run]
+omit =
+    *.pip-modules*
+    *migrations*
+    manage.py
+    *__init__.py
+    *test*
