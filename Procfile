@@ -1,1 +1,1 @@
-web: gunicorn furnitart.wsgi: application
+web: gunicorn furnitart.wsgi:application
