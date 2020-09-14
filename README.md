@@ -6,8 +6,8 @@ The e-store allows shipping all around Europe at different shipping rates.
  
 ## UX
  
-This website is thought for 2 different users : the customer and the seller.
-- Customer
+This website is designed for 2 different users : the customer and the seller.
+### Customer
 The customer is able to view all different products and order them with using various filters.
 He/she can buy prodcuts and finanlly pay for them via Stripe. In this case he/she will recieve an instant notification that the order is being processed.
 The seller will send a notification when the order is shipped.
@@ -28,7 +28,7 @@ He makes the preorder, makes a payment on Paypal and emails the payment number t
 After few days he receives an email, confirming payment has been confirmed. After few more days he recieves an email confirming the shipment with a shipping tracking code.
 
 
-- Seller
+### Seller
 
 After logging in the seller will be able to control orders preorders and the inventory.
 
@@ -50,16 +50,12 @@ After 2 days, he receives an email from the guest with the payment invoice. The 
 After 1 day he has shipped the item and can confirm the shipment with a shipping code.
 
 ## Features
-
-In this section, you should go over the different parts of your project, and describe each in a sentence or so.
- 
-
 ### Existing Features
-- Management : allows sellers to keep track of the full inventory.It allows sellers to keep track of orders and preorders
-- Profile : allows users to keep track of orders and preorders
-- Products :allows user to filter products or order them 
-- Checkout :allows user get a paypal invoice or to pay directly (Stripe). The Stripe payment is done using the support of a webhooker. This ensures that orderes are always correctly registered in the server.
-
+- Management : allows sellers to keep track and modify inventory, orders and preorders. Amending orders / preorders allows seller to send automatic emails to customers and keep them updated of order/preorder/shipment status 
+- Profile : allows users to anebd delivery information and keep track of orders and preorders
+- Products :allows user to see the products, filter and  order them 
+- Checkout :allows user get a paypal invoice or to pay directly (Stripe). The Stripe payment is done using the support of a webhooker. This ensures that orderes are always correctly registered in the server. In case the payment was processed but order was not processed by mistake , webhooker will create an order
+  
 For some/all of your features, you may choose to reference the specific project files that implement them, although this is entirely optional.
 
 In addition, you may also use this section to discuss plans for additional features to be implemented in the future:
@@ -83,7 +79,23 @@ In addition, you may also use this section to discuss plans for additional featu
 
 ## Testing
 
-Most of the webiste has been automated - tested with TestCase
+To test the project the following accounts should be used
+
+- customer
+USERNAME : ctest
+PASSWORD : ctest1234
+
+- seller (superuser)
+USERNAME : stest
+PASSWORD : stest12345
+
+To test the Stripe payment use the follwong test cc:
+
+NUMBER: 4242 4242 4242 4242
+EXP: 02 /22
+CVC: 424
+
+Most of the webiste has been automated-tested with Django TestCase
 
 The section tested have been Profile, Products, Chekout and Bag.
 
@@ -93,28 +105,34 @@ Tu run the tests ?
 
 The project has also been tested manually.
 
-Following few test that have been carried on manually:
+These tests have been carried on manually adn can be reproduced:
 
-1. Contact form:
-    1. Go to the "Contact Us" page
-    2. Try to submit the empty form and verify that an error message about the required fields appears
-    3. Try to submit the form with an invalid email address and verify that a relevant error message appears
-    4. Try to submit the form with all inputs valid and verify that a success message appears.
+1. Product Availabilioty decreases after an order:
+    1. As superuser creates product "Test" and sets availability to 3
+    2. Add to the bag 3 items of product "Test"
+    3. Verify that you can't add more items of this product
+    4. Finalize the order
+    5. Verify that bag is now empty
+    6. Go to "products" and verify that the product is now marked as not avaialable
 
-The project is responsive to different sceens . All test concerning responsiveness have been carried out using Chrome Inspector. The mimimum screen considered has been 320px*640px
+The project is responsive to different sceens . All test concerning responsiveness have been carried out using Chrome Inspector. The mimimum screen considered has been 320*640px
 
-### Bugs
+### Bugs and problems
 
 - Availability
 - Delivery problems
-Some products can only be delivered to Ireland . On top of it delivery to Ireland is also chepar compared to the one to different countries.
-Obviously the information about a possible delivery problem and aabout delivery fees had to be constant during the whole purchasing process.
-In order to achieve that I decided to use a reference for the delivery the one saved in the use profile. 
-This was made possible through the use of session variable and template tagging. At the checkout, anyhow, the user had to have the possibility to change delivery country.
+Some products can only be delivered to Ireland . On top of it delivery to Ireland is also chepar compared to EU countries.
+Obviously the information about a possible delivery problem and about delivery fees had to be constant during the whole purchasing process.
+In order to achieve that I decided to use as a reference the delivery saved in the use profile. In case of anonymous user I have decided to assume he/she is not from Ireland.
+This was made possible through the use of session variable and template tagging. At the same time user had to be given the possiblity to change deliver address at checkout.
 I had then to create a new session variable that reflected this choice.
-All the logic that assigned a specifi delivery fee or detected  a delivery problem takes palces inside the context file (bag).
- 
-- 
+ser choice had to be considered more relevant than saved delivery address at checkout stage. Although saved delivery adrres had to be considered more relevant in case of following purchasse during the same session. 
+All the logic that assigned a specific delivery fee or detected  a delivery problem takes place inside the context file (bag).
+
+- Payment choice: Stripe and payment by PayPal invoice
+The whole checkout page had to be made responsive to the decision of the guest to pay either by Paypal or Stripe.
+This was graphically achieved with scripts, whereas different view handles the logic.
+
 
 ## Deployment
 
@@ -128,8 +146,6 @@ In particular, you should provide all details of the differences between the dep
 In addition, if it is not obvious, you should also describe how to run your code locally.
 
 
-## Credits
-
 ### Content
 - The text for section Y was copied from the [Wikipedia article Z](https://en.wikipedia.org/wiki/Z)
 
@@ -138,4 +154,4 @@ In addition, if it is not obvious, you should also describe how to run your code
 
 ### Acknowledgements
 
-- I received inspiration for this project from the E-commerce project developed at the end on my Full-stack Code Institute course
+- I received inspiration for this project from the E-commerce project at the end on my Full-stack Code Institute course

@@ -371,6 +371,10 @@ def quantity_problem(request):
             quantity_problem = True
             break
     if quantity_problem == False:
-        return HttpResponse(status=200) 
+        # OK Stripe Payment and order creation can go ahead
+        return HttpResponse(status=200)
+
     else:
-        return HttpResponse(status=404) 
+        messages.error(request, "Oops ... there was a problem ")
+        del request.session['bag']
+        return redirect(reverse('products'))
