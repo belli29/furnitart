@@ -46,6 +46,7 @@ class StripeWH_Handler:
         """
         Handle the payment_intent.succeeded webhook from Stripe
         """
+        
         # fetching relevant Stripe event details 
         intent = event.data.object
         pid = intent.id
@@ -60,7 +61,7 @@ class StripeWH_Handler:
             if v == "":
                 shipping_details[f] = None
         
-        # update available quantity and sold quantity of products   
+        #update available quantity and sold quantity of products   
         bag_dict = json.loads(bag)  
         for p, quantity_purchased in bag_dict.items():
             product = get_object_or_404(Product, pk=p)    
@@ -72,7 +73,7 @@ class StripeWH_Handler:
             product.sold = sold
             product.save()
         
-        # Update profile information if save_info was checked
+        #Update profile information if save_info was checked
         profile = None
         username = intent.metadata.username
         if username != 'AnonymousUser':
@@ -86,6 +87,7 @@ class StripeWH_Handler:
                 profile.default_street_address2 = shipping_details.address.line2
                 profile.default_county = shipping_details.address.state
                 profile.save()
+                
         #check if order exist
         order_exists = False
         attempt = 1
