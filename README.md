@@ -2,54 +2,29 @@
 
 Furnitart is the website of a furniture shop based in Ireland that wants to start selling on the e-market.
 The e-store allows shipping all around Europe at different shipping rates. 
-
  
 ## UX
  
 This website is designed for 2 different users : the customer and the seller.
-### Customer
-The customer is able to view all different products and order them with using various filters.
-He/she can buy prodcuts and finanlly pay for them via Stripe. In this case he/she will recieve an instant notification that the order is being processed.
-The seller will send a notification when the order is shipped.
 
-The customer can also decide to request a Paypay invoice that generates an invoice, payable in the following 3 days. Once paid he/she is supposed to contact the seller to upgrade the preorder into an order( then previous flow applies).
-This option is suggested to the customer as it does not lead to any processing fee for the seller.
+### User stories
 
-The customer can also register. From the profile page he/she will be able to keep track of all his/ orders on the secion My profile 
+- Customer
+1. I want to see only products I am interested in. I want to be able to filter and order them so that I can find the produt I really need
+2. I want to be given the possiblity to choose the payment method and to get a small discount in case the purchase is not immediate (PayPal)
+3. I want to be informed if my items is shipped and I want to received shipping code in order to track it
+4. I want to be informed before i buy a product if that is not delivarable to my place
+5. I want to have all my orders and preorders visible at a glance  
+6. I want to have info about shipment / "preorder upgrading to order" / preorder cancelled avaialable on the web but I also want to receive an email everytime something changes
+- Seller
+1. I want to have an idea of how business is going and how much avaialable inventory I have at a glance 
+2. I want to offer to the user the possiblity to pay by Paypal. It is more convenient for me and I am ready to offer a discount on the grand total
+3. I want to set different delivery rates depending on the delivery destination
+4. I want user to be automatically informed by email when I take any action on an order
 
-- user story1:
-
-User is looking for a new table but has very reduced space in his studio. User searches for table and order results for size (smaller to bigger).
-
-Finally he finds a product that he likes. He verifies the size and decides to purchase it. Intially he would like to pay by Stripe but notices that payment by PayPal invoice has a nice discount.
-
-He makes the preorder, makes a payment on Paypal and emails the payment number to the seller.
-
-After few days he receives an email, confirming payment has been confirmed. After few more days he recieves an email confirming the shipment with a shipping tracking code.
-
-
-### Seller
-
-After logging in the seller will be able to control orders preorders and the inventory.
-
-The seller will be able to handle the processing of the orders and send info to the customers about the orders.
-
-The seller will also be able to add / delete / modify products and will always have control over the number of items available
-
-- seller story 1:
-
-The seller has 2 units of a product that, due to its size, can only be delivered to Ireland. 
-The seller receives a preorder for 1 unit to be shipped to Ireland. The available quantity is now only 1 on the website.
-After 3 days, he has not recieved any information about the payment from the customer . He, then, decides to delete the prepayment in order to increase the product availability.
-
--seller story 2:
-
-The seller has 2 units of a product that, due to its size, can only be delivered to Ireland 
-The seller receives a preorder for 1 unit to be shipped to Ireland. The available quantity is now only 1 on the website.
-After 2 days, he receives an email from the guest with the payment invoice. The seller confirms through the app that payment has been received.
-After 1 day he has shipped the item and can confirm the shipment with a shipping code.
 
 ## Features
+
 ### Existing Features
 - Management : allows sellers to keep track and modify inventory, orders and preorders. Amending orders / preorders allows seller to send automatic emails to customers and keep them updated of order/preorder/shipment status 
 - Profile : allows users to anebd delivery information and keep track of orders and preorders
@@ -61,11 +36,11 @@ For some/all of your features, you may choose to reference the specific project 
 In addition, you may also use this section to discuss plans for additional features to be implemented in the future:
 
 ### Features Left to Implement
-- the shipping logic should be more complex providing different rates that adapt to different countries and sizes of the items shipped
+- the shipping logic should be more complex providing different rates that adapt to different countries and sizes of the items shipped. The product model already has weight and sizes field. Those along with delivery destination should be used to implement automatic delivery calculation. 
 - customer should be able to add the payment code directly in the app 
-- the app should have the otpion to change laguage in order to result more customer friendly
+- the app should have the option to change laguage in order to result more customer friendly
 - the bag should be emptied after a certain time of user inactivity 
-- login possible also with Facebook
+- rRegistration should be possible also with Facebook
 
 
 ## Technologies Used
@@ -73,13 +48,66 @@ In addition, you may also use this section to discuss plans for additional featu
 - [JQuery](https://jquery.com)
     - The project uses **JQuery** to simplify DOM manipulation.
 - [Django3](https://docs.djangoproject.com/)
-    - The project uses **Django 3** to .
+    - The project uses **Django 3** as framework to achieve rapid development and clean, pragmatic design.
 - [Bootstrap4](https://getbootstrap.com/)
-    - The project uses **Bootstrap 4** to  .
+    - The project uses **Bootstrap 4** to achieve a responsive, mobile-first site.
 
 ## Testing
 
 ### How to test the project
+
+
+### How project was tested 
+
+Most of the project has been automated-tested with Django TestCase (overall coverage 55%).
+
+More in details the modules tested have been Profile, Products, Chekout and Bag.
+
+In all these sections I have run tests for views, forms and models.
+
+The project has also been tested manually. Below some of the tests.
+
+1. Product Availability decreases after an order:
+    1. As superuser creates product "Test" and sets availability to 3
+    2. Add to the bag 3 items of product "Test"
+    3. Verify that you can't add more items of this product
+    4. Finalize the order
+    5. Verify that bag is now empty
+    6. Go to "products" and verify that the product is now marked as not avaialable
+
+2. Orders in profile
+    1. Create a new profile
+    2. Make an order
+    3. Go to Profiel and verify the order is in the list
+
+3. Shipment info:
+    1. Make an order
+    2. As superuser mark order as shipped and add shipping code in the pop-up menu
+    3. Verifya you have recieved the email with this shipping information and that the ifo is also avaialable in your Profile
+
+4. Customer is alsways informed about shipping problem:
+    1. Login and amend delivery country to Germany
+    2. Select a product not delivarable to Eu
+    3. The bag template should already be warning you of a problem with delivery
+    4. Go to checkout. No payment option is avaialable
+    5. Select country Ireland
+    6. Payment options are now avaialable
+
+5. Paypal payment option applied discount:
+    1. Select a product and go to checkout 
+    2. Select Paypal payment and process preorder
+    3. Notice discount has been applied on the preorder confirmation
+
+### How to reproduce tests
+
+- How to reproduce automatic tests
+
+1. Go to GitHub repository 
+2. Clone this project 
+3. Open the project in GitPod
+4. Execute the folloowing : python3 manage.py test
+
+- How to reproduce manual  tests
 
 To test the project the following accounts should be used
 
@@ -97,30 +125,6 @@ NUMBER: 4242 4242 4242 4242
 EXP: 02 /22
 CVC: 424
 
-### How project was tested 
-
-Most of the project has been automated-tested with Django TestCase
-
-The section tested have been Profile, Products, Chekout and Bag.
-
-In all these sections I have run tests for views, forms and models.
-
-Tu run the tests ? 
-
-The project has also been tested manually.
-
-These tests have been carried on manually and can be reproduced:
-
-1. Product Availability decreases after an order:
-    1. As superuser creates product "Test" and sets availability to 3
-    2. Add to the bag 3 items of product "Test"
-    3. Verify that you can't add more items of this product
-    4. Finalize the order
-    5. Verify that bag is now empty
-    6. Go to "products" and verify that the product is now marked as not avaialable
-
-2. Profile dispalys
-
 ### Layout responsiveness
 The project is responsive to different screens . All test concerning responsiveness have been carried out using Chrome Inspector. The mimimum screen considered has been 320*640px
 
@@ -130,12 +134,12 @@ The project is responsive to different screens . All test concerning responsiven
 
 - Availability
 - Delivery problems
-Some products can only be delivered to Ireland . On top of it delivery to Ireland is also chepar compared to EU countries.
+Some products can only be delivered to Ireland . On top of it, delivery to Ireland is also cheaper compared to EU countries.
 Obviously the information about a possible delivery problem and about delivery fees had to be constant during the whole purchasing process.
 In order to achieve that I decided to use as a reference the delivery saved in the use profile. In case of anonymous user I have decided to assume he/she is not from Ireland.
-This was made possible through the use of session variable and template tagging. At the same time user had to be given the possiblity to change deliver address at checkout.
+This was made possible through the use of session variable and template tagging. At the same time user had to be given the possiblity to change delivery address at checkout.
 I had then to create a new session variable that reflected this choice.
-ser choice had to be considered more relevant than saved delivery address at checkout stage. Although saved delivery adrres had to be considered more relevant in case of following purchasse during the same session. 
+User choice had to be considered more relevant than saved delivery address at checkout stage. Although saved delivery address had to be considered more relevant in case of following purchasse during the same session. 
 All the logic that assigned a specific delivery fee or detected  a delivery problem takes place inside the context file (bag).
 
 - Payment choice: Stripe and payment by PayPal invoice
@@ -151,8 +155,12 @@ The issue was not adressed due to lack of time and low relevance
 
 ## Deployment
 
-The project has been deployed on [Heroku](https://heroku.com/) and on AMS
+The project has been deployed on [Heroku](https://heroku.com/). The project is visible [here ](https://furnitart.herokuapp.com/)
 
+On Deployemtn the following has been change (in omparison with local):
+
+- Static / media files are stored in AWS S3 service
+ 
 In particular, you should provide all details of the differences between the deployed version and the development version, if any, including:
 - Different values for environment variables (Heroku Config Vars)?
 - Different configuration files?

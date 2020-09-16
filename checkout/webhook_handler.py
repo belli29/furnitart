@@ -58,7 +58,7 @@ class StripeWH_Handler:
         #clean data in the shipping details
         for f, v in shipping_details.items():
             if v == "":
-                shipping_details[f] == None
+                shipping_details[f] = None
         
         # update available quantity and sold quantity of products   
         bag_dict = json.loads(bag)  
