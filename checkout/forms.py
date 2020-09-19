@@ -38,7 +38,6 @@ class OrderForm(forms.ModelForm):
             self.fields[field].widget.attrs['class'] = 'stripe-style-input'
             self.fields[field].label = False
 
-# preorder form
 
 class PreOrderForm(forms.ModelForm):
     class Meta:

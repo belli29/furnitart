@@ -3,9 +3,10 @@ from decimal import *
 from .models import Order, OrderLineItem, PreOrder, PreOrderLineItem
 from products.models import Product
 
+
 class TestProductModel(TestCase):
 
-    def test_shipped_defaults_to_True(self): 
+    def test_shipped_defaults_to_True(self):
         order = Order(
                 full_name="test",
                 email="test",
@@ -16,15 +17,15 @@ class TestProductModel(TestCase):
                 street_address1="test",
                 street_address2="test",
                 county="test",
-                original_bag="test"            
+                original_bag="test"
         )
         order.save()
-        self.assertFalse(order.shipped)  
+        self.assertFalse(order.shipped)
 
     def test_order_total(self):
-        #delivery to Ireland
+        # delivery to Ireland
         product = Product(name="product", price=10)
-        product2 = Product(name="product2", price=5) 
+        product2 = Product(name="product2", price=5)
         product.save()
         product2.save()
         order = Order(
@@ -37,7 +38,7 @@ class TestProductModel(TestCase):
                 street_address1="test",
                 street_address2="test",
                 county="test",
-                original_bag="test"            
+                original_bag="test"
         )
         order.save()
         orderlineitem = OrderLineItem(
@@ -53,7 +54,7 @@ class TestProductModel(TestCase):
         orderlineitem.save()
         orderlineitem2.save()
         self.assertEqual(order.grand_total, 33)
-        #same, order, delivery to EU
+        # same, order, delivery to EU
         order.country = "DE"
         order.save()
         orderlineitem.save()
@@ -61,9 +62,9 @@ class TestProductModel(TestCase):
         self.assertEqual(order.grand_total, 36)
 
     def test_preorder_total(self):
-        #delivery to Ireland
+        # delivery to Ireland
         product = Product(name="product", price=10)
-        product2 = Product(name="product2", price=5) 
+        product2 = Product(name="product2", price=5)
         product.save()
         product2.save()
         order = PreOrder(
@@ -75,7 +76,7 @@ class TestProductModel(TestCase):
                 town_or_city="test",
                 street_address1="test",
                 street_address2="test",
-                county="test",           
+                county="test",
         )
         order.save()
         orderlineitem = PreOrderLineItem(
@@ -90,10 +91,10 @@ class TestProductModel(TestCase):
         )
         orderlineitem.save()
         orderlineitem2.save()
-        self.assertEqual(order.grand_total, Decimal('31.35') )
-        #same, order, delivery to EU
+        self.assertEqual(order.grand_total, Decimal('31.35'))
+        # same, order, delivery to EU
         order.country = "DE"
         order.save()
         orderlineitem.save()
         orderlineitem2.save()
-        self.assertEqual(order.grand_total, Decimal('34.20')) 
+        self.assertEqual(order.grand_total, Decimal('34.20'))

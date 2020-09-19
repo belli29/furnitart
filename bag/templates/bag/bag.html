@@ -14,7 +14,7 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3">
-                <h2 class="logo-font">Your Bag</h2>
+                <h2 class="logo-font top-title">Your Bag</h2>
                 <div class="text-muted ">({{product_count}})</div>
                 <hr class="w-75 mb-1 hr-color-pr">    
             </div>
@@ -27,16 +27,9 @@
                         {% if bag_items %}
                             <div class="table-responsive rounded">
                                 <table class="table table-borderless">
-                                    <thead>
-                                        <tr>
-                                        <th scope="col" class="text-left">Product</th>
-                                        <th scope="col" class="text-center">Quantity</th>
-                                        <th scope="col" class="text-right d-none d-sm-block">Price</th>
-                                        </tr>
-                                    </thead>
                                     <tbody>
                                         {% for item in bag_items%}
-                                            <tr class="text-left">            
+                                            <tr class="text-left text-sm-center">            
                                                 <td class="text-nowrap">
                                                     <span>
                                                         <div class="icon remove-item text-color-pr" id="remove_{{ item.item_id }}" data-item_id="{{ item.item_id}}">
@@ -47,8 +40,9 @@
                                                         {{item.product.name}}
                                                     </span>
                                                     
+                                                    
                                                 </td>
-                                                <td class="text-center ">
+                                                <td class="text-right text-sm-center ">
                                                     <form class="form " action="{% url 'update_bag' item.item_id %}" method="POST">
                                                         {% csrf_token %}
                                                         <select class="quantity-input w-25" id="quantity_{{ item.item_id }}" name="quantity" >
@@ -69,31 +63,31 @@
                                         {% endfor%}
                                         <tr>
                                             <td class="d-none d-sm-block"></td>
-                                            <td class="text-left text-sm-center" ></h6><strong>Bag Total:</strong></h6></td>
-                                            <td class="text-center text-sm-right"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
+                                            <td class="text-left text-sm-center" ></h6><strong>Total</strong></h6></td>
+                                            <td class="text-right text-sm-right"><h6><strong>€{{ total|floatformat:2 }}</strong></h6></td>
                                         </tr>
                                         <tr id="delivery-table-row">
                                             {% if delivery_problem %}
-                                                <td class="d-none d-sm-block"></td>
-                                                <td class="text-left text-sm-center">
-                                                    <strong>
-                                                        Delivery not possible to EU:
-                                                        <p>Choose a delivery address in Ireland at next step or edit your bag.</p>
-                                                    </strong>
-                                                </td>
+                                                <div class="text-center text-color-pr">
+                                                    Delivery not possible to EU:
+                                                    <p>Choose a delivery address in Ireland at next step or edit your bag.</p>
+                                                </div>   
                                             {% else %}
                                             <td class="d-none d-sm-block"></td>
                                             <td class="text-left text-sm-center" >
                                                 <h6>
-                                                    <strong>Delivery{% if ie_delivery%}(Ireland){% else%}(EU country){% endif %}:</strong>
+                                                    <strong>
+                                                        Delivery
+                                                        <br>
+                                                        {% if ie_delivery%}(Ireland){% else%}(EU country){% endif %}</strong>
                                                 </h6>
                                             </td>
-                                            <td class="text-center text-sm-right"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
+                                            <td class="text-right text-sm-right"><h6><strong>€{{ delivery|floatformat:2 }}</strong></h6></td>
                                             {% endif %}
                                         </tr>
                                         <tr class="{% if delivery_problem %} d-none {% endif %}">
                                             <td class="d-none d-sm-block"></td>
-                                            <td class="text-left text-sm-center" ><h4><strong>Grand Total:</strong></h4></td>
+                                            <td class="text-left text-sm-center" ><h4><strong>Grand Total</strong></h4></td>
                                             <td class="text-right"><h4><strong>€{{ grand_total|floatformat:2 }}</strong></h4></td>
                                         </tr>   
                                         <tr>

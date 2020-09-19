@@ -6,8 +6,8 @@ class ProductForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        exclude = ('sold','reserved')
-        
+        exclude = ('sold', 'reserved')
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         categories = Category.objects.all()

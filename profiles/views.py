@@ -6,6 +6,7 @@ from checkout.models import Order, PreOrder
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+
 @login_required
 def profile(request):
     """ Display the user's profile. """
@@ -28,9 +29,9 @@ def profile(request):
         'preorders': preorders,
         'form': form,
         'on_profile_page': True,
-        
     }
     return render(request, template, context)
+
 
 def order_history(request, order_number):
     """view showing sepcific order """
@@ -52,6 +53,7 @@ def order_history(request, order_number):
 
     return render(request, template, context)
 
+
 def pre_order_history(request, order_number):
     """view showing sepcific preorder """
     if not request.user.is_superuser:
@@ -70,4 +72,3 @@ def pre_order_history(request, order_number):
         }
 
     return render(request, template, context)
-    

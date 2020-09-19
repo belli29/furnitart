@@ -26,7 +26,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', '')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEVELOPMENT' in os.environ
 
-ALLOWED_HOSTS = ['localhost', '.gitpod.io', '127.0.0.1', '0.0.0.0', 'furnitart.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', '.gitpod.io',
+                 '127.0.0.1', '0.0.0.0', 'furnitart.herokuapp.com']
 
 
 # Application definition
@@ -49,7 +50,6 @@ INSTALLED_APPS = [
     'crispy_forms',
     'profiles',
     'storages',
-    
 ]
 
 MIDDLEWARE = [
@@ -71,13 +71,13 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             os.path.join(BASE_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'templates', 'allauth') ,
+            os.path.join(BASE_DIR, 'templates', 'allauth'),
         ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.debug',
-                'django.template.context_processors.request', # `allauth` needs this from django
+                'django.template.context_processors.request',  # `allauth` needs this from django
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.media',
@@ -87,7 +87,7 @@ TEMPLATES = [
                 'crispy_forms.templatetags.crispy_forms_tags',
                 'crispy_forms.templatetags.crispy_forms_field',
             ]
-            
+
         },
     },
 ]
@@ -108,7 +108,7 @@ ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_REQUIRED = True
 CCOUNT_EMAIL_VERIFICATION = 'required'
 ACCOUNT_SIGNUP_EMAIL_ENTER_TWICE = True
-ACCOUNT_USERNAME_MIN_LENGTH = 4 
+ACCOUNT_USERNAME_MIN_LENGTH = 4
 LOGIN_URL = 'accounts/login/'
 LOGIN_REDIRECT_URL = '/'
 
@@ -129,7 +129,6 @@ else:
             'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
         }
     }
-
 
 
 # Password validation
@@ -196,8 +195,6 @@ if 'USE_AWS' in os.environ:
     # Override static and media URLs in production
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATICFILES_LOCATION}/'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{MEDIAFILES_LOCATION}/'
-    
-
 
 
 # Delivery variables
@@ -218,7 +215,7 @@ STRIPE_WH_SECRET = os.getenv('STRIPE_WH_SECRET', '')
 # Countries
 
 COUNTRIES_ONLY = ['AT', 'BE', 'HR', 'BG', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GR', 'HU', 'IE',
-'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
+                  'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'GB']
 
 # Email
 

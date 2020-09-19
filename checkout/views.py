@@ -1,12 +1,11 @@
-from django.shortcuts import render, redirect, reverse, get_object_or_404, HttpResponse
+from django.shortcuts import render, redirect, reverse
+from django.shortcuts import get_object_or_404, HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.template.response import TemplateResponse
 from django.contrib.auth.decorators import login_required
-
 from .forms import OrderForm, PreOrderForm
 from .models import Order, OrderLineItem, PreOrder, PreOrderLineItem
 from products.models import Product
@@ -16,6 +15,7 @@ from profiles.forms import UserProfileForm
 
 import stripe
 import json
+
 
 def checkout(request):
     if request.method == 'POST':
@@ -35,7 +35,7 @@ def checkout(request):
         }
         # stripe
         if payment_choice == "stripe":
-            # validate form 
+            # validate form
             order_form = OrderForm(form_data)
             if order_form.is_valid():
                 order = order_form.save()
@@ -55,19 +55,22 @@ def checkout(request):
                         order_line_item.save()
                     except Product.DoesNotExist:
                         messages.error(request, (
-                            "One of the products in your bag wasn't found in our database. "
+                            "One of the products in your bag"
+                            "wasn't found in our database. "
                             "Contact us for assistance!")
                         )
                         order.delete()
-                        return redirect(reverse('view_bag'))    
+                        return redirect(reverse('view_bag'))
             else:
                 messages.error(request, 'There was an error with your form. \
                     Please double check your information.')
             request.session['save_info'] = 'save-info' in request.POST
-            return redirect(reverse('checkout_success', args=[order.order_number]))
+            return redirect(
+                reverse('checkout_success', args=[order.order_number])
+            )
         # paypal
         if payment_choice == 'paypal':
-            # validate form 
+            # validate form
             pre_order_form = PreOrderForm(form_data)
             if pre_order_form.is_valid():
                 pre_order = pre_order_form.save()
@@ -83,32 +86,39 @@ def checkout(request):
                         pre_order_line_item.save()
                     except Product.DoesNotExist:
                         messages.error(request, (
-                            "One of the products in your bag wasn't found in our database. "
+                            "One of the products in your bag"
+                            "wasn't found in our database."
                             "Contact us for assistance!")
                         )
                         pre_order.delete()
-                        return redirect(reverse('view_bag')) 
+                        return redirect(reverse('view_bag'))
             else:
                 messages.error(request, 'There was an error with your form. \
                 Please double check your information.')
             request.session['save_info'] = 'save-info' in request.POST
-            return redirect(reverse('invoice_confirmation',  args=[pre_order.order_number]))
-            
+            return redirect(reverse(
+                'invoice_confirmation', args=[pre_order.order_number])
+                )
+
     # GET request
     else:
         change_country = False
-        #check if user amended the country
+        # check if user amended the country
         if "country" in request.GET:
             change_country = True
             chosen_country = request.session.get('chosen_country')
             request.session['chosen_country'] = request.GET['country']
-        
-        #check if there is some delivery problem
+
+        # check if there is some delivery problem
         context = bag_contents(request)
         delivery_problem = context["delivery_problem"]
-        if delivery_problem :
-            messages.error(request, 'Some items in your bag cannot be delivered to your shipping destination. \
-            Go back to you bag and delete them or change your shipping address to Ireland.')  
+        if delivery_problem:
+            messages.error(
+                request, "Some items in your bag cannot be delivered"
+                "to your shipping destination."
+                "Go back to you bag and delete them"
+                "or change your shipping address to Ireland."
+            )
         stripe_public_key = settings.STRIPE_PUBLIC_KEY
         stripe_secret_key = settings.STRIPE_SECRET_KEY
         bag = request.session.get('bag', {})
@@ -135,7 +145,7 @@ def checkout(request):
                     'email': new_data['email'],
                     'phone_number': new_data['phone_number'],
                     'country': new_data['country'],
-                    'postcode':new_data['postcode'],
+                    'postcode': new_data['postcode'],
                     'town_or_city': new_data['town_or_city'],
                     'street_address1': new_data['street_address1'],
                     'street_address2': new_data['street_address2'],
@@ -143,7 +153,7 @@ def checkout(request):
                 })
         # request does not come from change country
         else:
-            if request.user.is_authenticated :
+            if request.user.is_authenticated:
                 try:
                     profile = UserProfile.objects.get(user=request.user)
                     order_form = OrderForm(initial={
@@ -161,7 +171,7 @@ def checkout(request):
                     order_form = OrderForm()
             else:
                 order_form = OrderForm()
-            
+
         template = 'checkout/checkout.html'
         context = {
             'order_form': order_form,
@@ -169,7 +179,8 @@ def checkout(request):
             'client_secret':  client_secret,
             'change_country': change_country,
             }
-        return render(request, template, context)        
+        return render(request, template, context)
+
 
 def checkout_success(request, order_number):
     """
@@ -200,27 +211,28 @@ def checkout_success(request, order_number):
     messages.success(request, f'Order successfully processed! \
         Your order number is {order_number}. A confirmation \
         email will be sent to {order.email}.')
-    # save session bag info to a bag variable 
-    bag = request.session['bag'] 
+    # save session bag info to a bag variable
+    bag = request.session['bag']
     bag_with_item_name = []
-    for key , value in bag.items():
+    for key, value in bag.items():
         product = get_object_or_404(Product, pk=key)
         bag_with_item_name.append({
-            'name':product.name,
+            'name': product.name,
             'quantity': value
 
         })
-    # deletes session bag 
-    if 'bag' in request.session: 
+    # deletes session bag
+    if 'bag' in request.session:
         del request.session['bag']
 
     template = 'checkout/checkout_success.html'
     context = {
         'order': order,
-        'bag': bag_with_item_name 
+        'bag': bag_with_item_name
     }
 
     return render(request, template, context)
+
 
 @require_POST
 def cache_checkout_data(request):
@@ -233,17 +245,18 @@ def cache_checkout_data(request):
             'username': request.user,
         })
         return HttpResponse(status=200)
-    except  Exception as e:
+    except Exception as e:
         messages.error(request, "There was something wrong with your payment.\
             Please try later")
         return HttpResponse(status=400)
-    
+
+
 def invoice_confirmation(request, pre_order_number):
     """
     handle invoice confirmation when user selects paypal payment method
     """
-    order = get_object_or_404(PreOrder, order_number=pre_order_number )
-    
+    order = get_object_or_404(PreOrder, order_number=pre_order_number)
+
     # send email
     cust_email = order.email
     subject = render_to_string(
@@ -252,25 +265,25 @@ def invoice_confirmation(request, pre_order_number):
     body = render_to_string(
         'checkout/confirmation_emails/invoice_confirmation_email_body.txt',
         {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
-        
+
     send_mail(
         subject,
         body,
         settings.DEFAULT_FROM_EMAIL,
         [cust_email]
     )
-    
-    # update available quantity and reserved quantity of products      
+
+    # update available quantity and reserved quantity of products
     for p, quantity_reserved in request.session['bag'].items():
         product = get_object_or_404(Product, pk=p)
         initial_quantity = product.available_quantity
-        initial_reserved  = product.reserved
-        reserved  = initial_reserved + quantity_reserved
+        initial_reserved = product.reserved
+        reserved = initial_reserved + quantity_reserved
         available_quantity = initial_quantity - quantity_reserved
         product.available_quantity = available_quantity
-        product.reserved = reserved 
-        product.save() 
-    
+        product.reserved = reserved
+        product.save()
+
     # Attach the user's profile to the pre order if user is authenticated
     profile = None
     if request.user.is_authenticated:
@@ -290,12 +303,14 @@ def invoice_confirmation(request, pre_order_number):
             profile.default_county = order.county
             profile.save()
 
-    # delete session bag 
-    if 'bag' in request.session: 
+    # delete session bag
+    if 'bag' in request.session:
         del request.session['bag']
 
     # add success message
-    messages.success(request, f'You will soon receive the invoice at {cust_email}.')
+    messages.success(
+        request, f'You will soon receive the invoice at {cust_email}.'
+    )
 
     template = 'checkout/invoice_confirmation.html'
     context = {
@@ -303,14 +318,16 @@ def invoice_confirmation(request, pre_order_number):
     }
     return render(request, template, context)
 
+
 @login_required
 def toggle_shipped(request, order_id):
-    """ Toggle a product shipped field, add shipping code and inform user by email """
+    """ Toggle a product shipped field, add shipping code
+    and inform user by email """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
     order = get_object_or_404(Order, pk=order_id)
-    # amend order as shipped 
+    # amend order as shipped
     if request.method == 'POST':
         order.shipped = True
         shipping_code = request.POST.get("shipping_code")
@@ -327,20 +344,23 @@ def toggle_shipped(request, order_id):
         body = render_to_string(
             'checkout/confirmation_emails/order_shipped_body.txt',
             {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
-            
+
         send_mail(
             subject,
             body,
             settings.DEFAULT_FROM_EMAIL,
             [cust_email]
         )
-    # amend order as not shipped 
+    # amend order as not shipped
     if request.method == 'GET':
         order.shipped = False
         order.shipping_code = ""
         order.save()
-        messages.success(request, 'customer has been informed there was an error: order has not been shipped yet.')
-        # email customer :order was marked as shipped by mistake 
+        messages.success(
+            request, 'customer has been informed there was an error:'
+            'order has not been shipped yet.'
+        )
+        # email customer :order was marked as shipped by mistake
         cust_email = order.email
         subject = render_to_string(
             'checkout/confirmation_emails/order_not_shipped_subject.txt',
@@ -348,7 +368,7 @@ def toggle_shipped(request, order_id):
         body = render_to_string(
             'checkout/confirmation_emails/order_not_shipped_body.txt',
             {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
-            
+
         send_mail(
             subject,
             body,
@@ -357,16 +377,19 @@ def toggle_shipped(request, order_id):
         )
     return redirect(reverse('products_management'))
 
+
 def delete_session_chosen_country(request):
     del request.session['chosen_country']
-    return HttpResponse(status=200) 
+    return HttpResponse(status=200)
+
 
 def quantity_problem(request):
-    """check if the quantity of the items does not exceed the quantity available"""
+    """check if the quantity of the items does not
+    exceed the quantity available"""
     quantity_problem = False
     bag = request.session.get('bag', {})
     for item_id, item_quantity in bag.items():
-        product = Product.objects.get(id=item_id) 
+        product = Product.objects.get(id=item_id)
         if item_quantity >= product.available_quantity:
             quantity_problem = True
             break

@@ -1,28 +1,26 @@
-from django.shortcuts import render, get_object_or_404, redirect,reverse, HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.shortcuts import redirect, reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
 from django.db.models.functions import Lower
-from django.http import HttpResponseRedirect
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-
 from .models import Product, Category
 from .forms import ProductForm
-from checkout.models import Order, OrderLineItem, PreOrder, PreOrderLineItem
+from checkout.models import Order, OrderLineItem, PreOrder
 
-# Create your views here.
 
-def all_products (request):
+def all_products(request):
     """view showing all products, including sorting and search queried"""
-    # save current parameters in a variable 
+    # save current parameters in a variable
     current_url = request.get_full_path()
-    if '?' in current_url :
+    if '?' in current_url:
         current_param = current_url.split('?')[1]
     else:
         current_param = ""
-    
+
     products = Product.objects.filter(is_active=True)
     query = None
     category = None
@@ -34,11 +32,10 @@ def all_products (request):
     if 'euro_filter' in request.GET:
         products = products.filter(euro_shipping=True)
         euro_filter = True
-    
-    if 'image_filter' in request.GET:
-        products = products.exclude(image ="")
-        image_filter = True
 
+    if 'image_filter' in request.GET:
+        products = products.exclude(image="")
+        image_filter = True
 
     if 'sort' in request.GET:
         sortkey = request.GET['sort']
@@ -47,7 +44,7 @@ def all_products (request):
             sortkey = 'lower_name'
             products = products.annotate(lower_name=Lower('name'))
         if sortkey == 'size':
-            products = products.annotate(size=F('l')*F('w')*F('h'))          
+            products = products.annotate(size=F('l')*F('w')*F('h'))
         if 'direction' in request.GET:
             direction = request.GET['direction']
             if direction == 'desc':
@@ -62,7 +59,7 @@ def all_products (request):
 
         queries = Q(name__icontains=query) | Q(description__icontains=query)
         products = products.filter(queries)
-    
+
     if 'category' in request.GET:
         category = request.GET['category']
         products = products.filter(category__name=category)
@@ -70,39 +67,42 @@ def all_products (request):
 
     current_sorting = f'{sort}_{direction}'
 
-    context ={
+    context = {
         'products': products,
-        'search_term': query, 
-        'current_category':category,
+        'search_term': query,
+        'current_category': category,
         'current_sorting': current_sorting,
         'euro_filter_active': euro_filter,
         'image_filter_active': image_filter,
         'current_param': current_param
     }
 
-    return render(request, 'products/products.html', context )
+    return render(request, 'products/products.html', context)
 
-def product_details (request, product_id):
+
+def product_details(request, product_id):
     """view showing details of the selected product"""
-    
+
     product = get_object_or_404(Product, pk=product_id)
     bag_qty = 0
     if 'bag' in list(request.session.keys()):
         if str(product_id) in list(request.session.get("bag").keys()):
-            print('ok')   
+            print('ok')
             bag_qty = request.session.get("bag")[str(product_id)]
     remaining_qty = product.available_quantity - bag_qty
-    context ={
+    context = {
         'product': product,
         'remaining_qty': remaining_qty
     }
 
-    return render(request, 'products/product_details.html', context )
+    return render(request, 'products/product_details.html', context)
 
-# products management
+
+"""Products management view"""
+
 
 @login_required
-def management (request):
+def management(request):
     """view allowing super users to manage inventory """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
@@ -112,7 +112,7 @@ def management (request):
     pay_pal_filter = False
     shipped_filter = False
     view_preorders = False
-    if 'view_preorders' in request.GET:    
+    if 'view_preorders' in request.GET:
         view_preorders = True
     if 'pay_pal_filter' in request.GET:
         orders = orders.filter(pay_pal_order=True)
@@ -120,9 +120,9 @@ def management (request):
     if 'shipped_filter' in request.GET:
         orders = orders.filter(shipped=True)
         shipped_filter = True
-    # save current parameters in a variable 
+    # save current parameters in a variable
     current_url = request.get_full_path()
-    if '?' in current_url :
+    if '?' in current_url:
         current_param = current_url.split('?')[1]
     else:
         current_param = ""
@@ -137,12 +137,11 @@ def management (request):
         'current_param': current_param,
     }
     template = 'products/management.html'
-    return render(request, template, context )
-
+    return render(request, template, context)
 
 
 @login_required
-def add_product (request):
+def add_product(request):
     """view adding a new product """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
@@ -155,13 +154,16 @@ def add_product (request):
             # identify if the user was coming from management dashboard
             from_management = request.POST['from_management']
             print(from_management)
-            if from_management:  
+            if from_management:
                 return redirect(reverse('list_products'))
             else:
-                return redirect (reverse("product_details", args=[product.id]))
+                return redirect(reverse("product_details", args=[product.id]))
         else:
-           messages.error(request, 'Something went wrong. We could not add the product.') 
-        
+            messages.error(
+               request,
+               'Something went wrong. We could not add the product.'
+               )
+
     else:
         form = ProductForm()
         # define if the user is coming from management dashboard
@@ -171,12 +173,13 @@ def add_product (request):
             "from_management": from_management,
         }
         template = 'products/add_product.html'
-        return render (request, template, context)
+        return render(request, template, context)
+
 
 @login_required
-def list_products (request):
+def list_products(request):
     """view listing all products """
-    
+
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
@@ -185,7 +188,8 @@ def list_products (request):
             "products": all_products,
         }
     template = 'products/list_products.html'
-    return render (request, template, context)
+    return render(request, template, context)
+
 
 @login_required
 def edit_product(request, product_id):
@@ -206,7 +210,10 @@ def edit_product(request, product_id):
             else:
                 return redirect(reverse('product_details', args=[product.id]))
         else:
-            messages.error(request, 'Failed to update product. Please ensure the form is valid.')
+            messages.error(
+                request,
+                'Failed to update product. Please ensure the form is valid.'
+                )
     else:
         form = ProductForm(instance=product)
         messages.info(request, f'You are editing {product.name}')
@@ -220,6 +227,7 @@ def edit_product(request, product_id):
     }
 
     return render(request, template, context)
+
 
 @login_required
 def delete_product(request, product_id):
@@ -237,6 +245,7 @@ def delete_product(request, product_id):
     else:
         return redirect(reverse('products'))
 
+
 @login_required
 def toggle_active(request, product_id):
     """ Toggle a product is_active field """
@@ -251,7 +260,8 @@ def toggle_active(request, product_id):
         product.is_active = True
         product.save()
     return redirect(reverse('list_products'))
- 
+
+
 @login_required
 def order_history(request, order_number):
     """ show speficic order """
@@ -272,6 +282,7 @@ def order_history(request, order_number):
 
     return render(request, template, context)
 
+
 @login_required
 def pre_order_history(request, order_number):
     """ show speficic pre order """
@@ -291,6 +302,7 @@ def pre_order_history(request, order_number):
         }
 
     return render(request, template, context)
+
 
 @login_required
 def confirm_pre_order(request, order_number):
@@ -314,11 +326,11 @@ def confirm_pre_order(request, order_number):
         order_total=pre_order.order_total,
         grand_total=pre_order.grand_total,
         pay_pal_order=True
-        
+
     )
     # save order
     order.save()
-    # copy line items from preorder to order 
+    # copy line items from preorder to order
     for li in pre_order.lineitems.all():
         order_line_item = OrderLineItem(
             order=order,
@@ -327,16 +339,21 @@ def confirm_pre_order(request, order_number):
         )
         order_line_item.save()
         # update product reserved, sold
-        product=li.product
-        quantity=li.quantity
-        product.sold =  product.sold + quantity
+        product = li.product
+        quantity = li.quantity
+        product.sold = product.sold + quantity
         product.reserved = product.reserved - quantity
         product.save()
     # delete preorder
     pre_order.delete()
     # success message
-    messages.success(request, f'pre_order {pre_order.order_number} deleted. New order {order.order_number} confirmed')
+    messages.success(request, (
+        f'pre_order {pre_order.order_number} deleted.'
+        f'New order {order.order_number} confirmed.'
+        )
+    )
     return redirect(reverse('products_management'))
+
 
 @login_required
 def delete_pre_order(request, order_number):
@@ -360,16 +377,16 @@ def delete_pre_order(request, order_number):
         order_total=pre_order.order_total,
         grand_total=pre_order.grand_total,
         pay_pal_order=True
-        
+
     )
     # update product avaiable, reserved
     for li in pre_order.lineitems.all():
-        product=li.product
-        quantity=li.quantity
-        product.available_quantity =  product.available_quantity + quantity
+        product = li.product
+        quantity = li.quantity
+        product.available_quantity = product.available_quantity + quantity
         product.reserved = product.reserved - quantity
         product.save()
-    
+
     # email user
     cust_email = order.email
     subject = render_to_string(
@@ -378,7 +395,7 @@ def delete_pre_order(request, order_number):
     body = render_to_string(
         'checkout/confirmation_emails/delete_preorder_body.txt',
         {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
-            
+
     send_mail(
         subject,
         body,
