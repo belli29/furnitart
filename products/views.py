@@ -22,27 +22,25 @@ def all_products(request):
         current_param = ""
 
     products = Product.objects.filter(is_active=True)
+    products = products.order_by("price")
     query = None
     category = None
     sort = None
     direction = None
     euro_filter = False
-    image_filter = False
+    available_filter = False
 
     if 'euro_filter' in request.GET:
         products = products.filter(euro_shipping=True)
         euro_filter = True
 
-    if 'image_filter' in request.GET:
-        products = products.exclude(image="")
-        image_filter = True
-
+    if 'available_filter' in request.GET:
+        products = products.filter(available_quantity__gt=0)
+        available_filter = True
+    # filter results
     if 'sort' in request.GET:
         sortkey = request.GET['sort']
         sort = sortkey
-        if sortkey == 'name':
-            sortkey = 'lower_name'
-            products = products.annotate(lower_name=Lower('name'))
         if sortkey == 'size':
             products = products.annotate(size=F('l')*F('w')*F('h'))
         if 'direction' in request.GET:
@@ -66,14 +64,14 @@ def all_products(request):
         category = Category.objects.filter(name=category)[0]
 
     current_sorting = f'{sort}_{direction}'
-
+    
     context = {
         'products': products,
         'search_term': query,
         'current_category': category,
         'current_sorting': current_sorting,
         'euro_filter_active': euro_filter,
-        'image_filter_active': image_filter,
+        'available_filter_active': available_filter,
         'current_param': current_param
     }
 
@@ -87,7 +85,6 @@ def product_details(request, product_id):
     bag_qty = 0
     if 'bag' in list(request.session.keys()):
         if str(product_id) in list(request.session.get("bag").keys()):
-            print('ok')
             bag_qty = request.session.get("bag")[str(product_id)]
     remaining_qty = product.available_quantity - bag_qty
     context = {
@@ -109,9 +106,15 @@ def management(request):
         return redirect(reverse('home'))
     # orders section
     orders = Order.objects.all()
+    orders = orders.order_by("-date")
+    preorders = Order.objects.all()
+    preorders = preorders.order_by("-date")
     pay_pal_filter = False
     shipped_filter = False
+    unshipped_filter = False
     view_preorders = False
+    sort = None
+    direction = None
     if 'view_preorders' in request.GET:
         view_preorders = True
     if 'pay_pal_filter' in request.GET:
@@ -120,21 +123,35 @@ def management(request):
     if 'shipped_filter' in request.GET:
         orders = orders.filter(shipped=True)
         shipped_filter = True
+    if'unshipped_filter' in request.GET:
+        orders = orders.filter(shipped=False)
+        unshipped_filter = True
     # save current parameters in a variable
     current_url = request.get_full_path()
     if '?' in current_url:
         current_param = current_url.split('?')[1]
     else:
         current_param = ""
-
-    preorders = PreOrder.objects.all()
+    # filter results
+    if 'sort' in request.GET:
+        sort = request.GET['sort']
+        sortkey = request.GET['sort']
+        if 'direction' in request.GET:
+            direction = request.GET['direction']
+            if direction == 'desc':
+                sortkey = f'-{sortkey}'
+        orders = orders.order_by(sortkey)
+        preorders = orders.order_by(sortkey)
+    current_sorting = f'{sort}-{direction}'
     context = {
         'view_preorders': view_preorders,
         'orders': orders,
         'preorders': preorders,
         'pay_pal_filter_active': pay_pal_filter,
         'shipped_filter_active': shipped_filter,
+        'unshipped_filter_active': unshipped_filter,
         'current_param': current_param,
+        'current_sorting': current_sorting
     }
     template = 'products/management.html'
     return render(request, template, context)
@@ -153,7 +170,6 @@ def add_product(request):
             messages.success(request, 'You succesfully added a product!')
             # identify if the user was coming from management dashboard
             from_management = request.POST['from_management']
-            print(from_management)
             if from_management:
                 return redirect(reverse('list_products'))
             else:

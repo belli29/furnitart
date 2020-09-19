@@ -11,7 +11,7 @@ def get_bag_context(self):
 
 class TestView (TestCase):
     def test_profiles(self):
-        """testing if the bag page works and template used"""
+        """testing if the profile page works and template used"""
         # when user is not logged in
         response = self.client.get('/profiles/')
         self.assertEqual(response.status_code, 302)

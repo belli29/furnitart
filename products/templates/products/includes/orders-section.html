@@ -41,7 +41,7 @@
                             </td>
                             <td class="text-center">
                                 {% if order.shipped %}
-                                    <a href="{% url 'toggle_shipped' order.id%}">
+                                    <a href="" data-toggle="modal" data-target="#unship-order-{{order.id}}">
                                         <i class="fas fa-check text-color-pr" alt="shipped"></i>
                                     </a>
                                 {% else %}
@@ -52,6 +52,7 @@
                             </td>
                         </tr>
                         {% include 'products/includes/modal_window_shipped.html' %}
+                        {% include 'products/includes/modal_window_unshipped.html' %}
                     {% endfor %}
                 </tbody>
             </table>

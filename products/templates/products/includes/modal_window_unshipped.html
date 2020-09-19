@@ -1,0 +1,20 @@
+<div class="modal fade" id="unship-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="ship-order" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="unship-order"> Order {{order.order_number}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Something going wrong here ...</p>
+                <p>Customer has been previously informed that the order was shipped . If you click CONFIRM  customer will be informed via mail that there was a mistake: order has not been shipped yet.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
+                <a type="button" id="submit-button" href="{% url 'toggle_shipped' order.id %}" class="btn rounded-0 border-color-pr">Confirm</a>
+            </div>
+        </div>
+    </div>
+</div>
