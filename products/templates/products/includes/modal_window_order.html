@@ -1,12 +1,21 @@
-<!-- preorder modal -->
+<!-- order modal -->
 <div class="modal fade modal-window-order" id="order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="order" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title mx-auto" id="order-modal">
                 {{order.order_number}}
+                {% if order.stripe_pid != "" %}
+                    <p class="text-color-pr">
+                        <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                        {{ order.stripe_pid }}
+                    </p>
+                {% else %}
+                    <p class="text-color-pr">
+                        <i class="fa fa-cc-paypal fa-2x " aria-hidden="true"></i>
+                    </p>
+                {% endif %}  
                 </div>
-                <p><h6>This is a preorder!</h6></p>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -72,55 +81,65 @@
                 </div>
                 <hr>  
                 <button type="button" class="btn btn-outline-dark rounded-0 " data-dismiss="modal">Close</button>
-                <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#confirm-order-{{order.id}}">
-                    Upgrade to Order
-                </a>
-                <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#delete-order-{{order.id}}">
-                    Delete Preorder
-                </a>
+                {% if order.shipped %}
+                    <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#unship-order-{{order.id}}">
+                        Unship Order
+                    </a>
+                {% else %}
+                    <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#ship-order-{{order.id}}">
+                    Ship it !
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
 </div>
-<!-- upgrade to order modal -->
-<div class="modal fade incoming-modal" id="confirm-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="confirm-order" aria-hidden="true">
+<!-- ship-order modal -->
+<div class="modal fade incoming-modal" id="ship-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="ship-order" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirm-order"> Preorder {{order.order_number}}</h5>
+                <h5 class="modal-title mx-auto" id="order-modal"> {{order.order_number}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>You are about to confirm an order and delete the preorder </p>
-                <p>Customer will be informed that payment has been confirmed via email.</p>
+                <p>Add shipping code down below. </p>
+                <form action="{% url 'toggle_shipped' order.id %}" method="POST"  enctype='multipart/form-data' id="toggle-shipped-form-{{order.id}}">
+                    {% csrf_token %}
+                    <input type="text" name="shipping_code">
+                </form>
+                <p>Customer will be informed that order has been shipped via email.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
-                <button type="button" class="btn rounded-0 border-color-pr"><a href="{% url 'confirm_pre_order' order.order_number  %}" >Yes, confirm it!</a></button>
+                <button type="submit" id="submit-button" form="toggle-shipped-form-{{order.id}}" class="btn rounded-0 border-color-pr">Confirm</button>
             </div>
         </div>
     </div>
 </div>
-<!-- delete preorder modal -->
-<div class="modal fade incoming-modal" id="delete-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="delete-order" aria-hidden="true">
+<!-- unship-order modal -->
+<div class="modal fade incoming-modal" id="unship-order-{{order.id}}" tabindex="-1" role="dialog" aria-labelledby="ship-order" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="delete-order"> Preorder {{order.order_number}}</h5>
+                <h5 class="modal-title mx-auto" id="order-modal"> {{order.order_number}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                <p>You are about to delete this preorder </p>
-                <p>Customer will be informed that payment has note been received and preorder is not avalid anymore</p>
+                <p>Something going wrong here ...</p>
+                <p>Customer has been previously informed that the order was shipped . If you click CONFIRM  customer will be informed via mail that there was a mistake: order has not been shipped yet.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
-                <button type="button" class="btn rounded-0 border-color-pr"><a href="{% url 'delete_pre_order' order.order_number  %}" >Delete it!</a></button>
+                <a type="button" id="submit-button" href="{% url 'toggle_shipped' order.id %}" class="btn rounded-0 border-color-pr">Confirm</a>
             </div>
         </div>
     </div>
 </div>
+
+
+ 

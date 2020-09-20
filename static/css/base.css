@@ -300,6 +300,18 @@ a {
 .toggler-custom:focus{
    outline: none;
 }
+
+#order-modal{
+    font-size: .8rem
+}
+
+.modal-window-order {
+    z-index: 99999;
+}
+.incoming-modal{
+    z-index: 999999;
+}
+
 /* -------------------------------- nav icon 
 from https://codepen.io/designcouch/pen/Atyop */
 

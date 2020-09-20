@@ -2,6 +2,10 @@ from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import get_object_or_404
 from products.models import Product
+from checkout.models import Order, PreOrder
+import datetime
+import pytz
+
 
 
 def bag_contents(request):
@@ -85,6 +89,17 @@ def bag_contents(request):
     delivery_problem = results['delivery_problem']
     grand_total = delivery + total
 
+    # for seller banner
+    # identify current date
+    utc_now = pytz.utc.localize(datetime.datetime.utcnow())
+    dublin_now = utc_now.astimezone(pytz.timezone("Europe/Dublin"))
+    dublin_today = dublin_now.date
+    all_orders = Order.objects.all()
+    today_orders = all_orders.filter(date__gte=datetime.datetime.utcnow().astimezone(pytz.timezone("Europe/Dublin")).date())
+    today_preorders = PreOrder.objects.all().filter(date__gte=datetime.datetime.utcnow().astimezone(pytz.timezone("Europe/Dublin")).date())
+    today_orders_count = len(today_orders)
+    today_preorders_count = len(today_preorders)
+
     context = {
         'bag_items': bag_items,
         'total': total,
@@ -96,7 +111,9 @@ def bag_contents(request):
         'discount': settings.PAY_PAL_DISCOUNT,
         'ie_delivery': ie_delivery,
         'delivery_problem': delivery_problem,
-
+        'today': dublin_today,
+        'today_orders_count': today_orders_count,
+        'today_preorders_count':today_preorders_count, 
     }
 
     return context

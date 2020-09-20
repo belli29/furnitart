@@ -107,7 +107,7 @@ def management(request):
     # orders section
     orders = Order.objects.all()
     orders = orders.order_by("-date")
-    preorders = Order.objects.all()
+    preorders = PreOrder.objects.all()
     preorders = preorders.order_by("-date")
     pay_pal_filter = False
     shipped_filter = False
@@ -276,48 +276,6 @@ def toggle_active(request, product_id):
         product.is_active = True
         product.save()
     return redirect(reverse('list_products'))
-
-
-@login_required
-def order_history(request, order_number):
-    """ show speficic order """
-    if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can see that.')
-        return redirect(reverse('home'))
-    order = get_object_or_404(Order, order_number=order_number)
-    messages.info(request, (
-        f'This is a past confirmation for order number {order_number}. '
-        'A confirmation email was sent on the order date.'
-    ))
-
-    template = 'checkout/checkout_success.html'
-    context = {
-        'order': order,
-        'from_management': True,
-    }
-
-    return render(request, template, context)
-
-
-@login_required
-def pre_order_history(request, order_number):
-    """ show speficic pre order """
-    if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can see that.')
-        return redirect(reverse('home'))
-    order = get_object_or_404(PreOrder, order_number=order_number)
-    messages.info(request, (
-        f'This is a past confirmation for pre order number {order_number}. '
-        'Payment instructions  were sent on the order date.'
-    ))
-
-    template = 'checkout/invoice_confirmation.html'
-    context = {
-        'order': order,
-        'from_management': True,
-        }
-
-    return render(request, template, context)
 
 
 @login_required

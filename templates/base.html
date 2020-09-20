@@ -134,7 +134,35 @@
         </div>
         <div id="delivery-banner" class="row text-center">
             <div class="col bg-black text-white ">
-                <div class="logo-font my-1">Free delivery to {% if ie_delivery %} Ireland{% else %}all EU{% endif %} on orders over €{{ free_delivery_threshold }}!</div>                
+                {% if request.user.is_superuser%}
+                    {% if today_orders_count == 0  and today_preorders_count == 0 %}
+                        <div class="logo-font my-1">Today, {{today}}, there was no order / preorder</div>
+                    {% else %}
+                        <div class="logo-font my-1">Today, {{today}}, you have received 
+                            {% if today_orders_count == 0 %}
+
+                            {% elif today_orders_count == 1 %}
+                                1 order
+                            {% else %}
+                                {{ today_orders_count}} orders
+                            {% endif %}
+                            {% if today_preorders_count == 0 %}
+                            {% elif today_orders_count == 1 %}
+                                {% if today_orders_count != 0 %}
+                                    and
+                                {% endif%}
+                                1 preorder
+                            {% else %}
+                                {% if today_orders_count != 0 %}
+                                    and
+                                {% endif %}
+                                {{ today_preorders_count}} preorders
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                {% else %}
+                <div class="logo-font my-1">Free delivery to {% if ie_delivery %} Ireland{% else %}all EU{% endif %} on orders over €{{ free_delivery_threshold }}!</div>
+                {% endif %}              
             </div>            
         </div>
     </header>
