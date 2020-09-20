@@ -1,5 +1,5 @@
 from django import forms
-from .models import Order, PreOrder
+from .models import Order, PreOrder, Delivery
 
 
 class OrderForm(forms.ModelForm):
@@ -74,3 +74,23 @@ class PreOrderForm(forms.ModelForm):
                 self.fields[field].widget.attrs['placeholder'] = placeholder
             self.fields[field].widget.attrs['class'] = 'stripe-style-input'
             self.fields[field].label = False
+
+
+class DeliveryForm(forms.ModelForm):
+    class Meta:
+        model = Delivery
+        exclude = ('order',)
+
+    def __init__(self, *args, **kwargs):
+        """
+        Add placeholders and classes, remove auto-generated
+        labels and set autofocus on first field
+        """
+        super().__init__(*args, **kwargs)
+        placeholders = {
+            'tracking_number': 'Tracking Number',
+            'provider': 'Delivery Company',
+            'expected_wait': 'Approx number of days',
+        }
+
+        self.fields['order number'].widget.attrs['autofocus'] = True

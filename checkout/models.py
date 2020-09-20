@@ -185,3 +185,15 @@ class PreOrderLineItem(models.Model):
     def __str__(self):
         return f'product number {self.product.id}' \
             'on order {self.order.order_number}'
+
+class Delivery(models.Model):
+    tracking_number = models.CharField(max_length=32, null=False, editable=False)
+    order = models.ForeignKey(Order, on_delete=models.PROTECT,
+                                     null=False, blank=False,
+                                     related_name='delivery')
+    provider = models.CharField(max_length=50, null=False, blank=False)
+    expected_wait = models.IntegerField(null=False, blank=False)
+    
+    def __str__(self):
+        return self.order_number
+

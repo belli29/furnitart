@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import Order, OrderLineItem
 from .models import PreOrder, PreOrderLineItem
-
+from .models import Delivery
 
 class OrderLineItemAdminInline(admin.TabularInline):
     model = OrderLineItem
@@ -56,3 +56,15 @@ class PreOrderAdmin(admin.ModelAdmin):
     ordering = ('-date',)
 
 admin.site.register(PreOrder, PreOrderAdmin)
+
+# delivery
+
+class DeliveryAdmin(admin.ModelAdmin):
+    readonly_fields = ('order')
+
+    fields = ('order', 'tracking_number', 
+              'provider', 'expected_wait')
+
+    list_display = ('order', 'tracking_number')
+
+    ordering = ('-date',)

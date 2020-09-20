@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <div class="modal-title mx-auto" id="order-modal">
+                <div class="modal-title order-modal mx-auto" >
                 {{order.order_number}}
                 <p><h6 class="text-color-pr">This is a preorder!</h6></p>
                 </div>
@@ -87,10 +87,10 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirm-order"> Preorder {{order.order_number}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="modal-title mx-auto order-modal">
+                {{order.order_number}}
+                <p><h6 class="text-color-pr">This is a preorder!</h6></p>
+                </div>
             </div>
             <div class="modal-body">
                 <p>You are about to confirm an order and delete the preorder </p>
@@ -108,14 +108,14 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="delete-order"> Preorder {{order.order_number}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="modal-title mx-auto order-modal">
+                {{order.order_number}}
+                <p><h6 class="text-color-pr">This is a preorder!</h6></p>
+                </div>
             </div>
             <div class="modal-body">
                 <p>You are about to delete this preorder </p>
-                <p>Customer will be informed that payment has note been received and preorder is not avalid anymore</p>
+                <p>Customer will be informed that payment has note been received and preorder is not valid anymore</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
