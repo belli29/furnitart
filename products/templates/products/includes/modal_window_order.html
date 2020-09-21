@@ -12,7 +12,12 @@
                     </p>
                 {% else %}
                     <p class="text-color-pr">
-                        <i class="fa fa-cc-paypal fa-2x " aria-hidden="true"></i>
+                        This order procedes from a preorder made on<br>
+                        {{order.preorder.date}}
+                        <p class="text-color-pr">
+                            <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                            {{ order.pp_transaction_id }}
+                        </p>
                     </p>
                 {% endif %}  
                 </div>

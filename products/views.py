@@ -107,7 +107,7 @@ def management(request):
     delivery_form = DeliveryForm()
     orders = Order.objects.all()
     orders = orders.order_by("-date")
-    preorders = PreOrder.objects.all()
+    preorders = PreOrder.objects.all().exclude(status="INV").exclude(status="UPG")
     preorders = preorders.order_by("-date")
     pay_pal_filter = False
     shipped_filter = False
@@ -118,7 +118,7 @@ def management(request):
     if 'view_preorders' in request.GET:
         view_preorders = True
     if 'pay_pal_filter' in request.GET:
-        orders = orders.filter(pay_pal_order=True)
+        orders = orders.exclude(pp_transaction_id="")
         pay_pal_filter = True
     if 'shipped_filter' in request.GET:
         orders = orders.filter(shipped=True)
@@ -281,11 +281,13 @@ def toggle_active(request, product_id):
 
 @login_required
 def confirm_pre_order(request, order_number):
-    """ view deleting preorder and creating a corresponding order """
+    """ view upgrading preorder and creating a corresponding order """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can see that.')
         return redirect(reverse('home'))
     pre_order = get_object_or_404(PreOrder, order_number=order_number)
+    pp_transaction_id = request.POST['pp_transaction_id']
+    print(pp_transaction_id)
     order = Order(
         user_profile=pre_order.user_profile,
         full_name=pre_order.full_name,
@@ -300,8 +302,7 @@ def confirm_pre_order(request, order_number):
         delivery_cost=pre_order.delivery_cost,
         order_total=pre_order.order_total,
         grand_total=pre_order.grand_total,
-        pay_pal_order=True
-
+        pp_transaction_id=pp_transaction_id
     )
     # save order
     order.save()
@@ -319,11 +320,13 @@ def confirm_pre_order(request, order_number):
         product.sold = product.sold + quantity
         product.reserved = product.reserved - quantity
         product.save()
-    # delete preorder
-    pre_order.delete()
+    # update preorder
+    pre_order.upgraded_order = order
+    pre_order.status = "UPG"
+    pre_order.save()
     # success message
     messages.success(request, (
-        f'pre_order {pre_order.order_number} deleted.'
+        f'Preorder {pre_order.order_number} upgraded.'
         f'New order {order.order_number} confirmed.'
         )
     )
@@ -332,28 +335,11 @@ def confirm_pre_order(request, order_number):
 
 @login_required
 def delete_pre_order(request, order_number):
-    """ view deleting preorder and creating a corresponding order """
+    """ view amending preorder to invalid or expired """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can see that.')
         return redirect(reverse('home'))
     pre_order = get_object_or_404(PreOrder, order_number=order_number)
-    order = Order(
-        user_profile=pre_order.user_profile,
-        full_name=pre_order.full_name,
-        email=pre_order.email,
-        phone_number=pre_order.phone_number,
-        country=pre_order.country,
-        postcode=pre_order.postcode,
-        town_or_city=pre_order.town_or_city,
-        street_address1=pre_order.street_address1,
-        street_address2=pre_order.street_address2,
-        county=pre_order.county,
-        delivery_cost=pre_order.delivery_cost,
-        order_total=pre_order.order_total,
-        grand_total=pre_order.grand_total,
-        pay_pal_order=True
-
-    )
     # update product avaiable, reserved
     for li in pre_order.lineitems.all():
         product = li.product
@@ -378,9 +364,9 @@ def delete_pre_order(request, order_number):
         [cust_email]
     )
     # delete preorder
-    pre_order.delete()
+    pre_order.status = "INV"
     # success message
-    messages.success(request, f'pre_order {pre_order.order_number} deleted.')
+    messages.success(request, f'pre_order {pre_order.order_number} marked as invalid or expired. Avaialbility has been replenished')
     return redirect(reverse('products_management'))
 
 

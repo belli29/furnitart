@@ -20,8 +20,8 @@ def profile(request):
             messages.error(request, 'Profile could not be updated!')
     else:
         form = UserProfileForm(instance=profile)
-    orders = profile.orders.all()
-    preorders = profile.preorders.all()
+    orders = profile.orders.all().order_by("-date")
+    preorders = profile.preorders.all().exclude(status="INV").exclude(status="UPG").order_by("-date")
     template = 'profiles/profile.html'
     context = {
         'profile': profile,
@@ -30,45 +30,4 @@ def profile(request):
         'form': form,
         'on_profile_page': True,
     }
-    return render(request, template, context)
-
-
-def order_history(request, order_number):
-    """view showing sepcific order """
-    if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can see that.')
-        return redirect(reverse('home'))
-    order = get_object_or_404(Order, order_number=order_number)
-
-    messages.info(request, (
-        f'This is a past confirmation for order number {order_number}. '
-        'A confirmation email was sent on the order date.'
-    ))
-
-    template = 'checkout/checkout_success.html'
-    context = {
-        'order': order,
-        'from_profile': True,
-    }
-
-    return render(request, template, context)
-
-
-def pre_order_history(request, order_number):
-    """view showing sepcific preorder """
-    if not request.user.is_superuser:
-        messages.error(request, 'Sorry, only store owners can see that.')
-        return redirect(reverse('home'))
-    order = get_object_or_404(PreOrder, order_number=order_number)
-    messages.info(request, (
-        f'This is a past confirmation for pre order number {order_number}. '
-        'Payment instructions  were sent on the order date.'
-    ))
-
-    template = 'checkout/invoice_confirmation.html'
-    context = {
-        'order': order,
-        'from_profile': True,
-        }
-
     return render(request, template, context)

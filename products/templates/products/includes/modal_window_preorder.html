@@ -93,12 +93,17 @@
                 </div>
             </div>
             <div class="modal-body">
-                <p>You are about to confirm an order and delete the preorder </p>
-                <p>Customer will be informed that payment has been confirmed via email.</p>
+                <p>You are about to create a new order </p>
+                <p>Enter the Pay Pal transaction code below</p>
+                <form action="{% url 'confirm_pre_order' order.order_number  %}" method="POST"  enctype='multipart/form-data' id="upgrade-preorder-form-{{order.id}}">
+                    {% csrf_token %}
+                    <input type="text" id="pp_transaction_id" name="pp_transaction_id" required>
+                </form>
+                <p class="mt-2">Customer will be informed that payment has been confirmed via email.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
-                <button type="button" class="btn rounded-0 border-color-pr"><a href="{% url 'confirm_pre_order' order.order_number  %}" >Yes, confirm it!</a></button>
+                <button type="submit" form="upgrade-preorder-form-{{order.id}}" class="btn rounded-0 border-color-pr">Yes, confirm it!</button>
             </div>
         </div>
     </div>

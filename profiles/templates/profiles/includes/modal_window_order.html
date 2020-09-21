@@ -12,9 +12,14 @@
                     </p>
                 {% else %}
                     <p class="text-color-pr">
-                        <i class="fa fa-cc-paypal fa-2x " aria-hidden="true"></i>
+                        This order procedes from a preorder made on<br>
+                        {{order.preorder.date}}
+                        <p class="text-color-pr">
+                            <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                            {{ order.pp_transaction_id }}
+                        </p>
                     </p>
-                {% endif %}  
+                {% endif %}
                 </div>
             </div>
             <div class="modal-body">
@@ -102,15 +107,6 @@
                 {% endif %}
                 <hr>  
                 <button type="button" class="btn btn-outline-dark rounded-0 " data-dismiss="modal">Close</button>
-                {% if order.shipped %}
-                    <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#unship-order-{{order.id}}">
-                        Unship Order
-                    </a>
-                {% else %}
-                    <a href="" class="btn rounded-0 border-color-pr " data-toggle="modal" data-target="#ship-order-{{order.id}}">
-                    Ship it !
-                    </a>
-                {% endif %}
             </div>
         </div>
     </div>

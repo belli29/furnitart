@@ -35,7 +35,8 @@ class Order(models.Model):
     stripe_pid = models.CharField(max_length=254, null=False,
                                   blank=False, default='')
     shipped = models.BooleanField(default=False)
-    pay_pal_order = models.BooleanField(default=False)
+    pp_transaction_id = models.CharField(max_length=254, null=False,
+                                  blank=False, default='')
 
     def _generate_order_number(self):
         """
@@ -102,6 +103,10 @@ class OrderLineItem(models.Model):
 
 class PreOrder(models.Model):
     order_number = models.CharField(max_length=32, null=False, editable=False)
+    upgraded_order = models.OneToOneField(Order, on_delete=models.SET_NULL,
+                                          null=True, blank=True,
+                                          default=None,
+                                          related_name='preorder')
     user_profile = models.ForeignKey(UserProfile, on_delete=models.SET_NULL,
                                      null=True, blank=True,
                                      related_name='preorders')
@@ -121,7 +126,18 @@ class PreOrder(models.Model):
                                       decimal_places=2, null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2,
                                       null=False, default=0)
-    expired = models.BooleanField(default=False)
+    
+    STATUS_CHOICES= [
+        ('PEND', 'Pending'),
+        ('INV', 'Invalid or experired'),
+        ('UPG', 'Upgraded to order'),
+    ]
+
+    status = models.CharField(max_length=9,
+                  choices=STATUS_CHOICES,
+                  default="PEND",
+                  null=False,
+                  blank=False)
 
     def _generate_order_number(self):
         """
