@@ -18,12 +18,10 @@
     <div class="container-fluid" >
         <div class="row">
             <div class="col text-center mt-3 px-0">
-                {% if not from_profile %}
-                    <h2 class="logo-font top-title ">Thank you!</h2>
-                    <div class="text-muted ">
-                        Your pre order information is below. Paymment instructions will be sent to <strong>{{ order.email }}</strong>.
-                    </div>
-                {% endif %}
+                <h2 class="logo-font top-title ">Thank you!</h2>
+                <div class="text-muted ">
+                    Your pre order information is below. Paymment instructions will be sent to <strong>{{ order.email }}</strong>.
+                </div>
                 <hr class="w-75 mb-1 hr-color-pr px-0">    
             </div>
         </div>
@@ -42,26 +40,15 @@
             <div class="col-9 mx-auto my-5">
                 <div class="row">
                     <div class="col-12 px-0 ">
-                        {% if from_profile %}
-                            <a href="{% url 'profile' %}" class="btn btn-outline-pr rounded-0 mx-auto">
-                                <span class="icon mr-2">
-                                    <i class="fas fa-angle-left"></i>
-                                </span>
-                                <span class="text-uppercase">Back to Profile</span>
-                            </a>
-                        {% else %}
-                            <a href="{% url 'products' %}" class="btn btn-outline-pr rounded-0 mx-auto">
-                                <span class="icon mr-2">
-                                    <i class=" fas fa-chevron-left"></i>
-                                </span>
-                                <span class="text-uppercase">Keep shopping</span>
-                            </a>
-                        {% endif %}
-                            
+                        <a href="{% url 'products' %}" class="btn btn-outline-pr rounded-0 mx-auto">
+                            <span class="icon mr-2">
+                                <i class=" fas fa-chevron-left"></i>
+                            </span>
+                            <span class="text-uppercase">Keep shopping</span>
+                        </a>
                     </div>             
                 </div>
             </div>   
         </div>
     </div>
-    
 {% endblock %}

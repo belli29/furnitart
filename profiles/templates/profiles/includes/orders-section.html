@@ -21,8 +21,7 @@
                     {% for order in orders %}
                         <tr>
                             <td>
-                                <a href="{% url 'order_history' order.order_number %}"
-                                title="{{ order.order_number }}">
+                                <a href="" data-toggle="modal" data-target="#order-{{order.id}}">
                                     {{ order.order_number|truncatechars:6 }}
                                 </a>
                             </td>
@@ -36,6 +35,7 @@
                                 {% endif %}   
                             </td>
                         </tr>
+                        {% include 'profiles/includes/modal_window_order.html' %}
                     {% endfor %}
                 </tbody>
             </table>

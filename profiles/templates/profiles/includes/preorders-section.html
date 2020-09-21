@@ -21,8 +21,7 @@
                     {% for order in preorders %}
                         <tr>
                             <td>
-                                <a href="{% url 'pre_order_history' order.order_number %}"
-                                title="{{ order.order_number }}">
+                                <a href="" data-toggle="modal" data-target="#preorder-{{order.id}}">
                                     {{ order.order_number|truncatechars:6 }}
                                 </a>
                             </td>
@@ -38,6 +37,7 @@
                             </td>
                             <td>€ {{ order.grand_total }}</td>
                         </tr>
+                        {% include 'profiles/includes/modal_window_preorder.html' %}
                     {% endfor %}
                 </tbody>
             </table>
