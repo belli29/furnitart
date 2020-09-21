@@ -334,7 +334,7 @@ def confirm_pre_order(request, order_number):
 
 
 @login_required
-def delete_pre_order(request, order_number):
+def invalid_pre_order(request, order_number):
     """ view amending preorder to invalid or expired """
     if not request.user.is_superuser:
         messages.error(request, 'Sorry, only store owners can see that.')
@@ -349,13 +349,13 @@ def delete_pre_order(request, order_number):
         product.save()
 
     # email user
-    cust_email = order.email
+    cust_email = pre_order.email
     subject = render_to_string(
-        'checkout/confirmation_emails/delete_preorder_subject.txt',
-        {'preorder': order})
+        'checkout/confirmation_emails/invalid_preorder_subject.txt',
+        {'preorder': pre_order})
     body = render_to_string(
-        'checkout/confirmation_emails/delete_preorder_body.txt',
-        {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+        'checkout/confirmation_emails/invalid_preorder_body.txt',
+        {'preorder': pre_order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
 
     send_mail(
         subject,
@@ -365,6 +365,7 @@ def delete_pre_order(request, order_number):
     )
     # delete preorder
     pre_order.status = "INV"
+    pre_order.save()
     # success message
     messages.success(request, f'pre_order {pre_order.order_number} marked as invalid or expired. Avaialbility has been replenished')
     return redirect(reverse('products_management'))

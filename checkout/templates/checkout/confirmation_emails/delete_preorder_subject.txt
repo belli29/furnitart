@@ -1,1 +1,0 @@
-Furnitart: You preorder {{ order.order_number }} has been deleted

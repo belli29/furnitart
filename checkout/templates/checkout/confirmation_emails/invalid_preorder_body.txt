@@ -1,5 +1,5 @@
 
-Hello {{ order.full_name }}!
+Hello {{ preorder.full_name }}!
 
 We have not heard from you in the last 3 days.
 
