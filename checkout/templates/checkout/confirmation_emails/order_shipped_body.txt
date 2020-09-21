@@ -3,18 +3,18 @@ Hello {{ order.full_name }}!
 
 Your order has been sent!
 
-Here you have the shipping code to track your delivery: {{order.shipping_code}}
+Here you have the shipping code to track your delivery: {{delivery.tracking_number}}
 
-This is a confirmation of your order at Furnitart. Your order information is below:
+Delivery is handled by"{{delivery.provider}}" and should take approx {{delivery.expected_wait}} days.
 
-Order Number: {{ order.order_number }}
-Order Date: {{ order.date }}
+Your order has been shipped to:
 
-Order Total: ${{ order.order_total }}
-Delivery: ${{ order.delivery_cost }}
-Grand Total: ${{ order.grand_total }}
-
-Your ordehas been shipped to {{ order.street_address1 }} in {{ order.town_or_city }}, {{ order.country }}.
+{{ order.street_address1 }}
+{{ order.street_address2 }}
+{{ order.town_or_city }} 
+{{ order.town_or_city }}
+{{ order_county }} 
+{{ order.country }}
 
 If you have any questions, feel free to contact us at {{ contact_email }}.
 

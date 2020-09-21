@@ -12,4 +12,5 @@ urlpatterns = [
     path('toggle_active/<int:product_id>', views.toggle_active, name='toggle_active'),
     path('confirm_pre_order/<order_number>', views.confirm_pre_order, name='confirm_pre_order'),
     path('delete_pre_order/<order_number>', views.delete_pre_order, name='delete_pre_order'),
+    path('toggle_shipped/<int:order_id>/<action>', views.toggle_shipped, name='toggle_shipped'),
 ]   

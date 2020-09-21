@@ -35,7 +35,6 @@ class Order(models.Model):
     stripe_pid = models.CharField(max_length=254, null=False,
                                   blank=False, default='')
     shipped = models.BooleanField(default=False)
-    shipping_code = models.CharField(max_length=254, null=True, blank=True)
     pay_pal_order = models.BooleanField(default=False)
 
     def _generate_order_number(self):
@@ -187,7 +186,8 @@ class PreOrderLineItem(models.Model):
             'on order {self.order.order_number}'
 
 class Delivery(models.Model):
-    tracking_number = models.CharField(max_length=32, null=False, editable=False)
+    tracking_number = models.CharField(max_length=32, null=False)
+    date = models.DateTimeField(auto_now_add=True, null=True)
     order = models.ForeignKey(Order, on_delete=models.PROTECT,
                                      null=False, blank=False,
                                      related_name='delivery')
@@ -195,5 +195,5 @@ class Delivery(models.Model):
     expected_wait = models.IntegerField(null=False, blank=False)
     
     def __str__(self):
-        return self.order_number
+        return self.tracking_number
 

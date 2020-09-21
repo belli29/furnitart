@@ -3,14 +3,13 @@ from django.shortcuts import redirect, reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, F
-from django.db.models.functions import Lower
 from django.conf import settings
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from .models import Product, Category
 from .forms import ProductForm
-from checkout.models import Order, OrderLineItem, PreOrder
-
+from checkout.models import Order, OrderLineItem, PreOrder, Delivery
+from checkout.forms import DeliveryForm
 
 def all_products(request):
     """view showing all products, including sorting and search queried"""
@@ -64,7 +63,7 @@ def all_products(request):
         category = Category.objects.filter(name=category)[0]
 
     current_sorting = f'{sort}_{direction}'
-    
+
     context = {
         'products': products,
         'search_term': query,
@@ -105,6 +104,7 @@ def management(request):
         messages.error(request, 'Sorry, only store owners can do that.')
         return redirect(reverse('home'))
     # orders section
+    delivery_form = DeliveryForm()
     orders = Order.objects.all()
     orders = orders.order_by("-date")
     preorders = PreOrder.objects.all()
@@ -151,7 +151,8 @@ def management(request):
         'shipped_filter_active': shipped_filter,
         'unshipped_filter_active': unshipped_filter,
         'current_param': current_param,
-        'current_sorting': current_sorting
+        'current_sorting': current_sorting,
+        'delivery_form': delivery_form
     }
     template = 'products/management.html'
     return render(request, template, context)
@@ -380,4 +381,85 @@ def delete_pre_order(request, order_number):
     pre_order.delete()
     # success message
     messages.success(request, f'pre_order {pre_order.order_number} deleted.')
+    return redirect(reverse('products_management'))
+
+
+@login_required
+def toggle_shipped(request, order_id, action):
+    """ Toggle a product shipped field,
+    create /delete delivery instance,
+    amend order instance
+    and inform user by email """
+    if not request.user.is_superuser:
+        messages.error(request, 'Sorry, only store owners can do that.')
+        return redirect(reverse('home'))
+    order = get_object_or_404(Order, pk=order_id)
+    # amend order as shipped
+    if action == 'ship':
+        order.shipped = True
+        order.save()
+        form = DeliveryForm(request.POST)
+        if form.is_valid():
+            delivery = Delivery(
+                tracking_number=request.POST['tracking_number'],
+                provider=request.POST['provider'],
+                expected_wait=request.POST['expected_wait'],
+                order=order
+            )
+            delivery.save()
+            messages.success(request,
+                f"Order {order.order_number} confirmed as shipped!\n"
+                f"Delivery {delivery.tracking_number} by {delivery.provider}"
+                ' has been created.'
+            )
+            # send email to customer
+            cust_email = order.email
+            subject = render_to_string(
+                'checkout/confirmation_emails/order_shipped_subject.txt',
+                {'order': order}
+                )
+            body = render_to_string(
+                'checkout/confirmation_emails/order_shipped_body.txt',
+                {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL, 'delivery': delivery})
+            send_mail(
+                subject,
+                body,
+                settings.DEFAULT_FROM_EMAIL,
+                [cust_email]
+            )
+        else:
+            messages.error(
+                request,
+                'Something went wrong. Delicery cannnot be added.'
+            )
+    # amend order as not shipped
+    else:
+        order.shipped = False
+        order.save()
+        try:
+            delivery = get_object_or_404(Delivery, order=order)
+            delivery.delete()
+        except:
+            pass
+        messages.success(
+            request, 'customer has been informed there was an error:'
+            ' order has not been shipped yet. '
+            f'Any delivery associated to order {order.order_number}'
+            ' has been deleted'
+        )
+        # email customer :order was marked as shipped by mistake
+        cust_email = order.email
+        subject = render_to_string(
+            'checkout/confirmation_emails/order_not_shipped_subject.txt',
+            {'order': order})
+        body = render_to_string(
+            'checkout/confirmation_emails/order_not_shipped_body.txt',
+            {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL})
+
+        send_mail(
+            subject,
+            body,
+            settings.DEFAULT_FROM_EMAIL,
+            [cust_email]
+        )
     return redirect(reverse('products_management'))

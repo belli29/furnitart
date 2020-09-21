@@ -79,7 +79,7 @@ class PreOrderForm(forms.ModelForm):
 class DeliveryForm(forms.ModelForm):
     class Meta:
         model = Delivery
-        exclude = ('order',)
+        exclude = ('order','date')
 
     def __init__(self, *args, **kwargs):
         """
@@ -87,10 +87,7 @@ class DeliveryForm(forms.ModelForm):
         labels and set autofocus on first field
         """
         super().__init__(*args, **kwargs)
-        placeholders = {
-            'tracking_number': 'Tracking Number',
-            'provider': 'Delivery Company',
-            'expected_wait': 'Approx number of days',
-        }
 
-        self.fields['order number'].widget.attrs['autofocus'] = True
+        self.fields['tracking_number'].widget.attrs['autofocus'] = True
+        self.fields['expected_wait'].label = "Approx delivery days"
+        self.fields['provider'].label = "Delivery Company"

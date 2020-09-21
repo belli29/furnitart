@@ -60,7 +60,7 @@ admin.site.register(PreOrder, PreOrderAdmin)
 # delivery
 
 class DeliveryAdmin(admin.ModelAdmin):
-    readonly_fields = ('order')
+    readonly_fields = ('date',)
 
     fields = ('order', 'tracking_number', 
               'provider', 'expected_wait')
@@ -68,3 +68,5 @@ class DeliveryAdmin(admin.ModelAdmin):
     list_display = ('order', 'tracking_number')
 
     ordering = ('-date',)
+
+admin.site.register(Delivery, DeliveryAdmin)

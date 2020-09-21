@@ -79,6 +79,27 @@
                     <div class="col-6">Country</div>
                     <div class="col-6 text-small">{{ order.country.name }}</div>
                 </div>
+                {% if order.shipped %}
+                    {% for delivery in order.delivery.all %}
+                    <hr>
+                    <div class="row">
+                        <div class="col-6">Date of shipping</div>
+                        <div class="col-6 text-small">{{ delivery.date}}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Tracking Code</div>
+                        <div class="col-6 text-small">{{ delivery.tracking_number }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Delivery company</div>
+                        <div class="col-6 text-small">{{ delivery.provider }}</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">Expected delivery days</div>
+                        <div class="col-6 text-small">{{ delivery.expected_wait }}</div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
                 <hr>  
                 <button type="button" class="btn btn-outline-dark rounded-0 " data-dismiss="modal">Close</button>
                 {% if order.shipped %}
@@ -105,10 +126,9 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>Add shipping code down below. </p>
-                <form action="{% url 'toggle_shipped' order.id %}" method="POST"  enctype='multipart/form-data' id="toggle-shipped-form-{{order.id}}">
+                <form action="{% url 'toggle_shipped' order.id 'ship' %}" method="POST"  enctype='multipart/form-data' id="toggle-shipped-form-{{order.id}}">
                     {% csrf_token %}
-                    <input type="text" name="shipping_code">
+                    {{ delivery_form | crispy}}
                 </form>
                 <p>Customer will be informed that order has been shipped via email.</p>
             </div>
@@ -135,7 +155,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
-                <a type="button" id="submit-button" href="{% url 'toggle_shipped' order.id %}" class="btn rounded-0 border-color-pr">Confirm</a>
+                <a type="button" id="toggle-unshipped-form-{{order.id}}" href="{% url 'toggle_shipped' order.id 'unship' %}" method="POST"  enctype='multipart/form-data' class="btn rounded-0 border-color-pr">Confirm</a>
             </div>
         </div>
     </div>

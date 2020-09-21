@@ -5,7 +5,7 @@ We have informed  the order has been sent by mistake!
 
 Sorry ! 
 
-We will let you know as soon as you order will be sent 
+We will let you know as soon as you order will be sent. 
 
 If you have any questions, feel free to contact us at {{ contact_email }}.
 
