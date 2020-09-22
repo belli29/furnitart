@@ -56,17 +56,17 @@ class TestView (TestCase):
         response = self.client.get('/products/', {"euro_filter": True})
         self.assertNotIn(product, response.context["products"])
 
-    def test_search_by_image_filter(self):
-        """testing image filter"""
-        product = Product(name="test name", price=0, image="")
+    def test_search_by_avaialable_filter(self):
+        """testing avaialable filter"""
+        product = Product(name="test name", price=0, available_quantity=0)
         product.save()
-        response = self.client.get('/products/', {"image_filter": True})
+        response = self.client.get('/products/', {"available_filter": True})
         self.assertNotIn(product, response.context["products"])
 
     """management tests"""
 
-    def test_delete_preorder(self):
-        """testing delete preorder option """
+    def test_confirm_preorder(self):
+        """testing confirm preorder option """
 
         preorder = PreOrder(
                 full_name="test",
@@ -89,16 +89,14 @@ class TestView (TestCase):
         user.save()
         self.client.login(username=user.username, password='12345')
         response = self.client.post(
-                  f'/products/delete_pre_order/{preorder.order_number}'
+                  f'/products/confirm_pre_order/{preorder.order_number}',
+                  {'pp_transaction_id': 'test_transaction_id'}
                   )
-        try:
-            preorder = PreOrder.objects.get(pk=preorder.id)
-        except PreOrder.DoesNotExist:
-            preorder = None
-        self.assertEqual(None, preorder)
+        confirmed_preorder = PreOrder.objects.get(pk=preorder.id)
+        self.assertEqual("UPG", confirmed_preorder.status)
 
     def test_order_shipped(self):
-        """testing if order is maked as shipped correctly"""
+        """testing if order is marked as shipped correctly"""
         product = Product(
             name="test name",
             price=0, image="",
@@ -127,6 +125,27 @@ class TestView (TestCase):
             )
         user.save()
         self.client.login(username=user.username, password='12345')
-        response = self.client.post(f'/checkout/toggle_shipped/{order.id}')
+        delivery_info = {
+            'tracking_number': '12345',
+            'provider': 'test provider',
+            'expected_wait': 22,
+            'order':order,
+        }
+
+        response = self.client.post(f'/products/toggle_shipped/{order.id}', delivery_info)
         order = Order.objects.get(pk=order.id)
         self.assertTrue(order.shipped)
+        #check if associated delivery was generated
+        delivery_generated = False
+        delivery = order.delivery.all()[0]
+        if (delivery_info['tracking_number'] == delivery.tracking_number and
+                delivery_info['provider'] == delivery.provider and
+                delivery_info['expected_wait'] == delivery.expected_wait):
+            delivery_generated = True
+        self.assertTrue(delivery_generated)
+        #request to unship the order
+        response = self.client.post(f'/products/toggle_shipped/{order.id}')
+        order = Order.objects.get(pk=order.id)
+        self.assertFalse(order.shipped)
+
+

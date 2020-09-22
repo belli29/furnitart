@@ -63,4 +63,7 @@ class TestView (TestCase):
         response = self.client.get('/profiles/')
         self.assertEqual(response.status_code, 200)
         context_orders = response.context['orders']
-        self.assertEqual(str(context_orders), str(user_orders))
+        set_context_orders = set(context_orders)
+        set_user_orders = set(user_orders)
+        self.assertEqual(set_context_orders, set_user_orders)
+        

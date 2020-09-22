@@ -287,7 +287,6 @@ def confirm_pre_order(request, order_number):
         return redirect(reverse('home'))
     pre_order = get_object_or_404(PreOrder, order_number=order_number)
     pp_transaction_id = request.POST['pp_transaction_id']
-    print(pp_transaction_id)
     order = Order(
         user_profile=pre_order.user_profile,
         full_name=pre_order.full_name,
@@ -372,7 +371,7 @@ def invalid_pre_order(request, order_number):
 
 
 @login_required
-def toggle_shipped(request, order_id, action):
+def toggle_shipped(request, order_id):
     """ Toggle a product shipped field,
     create /delete delivery instance,
     amend order instance
@@ -382,7 +381,7 @@ def toggle_shipped(request, order_id, action):
         return redirect(reverse('home'))
     order = get_object_or_404(Order, pk=order_id)
     # amend order as shipped
-    if action == 'ship':
+    if not order.shipped:
         order.shipped = True
         order.save()
         form = DeliveryForm(request.POST)

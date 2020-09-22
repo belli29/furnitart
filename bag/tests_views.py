@@ -47,3 +47,49 @@ class TestView (TestCase):
         user.save()
         response = self.client.get('/bag/')
         self.assertFalse(response.context["delivery_problem"])
+
+    def test_add_to_bag(self):
+        """testing the view that adds items id and quantity to the bag"""
+        product = Product(name="Create a Test", price=1, euro_shipping=False)
+        product.save()
+        product = Product.objects.get(name="Create a Test", price=1, euro_shipping=False)
+        quantity= 2
+        response = self.client.post(f'/bag/add/1',
+                                    {'quantity': quantity,
+                                    "redirect_url": 'home'})
+        session = self.client.session
+        bag = session['bag']
+        self.assertEqual(bag, {str(product.id): quantity})
+    
+    def test_update_bag(self):
+        """testing the view that updates items id and quantity to the bag"""
+        product = Product(name="Create a Test", price=1, euro_shipping=False)
+        product.save()
+        product = Product.objects.get(name="Create a Test", price=1, euro_shipping=False)
+        quantity= 2
+        response = self.client.post(f'/bag/add/{product.id}',
+                                    {'quantity': quantity,
+                                    "redirect_url": 'home'})
+        new_quantity = 5
+        response = self.client.post(f'/bag/update/{product.id}',
+                                    {'quantity': new_quantity}
+                                    )
+        session = self.client.session
+        bag = session['bag']        
+        self.assertEqual(bag, {str(product.id): new_quantity})
+    
+    def test_remove_from_bag(self):
+        """testing the view that remove items from the bag"""
+        product = Product(name="Create a Test", price=1, euro_shipping=False)
+        product.save()
+        product = Product.objects.get(name="Create a Test", price=1, euro_shipping=False)
+        quantity= 2
+        response = self.client.post(f'/bag/add/{product.id}',
+                                    {'quantity': quantity,
+                                    "redirect_url": 'home'})
+        session = self.client.session
+        bag = session['bag']
+        response = self.client.post(f'/bag/remove/{product.id}')
+        session = self.client.session
+        bag = session['bag']        
+        self.assertEqual(bag, {})
