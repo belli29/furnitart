@@ -4,22 +4,22 @@
         <div class="modal-content">
             <div class="modal-header">
                 <div class="modal-title mx-auto order-modal">
-                {{order.order_number}}
-                {% if order.stripe_pid != "" %}
-                    <p class="text-color-pr">
-                        <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
-                        {{ order.stripe_pid }}
-                    </p>
-                {% else %}
-                    <p class="text-color-pr">
-                        This order procedes from a preorder made on<br>
-                        {{order.preorder.date}}
+                    {{order.order_number}}
+                    {% if order.stripe_pid != "" %}
                         <p class="text-color-pr">
-                            <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
-                            {{ order.pp_transaction_id }}
+                            <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                            {{ order.stripe_pid }}
                         </p>
-                    </p>
-                {% endif %}  
+                    {% else %}
+                        <p class="text-color-pr">
+                            This order procedes from a preorder made on<br>
+                            {{order.preorder.date}}
+                            <p class="text-color-pr">
+                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                {{ order.pp_transaction_id }}
+                            </p>
+                        </p>
+                    {% endif %}  
                 </div>
             </div>
             <div class="modal-body">
@@ -125,10 +125,24 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mx-auto order-modal"> {{order.order_number}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="modal-title mx-auto order-modal">
+                    {{order.order_number}}
+                    {% if order.stripe_pid != "" %}
+                        <p class="text-color-pr">
+                            <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                            {{ order.stripe_pid }}
+                        </p>
+                    {% else %}
+                        <p class="text-color-pr">
+                            This order procedes from a preorder made on<br>
+                            {{order.preorder.date}}
+                            <p class="text-color-pr">
+                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                {{ order.pp_transaction_id }}
+                            </p>
+                        </p>
+                    {% endif %}
+                </div>
             </div>
             <div class="modal-body">
                 <form action="{% url 'toggle_shipped' order.id %}" method="POST"  enctype='multipart/form-data' id="toggle-shipped-form-{{order.id}}">
@@ -149,10 +163,24 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mx-auto order-modal"> {{order.order_number}}</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
+                <div class="modal-title mx-auto order-modal">
+                    {{order.order_number}}
+                    {% if order.stripe_pid != "" %}
+                        <p class="text-color-pr">
+                            <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                            {{ order.stripe_pid }}
+                        </p>
+                    {% else %}
+                        <p class="text-color-pr">
+                            This order procedes from a preorder made on<br>
+                            {{order.preorder.date}}
+                            <p class="text-color-pr">
+                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                {{ order.pp_transaction_id }}
+                            </p>
+                        </p>
+                    {% endif %}
+                </div>
             </div>
             <div class="modal-body">
                 <p>Something going wrong here ...</p>

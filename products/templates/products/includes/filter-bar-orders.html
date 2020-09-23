@@ -39,7 +39,7 @@
         {% if view_preorders %}
         {% else %}
             <a href="{% url 'products_management' %}">
-                <div class="badge badge-dark{% if shipped_filter_active or pay_pal_filter_active %} opacity{% endif %}">No filter</div>
+                <div class="badge badge-dark{% if shipped_filter_active or pay_pal_filter_active or unshipped_filter_active %} opacity{% endif %}">No filter</div>
             </a>
         {% endif %}        
     </div> 
