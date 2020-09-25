@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.conf import settings
@@ -41,5 +41,6 @@ def support (request):
         messages.success(request, "Thanks for contacting me.\
         I'll check the issue and let you know as soon as possible"
         )
+        return redirect(reverse('home'))
     return render(request, 'home/support.html')
 

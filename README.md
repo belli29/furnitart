@@ -1,7 +1,9 @@
 # Furnitart
 
-Furnitart is the website of a furniture shop based in Ireland that wants to start selling on the e-market.
-The e-store allows shipping all around Europe at different shipping rates.
+Furnitart is a furniture shop based in Ireland that has developed a business model based on easy-to-assemble furniture that can be shipped all around Europe.
+The shop is currently selling online on big platforms. Eventually they develope a base of recurring clients who are enthusiast about their products.
+The shop would like to divert those customers, who used to buy their products on big online platforms, to their brand-new website based on this project.
+This would definetely allow the company to develop their online presence and to keep transaction fees lower.
 
 ## UX
 
@@ -11,17 +13,17 @@ This website is designed for 2 different users : the customer and the seller.
 
 - Customer
 
-1. I want to see only products I am interested in. I want to be able to filter and order them so that I can find the produt I really need
-2. I want to be given the possiblity to choose the payment method and to get a small discount in case the purchase is not immediate (PayPal)
-3. I want to be informed if my items is shipped and I want to received shipping code in order to track it
-4. I want to be informed before i buy a product if that is not delivarable to my place
-5. I want to have all my orders and preorders visible at a glance
-6. I want to have info about shipment / "preorder upgrading to order" / preorder cancelled avaialable on the web but I also want to receive an email everytime something changes
+1. I want to see only products I am interested in. I want to be able to filter and order them so that I can find the produt I really need.
+2. I want to be given the possiblity to choose the payment method.
+3. I want to be informed if my items are shipped and I want to recevei all relevant information about the shipping.
+4. I want to be informed before I buy a product if that is not delivarable to my place.
+5. I want to have all my orders and preorders visible at a glance.
+6. I want to be updated about any action taken on my order by email .
 
 - Seller
 
-1. I want to have an idea of how business is going and how much avaialable inventory I have at a glance
-2. I want to offer to the user the possiblity to pay by Paypal. It is more convenient for me and I am ready to offer a discount on the grand total
+1. I want to have an idea of how business is going and how much avaialable inventory I have at a glance.
+2. I want to offer to the user the possiblity to pay by Paypal. It is more convenient for me and I am ready to offer a discount on the grand total.
 3. I want to set different delivery rates depending on the delivery destination
 4. I want user to be automatically informed by email when I take any action on an order
 
@@ -34,17 +36,13 @@ This website is designed for 2 different users : the customer and the seller.
 - Products :allows user to see the products, filter and order them
 - Checkout :allows user get a paypal invoice or to pay directly (Stripe). The Stripe payment is done using the support of a webhooker. This ensures that orderes are always correctly registered in the server. In case the payment was processed but order was not processed by mistake , webhooker will create an order
 
-For some/all of your features, you may choose to reference the specific project files that implement them, although this is entirely optional.
-
-In addition, you may also use this section to discuss plans for additional features to be implemented in the future:
-
 ### Features Left to Implement
 
 - the shipping logic should be more complex providing different rates that adapt to different countries and sizes of the items shipped. The product model already has weight and sizes field. Those along with delivery destination should be used to implement automatic delivery calculation.
 - customer should be able to add the payment code directly in the app
 - the app should have the option to change laguage in order to result more customer friendly
 - the bag should be emptied after a certain time of user inactivity
-- rRegistration should be possible also with Facebook
+- Registration should be possible also with Facebook
 
 ## Technologies Used
 
@@ -54,14 +52,24 @@ In addition, you may also use this section to discuss plans for additional featu
   - The project uses **Django 3** as framework to achieve rapid development and clean, pragmatic design.
 - [Bootstrap4](https://getbootstrap.com/)
   - The project uses **Bootstrap 4** to achieve a responsive, mobile-first site.
+- [Python 3](https://www.python.org//)
+  - The project uses **Python3** for back-end development.
+- [Stripe](https://stripe.com/)
+  - The project uses **Stripe** for onnline payment processing.
+- [Heroku](https://heroku.com/)
+  - The project uses **Heroku**  as deployment evoiroment.
+- [AWS Simple Cloud Storage (S3)](https://aws.amazon.com/s3/)
+  - The project uses **S3** to store media and static files during deployment.
+- [PostgreSQL](https://www.postgresql.org/)
+  - The project uses **PostgreSQ** as object-relational database system during deployment.
+- [Gmail](https://mail.google.com/)
+  - The project uses **Gmail** SMTP server to manage email sending during deployment.
 
 ## Testing
 
-### How to test the project
-
 ### How project was tested
 
-Most of the project has been automated-tested with Django TestCase (overall coverage 55%).
+Most of the project has been automated-tested with Django TestCase (overall coverage 60%).
 
 More in details the modules tested have been Profile, Products, Chekout and Bag.
 
@@ -82,15 +90,15 @@ The project has also been tested manually. Below some of the tests.
 
    1. Create a new profile
    2. Make an order
-   3. Go to Profiel and verify the order is in the list
+   3. Go to profile and verify the order is in the list
 
 3. Shipment info:
 
    1. Make an order
    2. As superuser mark order as shipped and add shipping code in the pop-up menu
-   3. Verifya you have recieved the email with this shipping information and that the ifo is also avaialable in your Profile
+   3. Verify you have recieved the email with this shipping information and that the info is also avaialable in your Profile
 
-4. Customer is alsways informed about shipping problem:
+4. Customer is always informed about shipping problem:
 
    1. Login and amend delivery country to Germany
    2. Select a product not delivarable to Eu
@@ -160,31 +168,58 @@ The project is responsive to different screens . All test concerning responsiven
 
 - Availability
   The app does register a change in the avaialbility of the product only when the checkout process is completed.
-  This creates the following issue: during the time between adding to bag and finalizing the checkout the app does not detect possible avaialbility changes.
+  This creates the following issue: during the time between adding to bag and finalizing the checkout the app does not detect possible avaialability changes.
   This can lead to oversale situations.
 
 ## Deployment
 
 The project has been developed in Gitpod and deployed on [Heroku](https://heroku.com/).
-
-The following actions have been taken to deploy on Heroku:
-
-- A different database is used (postgres). The url is specified in Heroku environment variables
-- Static / media files stored in AWS S3 service . Cache control has also been added to improve performance
-- On Deploymnet sending emails has been done using on Gmail SMTP server
-
-The app settings file recognizes if we are in development / deployment environment based on Global variables set in Heroku /Gitpod
-
-More in details In Heroku (deployment), we have the following environment variables, not present on local (Gitpod):
-
-USE_AWS = True;
-AWS_ACCESS_KEY_ID;
-AWS_SECRET_ACCESS_KEY;
-EMAIL_HOST_USER;
-EMAIL_HOST_PASS;
-DATABASE_URL ;
-
 The deployed project is visible [here ](https://furnitart.herokuapp.com/)
+The following steps have been taken to deploy on Heroku:
+
+- install the following Django packages:
+    1. Gunicorn (run the application on the server)
+    2. Psycopg2-binary (to connect to a PostgreSQL database)
+- create requirement.txt file 
+- create Procfile
+- login to Heroku
+- create new app in Heroku
+- go to settings.py and amend DATABASE settings in order to point to PostgrSQL URI
+- make migrations
+- add new enviroment variable in Heroku:
+    DATABASE_URL = PostgrSQL URI
+- go to settings.py and amend DATABASE settings. In case DATABASE_URL is present as enviroment variable, point to that.
+- temporary disable collect static
+- add new enviroment variable in Heroku:
+    SECRET_KEY
+- In settings edit DEBUG
+    DEBUG = 'DEVELOPMENT' in os.environ
+- add new enviroment variable in GitPod:
+    DEVELOPMENT
+- S3 setup:
+    1. Create a AWS account  and go to S3
+    2.  Create a bucket 
+    3. Change bucket settings
+    4. create a group
+    5. attach policy to group
+    6. create a user and add it to the group
+    7. add user to group
+    8. download CSV file
+
+- connect Django to S3:
+    1. install boto3
+    2. install django-storages
+    3. add ‘storages’ to INSTALLED APPS
+    4. add keys from CSV file in Heroku:
+        AWS_ACCESS_KEY_ID
+        AWS_SECRET_ACCESS_KEY
+    5. remove DISABLE_COLLECTSTATIC
+    6. in Django create a file custom_storages.py
+    7. in settings.py add static and mediafile enviroment variables
+    8. Add cache control 
+    9. In AWS create new folder MEDIA
+- add Stripe keys to the Heroku config variable
+- create a new webhook endpoint for Stripe
 
 To run the app locally follow these steps:
 

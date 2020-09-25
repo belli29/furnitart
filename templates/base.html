@@ -96,16 +96,21 @@
                             <a class="nav-link px-2 {% if request.user.is_authenticated %} text-color-pr {% else %}text-black{% endif %}" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div class="text-center">
                                     <div><i class="{% if request.user.is_superuser %} fas fa-user-ninja fa-lg {% else %}fas fa-user fa-lg {% endif %} "></i></div>
-                                    <p class="my-0 text-sm d-none d-md-block">My Account</p>
+                                    {% if request.user.is_superuser %}
+                                        <p class="my-0 text-sm d-none d-md-block">{{request.user.username}}</p>
+                                    {% else %}
+                                        <p class="my-0 text-sm d-none d-md-block">My Account</p>
+                                    {% endif %}
                                 </div>
                             </a>
                             <div class="dropdown-menu border-0" aria-labelledby="user-options">
                                 {% if request.user.is_authenticated %}
                                     {% if request.user.is_superuser %}
                                         <a href="{% url 'products_management' %}" class="dropdown-item dropdown-item-pr">Management</a>
+                                    {% else %}
+                                        <a href="{% url 'profile' %}" class="dropdown-item dropdown-item dropdown-item-pr">My Profile</a>
+                                        <a href="{% url 'account_logout' %}" class="dropdown-item dropdown-item dropdown-item-pr">Logout</a>
                                     {% endif %}
-                                    <a href="{% url 'profile' %}" class="dropdown-item dropdown-item dropdown-item-pr">My Profile</a>
-                                    <a href="{% url 'account_logout' %}" class="dropdown-item dropdown-item dropdown-item-pr">Logout</a>
                                 {% else %}
                                     <a href="{% url 'account_signup' %}" class="dropdown-item dropdown-item dropdown-item-pr">Register</a>
                                     <a href="{% url 'account_login' %}" class="dropdown-item dropdown-item dropdown-item-pr">Login</a>
@@ -113,18 +118,25 @@
                             </div>
                         </li>
                         <li class="list-inline-item px-sm-1">
-                            <a class="{% if grand_total %}text-color-pr font-weight-bold{% else %}text-black{% endif %} nav-link px-0  " href="{% url 'view_bag'%}">
+                            <a class="{% if grand_total %}text-color-pr font-weight-bold{% else %}text-black{% endif %} nav-link px-0  " href="{% url 'account_logout' %}">
                                 <div class="text-center">
-                                    <div><i class="fas fa-shopping-bag fa-lg"></i></div>
-                                    <p id="base-total" class="my-0 d-none d-md-block">
-                                        {% if delivery_problem %}
-                                            &nbsp
-                                        {% elif grand_total %}
-                                            €{{ grand_total|floatformat:2 }}
-                                        {% else %}
-                                            €0.00
-                                        {% endif %}
-                                    </p>
+                                    {% if request.user.is_authenticated %}
+                                        <div><i class="fas fa-sign-out-alt fa-lg"></i></div>
+                                        <p id="base-total" class="my-0 d-none d-md-block">
+                                            Logout
+                                        </p>
+                                    {% else%}
+                                        <div><i class="fas fa-shopping-bag fa-lg"></i></div>
+                                        <p id="base-total" class="my-0 d-none d-md-block">
+                                            {% if delivery_problem %}
+                                                &nbsp
+                                            {% elif grand_total %}
+                                                €{{ grand_total|floatformat:2 }}
+                                            {% else %}
+                                                €0.00
+                                            {% endif %}
+                                        </p>
+                                    {% endif %}
                                 </div>
                             </a>
                         </li>
