@@ -1,4 +1,5 @@
 from django.db import models
+from PIL import Image
 
 
 class Category(models.Model):
@@ -30,6 +31,15 @@ class Product(models.Model):
     w = models.IntegerField(default=20)
     weight = models.IntegerField(default=20)
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        super(Product,self).save(*args, **kwargs)
+        if self.image:
+            img = Image.open(self.image.path)
+            n_img = img.resize((500,500), Image.ANTIALIAS)
+            n_img.save(self.image.path)
+            img.close()
+            super(Product, self).save(*args, **kwargs)
 
     def __str__(self):
         return self.name

@@ -116,28 +116,28 @@ The project has also been tested manually. Below some of the tests.
 
 - How to reproduce automatic tests
 
-1. Go to GitHub repository
-2. Clone this project
-3. Open the project in GitPod
-4. Execute the folloowing : python3 manage.py test
+    1. Go to GitHub repository
+    2. Clone this project
+    3. Open the project in GitPod
+    4. Execute the folloowing : python3 manage.py test
 
 - How to reproduce manual tests
 
-To test the project the following accounts should be used
+    To test the project the following accounts should be used:
 
-- customer
-  USERNAME : ctest
-  PASSWORD : ctest1234
+        - customer
+        USERNAME : ctest
+        PASSWORD : ctest1234
 
-- seller (superuser)
-  USERNAME : stest
-  PASSWORD : stest12345
+        - seller (superuser)
+        USERNAME : stest
+        PASSWORD : stest12345
 
-To test the Stripe payment use the follwong test cc:
+    To test the Stripe payment use the follwong test cc:
 
-NUMBER: 4242 4242 4242 4242
-EXP: 02 /22
-CVC: 424
+        NUMBER: 4242 4242 4242 4242
+        EXP: 02 /22
+        CVC: 424
 
 ### Layout responsiveness
 
@@ -170,6 +170,9 @@ The project is responsive to different screens . All test concerning responsiven
   The app does register a change in the avaialbility of the product only when the checkout process is completed.
   This creates the following issue: during the time between adding to bag and finalizing the checkout the app does not detect possible avaialability changes.
   This can lead to oversale situations.
+
+- Pictures uploaded
+  The selle is suggested an ideal format for uploaded picture. This should not be necesary as the app should resize automatically  the pictures  
 
 ## Deployment
 
