@@ -242,7 +242,6 @@ def edit_product(request, product_id):
         'product': product,
         'from_management': from_management,
     }
-
     return render(request, template, context)
 
 
@@ -255,12 +254,8 @@ def delete_product(request, product_id):
     product = get_object_or_404(Product, pk=product_id)
     product.delete()
     messages.success(request, f'Product {product.name} deleted!')
-    # identify if the user was coming from management dashboard
-    from_management = request.GET.get('from_management', False)
-    if from_management:
-        return redirect(reverse('list_products'))
-    else:
-        return redirect(reverse('products'))
+    return redirect(reverse('list_products'))
+
 
 
 @login_required

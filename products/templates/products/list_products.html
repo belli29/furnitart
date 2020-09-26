@@ -29,23 +29,23 @@
                                 <table class="table table-borderless">
                                     <thead>
                                         <tr>
-                                            <th scope="col"></th>
-                                            <th scope="col">Product</th>
+                                            <th scope="col" class="text-center"></th>
+                                            <th scope="col" class="text-center">Product</th>
                                             <th scope="col" class="text-center d-none d-md-table-cell ">Quantity</th>
                                             <th scope="col" class="text-center d-none d-md-table-cell">Sold </th>
                                             <th scope="col" class="text-center d-none d-md-table-cell">Reserved </th>
-                                            <th scope="col" class="text-center d-none d-md-table-cell">Active</th>
+                                            <th scope="col" class="text-center">Active</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {% for product in products%}
                                             <tr> 
-                                                <td>
+                                                <td class="text-center">
                                                     <a href="" class="mx-2 text-color-pr remove-product" data-toggle="modal" data-target="#delete-product-{{product.id}}">
                                                         <i class="fas fa-trash" alt="delete"></i>
                                                     </a>       
                                                 </td>           
-                                                <td> 
+                                                <td class="text-center" > 
                                                     <a href="{% url 'edit_product' product.id%}?from_managemeproduct.id%}?from_management=True">
                                                         {{product.name}}  
                                                     </a>          
@@ -59,7 +59,7 @@
                                                 <td class="text-center d-none d-md-table-cell">
                                                     {{product.reserved}}    
                                                 </td>
-                                                <td class="text-center">
+                                                <td class="text-center ">
                                                     {% if product.is_active %}
                                                         <a href="{% url 'toggle_active' product.id %}">
                                                             <i class="fas fa-check text-color-pr" alt="active"></i>
@@ -87,14 +87,22 @@
         <div class="row">
             <div class="col-9 mx-auto my-5">
                 <div class="row text-center">
-                    <div class="col-12 px-0 ">
-                        <a href="{% url 'products_management' %}" class="btn btn-outline-pr rounded-0 mx-auto h-100  ">
+                    <div class="col-12 col-md-6 px-0 mt-2 ">
+                        <a href="{% url 'products_management' %}" class="btn btn-outline-pr rounded-0 mx-auto h-100">
                             <span class="icon">
                                 <i class="fas fa-chevron-left"></i>
                             </span>
-                            <span class="text-uppercase">Back to management</span>
+                            <span class="text-uppercase"> Back to management</span>
                         </a>
-                    </div>           
+                    </div>
+                    <div class="col-12 col-md-6 px-0 mt-2">
+                        <a href="{% url 'add_product' %}" class="btn btn-outline-pr rounded-0 mx-auto h-100">
+                            <span class="icon">
+                                <i class="fas fa-plus"></i>
+                            </span>
+                            <span class="text-uppercase"> New Product</span>
+                        </a>
+                    </div>            
                 </div>
             </div>   
         </div>

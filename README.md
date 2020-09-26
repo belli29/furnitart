@@ -160,6 +160,10 @@ The project is responsive to different screens . All test concerning responsiven
   The whole checkout page had to be made responsive to the decision of the guest to pay either by Paypal or Stripe.
   This was graphically achieved with scripts, whereas different view handles the logic.
 
+- Pictures upload
+  The app is potimed for displaying picture with same width and height. For this reason pictures loaded by seller are automatically reshaped.
+  This happens becuase the model Product save method has been overwritten by a custom save method. Images are, then reshaped through PIL library.
+
 #### Known bugs
 
 - Areas
@@ -170,9 +174,6 @@ The project is responsive to different screens . All test concerning responsiven
   The app does register a change in the avaialbility of the product only when the checkout process is completed.
   This creates the following issue: during the time between adding to bag and finalizing the checkout the app does not detect possible avaialability changes.
   This can lead to oversale situations.
-
-- Pictures uploaded
-  The selle is suggested an ideal format for uploaded picture. This should not be necesary as the app should resize automatically  the pictures  
 
 ## Deployment
 
