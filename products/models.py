@@ -1,6 +1,7 @@
 from django.db import models
 from PIL import Image
 from django.core.files.storage import default_storage as storage
+from PIL import Image, ImageOps
 
 
 class Category(models.Model):
@@ -37,10 +38,16 @@ class Product(models.Model):
         super(Product,self).save(*args, **kwargs)
         if self.image:
             img = Image.open(self.image)
-            new_img = img.resize((500,500), Image.ANTIALIAS)
+            print('ok')
+            size = 500
+            thumb = (500, 500)
+            
+            method = Image.ANTIALIAS
+            img.thumbnail((size,size), method)
+            new = ImageOps.fit(img, thumb, method)
             temp = storage.open(self.image.name, "wb")
-            extension = "png"
-            new_img.save(temp, extension)
+            new.save(temp)
+            print('ok2')
             img.close()
             super(Product, self).save(*args, **kwargs)
 
