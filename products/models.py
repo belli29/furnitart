@@ -1,5 +1,6 @@
 from django.db import models
 from PIL import Image
+from django.core.files.storage import default_storage as storage
 
 
 class Category(models.Model):
@@ -35,9 +36,10 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         super(Product,self).save(*args, **kwargs)
         if self.image:
-            img = Image.open(self.image.path)
-            n_img = img.resize((500,500), Image.ANTIALIAS)
-            n_img.save(self.image.path)
+            img = Image.open(self.image)
+            new_img = img.resize((500,500), Image.ANTIALIAS)
+            temp = storage.open(self.image.name, "w")
+            new_img.save(temp)
             img.close()
             super(Product, self).save(*args, **kwargs)
 
