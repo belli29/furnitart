@@ -97,13 +97,6 @@ class TestView (TestCase):
 
     def test_order_shipped(self):
         """testing if order is marked as shipped correctly"""
-        product = Product(
-            name="test name",
-            price=0, image="",
-            available_quantity=10,
-            reserved=2
-            )
-        product.save()
         order = Order(
                 full_name="test",
                 email="test",
@@ -148,4 +141,48 @@ class TestView (TestCase):
         order = Order.objects.get(pk=order.id)
         self.assertFalse(order.shipped)
 
+    def test_product_active(self):
+        """testing if order is marked active correctly"""
+        product = Product(
+            name="test name",
+            price=0, image="",
+            available_quantity=10,
+            )
+        product.save()
+        user = User.objects.create_superuser(
+            'testuser', 'test@test.com', '12345'
+            )
+        user.save()
+        self.client.login(username=user.username, password='12345')
+        #request to make product inactive
+        response = self.client.post(f'/products/toggle_active/{product.id}')
+        product = Product.objects.get(pk=product.id)
+        self.assertFalse(product.is_active)
+        #request to make product active
+        response = self.client.post(f'/products/toggle_active/{product.id}')
+        product = Product.objects.get(pk=product.id)
+        self.assertTrue(product.is_active)
 
+    def test_preorder_invalid(self):
+        """testing if preorder is marked invalid correctly"""
+        preorder = PreOrder(
+            full_name="test",
+            email="test",
+            phone_number="12",
+            country="test",
+            postcode="test",
+            town_or_city="test",
+            street_address1="test",
+            street_address2="test",
+            county="test",
+        )
+        preorder.save()
+        user = User.objects.create_superuser(
+            'testuser', 'test@test.com', '12345'
+            )
+        user.save()
+        self.client.login(username=user.username, password='12345')
+        #request to make preorder invalid
+        response = self.client.post(f'/products/invalid_pre_order/{preorder.order_number}')
+        preorder = PreOrder.objects.get(pk=preorder.id)
+        self.assertEqual("INV", preorder.status)

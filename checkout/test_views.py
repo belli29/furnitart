@@ -63,3 +63,4 @@ class TestView (TestCase):
         response = self.client.get('/checkout/')
         message = list(response.context['messages'])[0]
         self.assertEqual(40, message.level)
+

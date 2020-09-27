@@ -18,6 +18,11 @@ import json
 
 
 def checkout(request):
+    """
+    render checkout page and does not allow checkout
+    in case of delivery issue,
+    handle POST requests (Stripe and PayPal)
+    """
     if request.method == 'POST':
         payment_choice = request.POST['payment-choice']
         bag = request.session.get('bag', {})
@@ -184,7 +189,8 @@ def checkout(request):
 
 def checkout_success(request, order_number):
     """
-    Handle successful checkouts
+    Handle successful checkouts for
+    Stripe payments
     """
     save_info = request.session.get('save_info')
     order = get_object_or_404(Order, order_number=order_number)
@@ -236,6 +242,9 @@ def checkout_success(request, order_number):
 
 @require_POST
 def cache_checkout_data(request):
+    """
+    Add metadata to stripe payment intent
+    """
     try:
         pid = request.POST.get('client_secret').split('_secret')[0]
         stripe.api_key = settings.STRIPE_SECRET_KEY
@@ -253,7 +262,7 @@ def cache_checkout_data(request):
 
 def invoice_confirmation(request, pre_order_number):
     """
-    handle invoice confirmation when user selects paypal payment method
+    Handle invoice confirmation when user selects paypal payment method
     """
     order = get_object_or_404(PreOrder, order_number=pre_order_number)
 
@@ -320,12 +329,13 @@ def invoice_confirmation(request, pre_order_number):
 
 
 def delete_session_chosen_country(request):
+    
     del request.session['chosen_country']
     return HttpResponse(status=200)
 
 
 def quantity_problem(request):
-    """check if the quantity of the items does not
+    """Check if the quantity of the items does not
     exceed the quantity available"""
     quantity_problem = False
     bag = request.session.get('bag', {})
