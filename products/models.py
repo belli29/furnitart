@@ -38,16 +38,14 @@ class Product(models.Model):
         super(Product,self).save(*args, **kwargs)
         if self.image:
             img = Image.open(self.image)
-            print('ok')
             size = 500
-            thumb = (500, 500)
-            
+            thumb = (size, size)
             method = Image.ANTIALIAS
+            extension='PNG'
             img.thumbnail((size,size), method)
-            new = ImageOps.fit(img, thumb, method)
+            new = ImageOps.fit(img, thumb)
             temp = storage.open(self.image.name, "wb")
-            new.save(temp)
-            print('ok2')
+            new.save(temp, extension)
             img.close()
             super(Product, self).save(*args, **kwargs)
 
