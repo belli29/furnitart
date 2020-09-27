@@ -38,8 +38,9 @@ class Product(models.Model):
         if self.image:
             img = Image.open(self.image)
             new_img = img.resize((500,500), Image.ANTIALIAS)
-            temp = storage.open(self.image.name, "w")
-            new_img.save(temp)
+            temp = storage.open(self.image.name, "wb")
+            extension = "png"
+            new_img.save(temp, extension)
             img.close()
             super(Product, self).save(*args, **kwargs)
 
