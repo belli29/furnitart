@@ -95,7 +95,7 @@
                         <li class="list-inline-item dropdown px-sm-1">
                             <a class="nav-link px-2 {% if request.user.is_authenticated %} text-color-pr {% else %}text-black{% endif %}" href="#" id="user-options" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <div class="text-center">
-                                    <div><i class="{% if request.user.is_superuser %} fas fa-user-ninja fa-lg {% else %}fas fa-user fa-lg {% endif %} "></i></div>
+                                    <div><i class="{% if request.user.is_superuser %} fa fa-power-off fa-lg {% else %}fas fa-user fa-lg {% endif %} "></i></div>
                                     {% if request.user.is_superuser %}
                                         <p class="my-0 text-sm d-none d-md-block">{{request.user.username}}</p>
                                     {% else %}

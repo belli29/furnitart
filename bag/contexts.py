@@ -89,11 +89,11 @@ def bag_contents(request):
 
     # for seller banner
 
-    today = timezone.now().date()
-    today_orders = PreOrder.objects.all().filter(
-        date__gte=timezone.now().date())
+    today = timezone.localtime().date()
+    today_orders = Order.objects.all().filter(
+        date__gte=today)
     today_preorders = PreOrder.objects.all().filter(
-        date__gte=timezone.now().date())
+        date__gte=today)
     today_orders_count = len(today_orders)
     today_preorders_count = len(today_preorders)
 

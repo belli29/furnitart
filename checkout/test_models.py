@@ -1,5 +1,5 @@
 from django.test import TestCase
-from decima import *
+from decimal import *
 from .models import Order, OrderLineItem, PreOrder, PreOrderLineItem
 from products.models import Product
 from django.conf import settings
@@ -189,6 +189,6 @@ class TestProductModel(TestCase):
         total = (product.price)*orderlineitem.quantity
         ie_delivery_fee = total * (
             settings.IRL_STANDARD_DELIVERY_PERCENTAGE/100)
-        grand_total = (ie_delivery_fee + total) * (
+        grand_total = float(ie_delivery_fee + total) * (
             settings.PAY_PAL_DISCOUNT/100)
         self.assertEqual(float(order.grand_total), grand_total)

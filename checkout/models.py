@@ -65,15 +65,14 @@ class Order(models.Model):
             )['lineitem_total__sum'] or 0
         if self.country == 'IE':
             if self.order_total < settings.IRL_FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * (
-                    settings.IRL_STANDARD_DELIVERY_PERCENTAGE/100)
+                self.delivery_cost = self.order_total * \
+                    settings.IRL_STANDARD_DELIVERY_PERCENTAGE / 100
             else:
                 self.delivery_cost = 0
         else:
             if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * (
+                self.delivery_cost = self.order_total * \
                     settings.STANDARD_DELIVERY_PERCENTAGE/100
-                    )
             else:
                 self.delivery_cost = 0
         self.grand_total = self.order_total + self.delivery_cost
@@ -172,16 +171,14 @@ class PreOrder(models.Model):
             Sum('lineitem_total'))['lineitem_total__sum'] or 0
         if self.country == 'IE':
             if self.order_total < settings.IRL_FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * (
-                    settings.IRL_STANDARD_DELIVERY_PERCENTAGE/100
-                    )
+                self.delivery_ie = settings.IRL_STANDARD_DELIVERY_PERCENTAGE
+                self.delivery_cost = self.order_total * self.delivery_ie / 100
             else:
                 self.delivery_cost = 0
         else:
             if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * (
-                    settings.STANDARD_DELIVERY_PERCENTAGE / 100
-                    )
+                self.delivery = settings.STANDARD_DELIVERY_PERCENTAGE
+                self.delivery_cost = self.order_total * self.delivery / 100
             else:
                 self.delivery_cost = 0
         self.total = self.order_total + self.delivery_cost
