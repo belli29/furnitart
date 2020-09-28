@@ -41,13 +41,11 @@ class Product(models.Model):
             size = 500
             thumb = (size, size)
             method = Image.ANTIALIAS
-            extension = "PNG'
             img.thumbnail((size, size), method)
             new = ImageOps.fit(img, thumb)
             temp = storage.open(self.image.name, "wb")
-            new.save(temp, extension)
+            new.save(temp)
             img.close()
             super(Product, self).save(*args, **kwargs)
-
     def __str__(self):
         return self.name
