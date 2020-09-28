@@ -79,7 +79,7 @@ class PreOrderForm(forms.ModelForm):
 class DeliveryForm(forms.ModelForm):
     class Meta:
         model = Delivery
-        exclude = ('order','date')
+        exclude = ('order', 'date')
 
     def __init__(self, *args, **kwargs):
         """

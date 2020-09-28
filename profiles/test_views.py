@@ -66,4 +66,3 @@ class TestView (TestCase):
         set_context_orders = set(context_orders)
         set_user_orders = set(user_orders)
         self.assertEqual(set_context_orders, set_user_orders)
-        

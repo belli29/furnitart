@@ -329,7 +329,7 @@ def invoice_confirmation(request, pre_order_number):
 
 
 def delete_session_chosen_country(request):
-    
+
     del request.session['chosen_country']
     return HttpResponse(status=200)
 
@@ -344,7 +344,7 @@ def quantity_problem(request):
         if item_quantity >= product.available_quantity:
             quantity_problem = True
             break
-    if quantity_problem == False:
+    if not quantity_problem:
         # OK Stripe Payment and order creation can go ahead
         return HttpResponse(status=200)
 

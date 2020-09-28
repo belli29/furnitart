@@ -122,13 +122,14 @@ class TestView (TestCase):
             'tracking_number': '12345',
             'provider': 'test provider',
             'expected_wait': 22,
-            'order':order,
+            'order': order,
         }
 
-        response = self.client.post(f'/products/toggle_shipped/{order.id}', delivery_info)
+        response = self.client.post(
+            f'/products/toggle_shipped/{order.id}', delivery_info)
         order = Order.objects.get(pk=order.id)
         self.assertTrue(order.shipped)
-        #check if associated delivery was generated
+        # check if associated delivery was generated
         delivery_generated = False
         delivery = order.delivery.all()[0]
         if (delivery_info['tracking_number'] == delivery.tracking_number and
@@ -136,7 +137,7 @@ class TestView (TestCase):
                 delivery_info['expected_wait'] == delivery.expected_wait):
             delivery_generated = True
         self.assertTrue(delivery_generated)
-        #request to unship the order
+        # request to unship the order
         response = self.client.post(f'/products/toggle_shipped/{order.id}')
         order = Order.objects.get(pk=order.id)
         self.assertFalse(order.shipped)
@@ -154,11 +155,11 @@ class TestView (TestCase):
             )
         user.save()
         self.client.login(username=user.username, password='12345')
-        #request to make product inactive
+        # request to make product inactive
         response = self.client.post(f'/products/toggle_active/{product.id}')
         product = Product.objects.get(pk=product.id)
         self.assertFalse(product.is_active)
-        #request to make product active
+        # request to make product active
         response = self.client.post(f'/products/toggle_active/{product.id}')
         product = Product.objects.get(pk=product.id)
         self.assertTrue(product.is_active)
@@ -182,7 +183,9 @@ class TestView (TestCase):
             )
         user.save()
         self.client.login(username=user.username, password='12345')
-        #request to make preorder invalid
-        response = self.client.post(f'/products/invalid_pre_order/{preorder.order_number}')
+        # request to make preorder invalid
+        response = self.client.post(
+            f'/products/invalid_pre_order/{preorder.order_number}'
+            )
         preorder = PreOrder.objects.get(pk=preorder.id)
         self.assertEqual("INV", preorder.status)

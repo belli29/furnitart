@@ -35,14 +35,14 @@ class Product(models.Model):
     is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
-        super(Product,self).save(*args, **kwargs)
+        super(Product, self).save(*args, **kwargs)
         if self.image:
             img = Image.open(self.image)
             size = 500
             thumb = (size, size)
             method = Image.ANTIALIAS
-            extension='PNG'
-            img.thumbnail((size,size), method)
+            extension = "PNG'
+            img.thumbnail((size, size), method)
             new = ImageOps.fit(img, thumb)
             temp = storage.open(self.image.name, "wb")
             new.save(temp, extension)

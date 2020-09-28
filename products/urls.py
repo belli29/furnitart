@@ -13,4 +13,4 @@ urlpatterns = [
     path('confirm_pre_order/<order_number>', views.confirm_pre_order, name='confirm_pre_order'),
     path('invalid_pre_order/<order_number>', views.invalid_pre_order, name='invalid_pre_order'),
     path('toggle_shipped/<int:order_id>', views.toggle_shipped, name='toggle_shipped'),
-]   
+]

@@ -6,7 +6,6 @@ from checkout.models import Order, PreOrder
 from django.utils import timezone
 
 
-
 def bag_contents(request):
     bag_items = []
     total = 0
@@ -91,8 +90,10 @@ def bag_contents(request):
     # for seller banner
 
     today = timezone.now().date()
-    today_orders = PreOrder.objects.all().filter(date__gte=timezone.now().date())
-    today_preorders = PreOrder.objects.all().filter(date__gte=timezone.now().date())
+    today_orders = PreOrder.objects.all().filter(
+        date__gte=timezone.now().date())
+    today_preorders = PreOrder.objects.all().filter(
+        date__gte=timezone.now().date())
     today_orders_count = len(today_orders)
     today_preorders_count = len(today_preorders)
 
@@ -109,7 +110,7 @@ def bag_contents(request):
         'delivery_problem': delivery_problem,
         'today': today,
         'today_orders_count': today_orders_count,
-        'today_preorders_count':today_preorders_count, 
+        'today_preorders_count': today_preorders_count,
     }
 
     return context

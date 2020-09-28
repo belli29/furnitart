@@ -11,6 +11,7 @@ from .forms import ProductForm
 from checkout.models import Order, OrderLineItem, PreOrder, Delivery
 from checkout.forms import DeliveryForm
 
+
 def all_products(request):
     """view showing all products, including sorting and search queried"""
     # save current parameters in a variable
@@ -107,7 +108,8 @@ def management(request):
     delivery_form = DeliveryForm()
     orders = Order.objects.all()
     orders = orders.order_by("-date")
-    preorders = PreOrder.objects.all().exclude(status="INV").exclude(status="UPG")
+    preorders = PreOrder.objects.all()
+    preorders = preorders.exclude(status="INV").exclude(status="UPG")
     preorders = preorders.order_by("-date")
     pay_pal_filter = False
     shipped_filter = False
@@ -257,7 +259,6 @@ def delete_product(request, product_id):
     return redirect(reverse('list_products'))
 
 
-
 @login_required
 def toggle_active(request, product_id):
     """ Toggle a product is_active field """
@@ -361,7 +362,11 @@ def invalid_pre_order(request, order_number):
     pre_order.status = "INV"
     pre_order.save()
     # success message
-    messages.success(request, f'pre_order {pre_order.order_number} marked as invalid or expired. Avaialbility has been replenished')
+    messages.success(
+        request,
+        f'pre_order {pre_order.order_number} marked as invalid or expired.'
+        'Avaialbility has been replenished'
+        )
     return redirect(reverse('products_management'))
 
 
@@ -388,11 +393,12 @@ def toggle_shipped(request, order_id):
                 order=order
             )
             delivery.save()
-            messages.success(request,
+            messages.success(
+                request,
                 f"Order {order.order_number} confirmed as shipped!\n"
                 f"Delivery {delivery.tracking_number} by {delivery.provider}"
                 ' has been created.'
-            )
+                )
             # send email to customer
             cust_email = order.email
             subject = render_to_string(
@@ -401,7 +407,11 @@ def toggle_shipped(request, order_id):
                 )
             body = render_to_string(
                 'checkout/confirmation_emails/order_shipped_body.txt',
-                {'order': order, 'contact_email': settings.DEFAULT_FROM_EMAIL, 'delivery': delivery})
+                {'order': order,
+                 'contact_email': settings.DEFAULT_FROM_EMAIL,
+                 'delivery': delivery
+                 }
+                )
             send_mail(
                 subject,
                 body,

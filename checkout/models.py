@@ -19,11 +19,14 @@ class Order(models.Model):
     email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=False, blank=False)
     country = CountryField(blank_label='Country *', null=False, blank=False)
-    postcode = models.CharField(max_length=20, null=True, blank=True)
+    postcode = models.CharField(
+        max_length=20, null=True, blank=True)
     town_or_city = models.CharField(max_length=40, null=False, blank=False)
     street_address1 = models.CharField(max_length=80, null=False, blank=False)
-    street_address2 = models.CharField(max_length=80, null=True, blank=True)
-    county = models.CharField(max_length=80, null=True, blank=True)
+    street_address2 = models.CharField(
+        max_length=80, null=True, blank=True)
+    county = models.CharField(
+        max_length=80, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     delivery_cost = models.DecimalField(max_digits=6, decimal_places=2,
                                         null=False, default=0)
@@ -32,11 +35,19 @@ class Order(models.Model):
     grand_total = models.DecimalField(max_digits=10, decimal_places=2,
                                       null=False, default=0)
     original_bag = models.TextField(null=False, blank=False, default='')
-    stripe_pid = models.CharField(max_length=254, null=False,
-                                  blank=False, default='')
+    stripe_pid = models.CharField(
+        max_length=254,
+        null=False,
+        blank=False,
+        default=''
+        )
     shipped = models.BooleanField(default=False)
-    pp_transaction_id = models.CharField(max_length=254, null=False,
-                                  blank=False, default='')
+    pp_transaction_id = models.CharField(
+        max_length=254,
+        null=False,
+        blank=False,
+        default=''
+        )
 
     def _generate_order_number(self):
         """
@@ -54,12 +65,15 @@ class Order(models.Model):
             )['lineitem_total__sum'] or 0
         if self.country == 'IE':
             if self.order_total < settings.IRL_FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * settings.IRL_STANDARD_DELIVERY_PERCENTAGE / 100
+                self.delivery_cost = self.order_total * (
+                    settings.IRL_STANDARD_DELIVERY_PERCENTAGE/100)
             else:
                 self.delivery_cost = 0
         else:
             if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
+                self.delivery_cost = self.order_total * (
+                    settings.STANDARD_DELIVERY_PERCENTAGE/100
+                    )
             else:
                 self.delivery_cost = 0
         self.grand_total = self.order_total + self.delivery_cost
@@ -98,7 +112,8 @@ class OrderLineItem(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f'product number {self.product.id} on order {self.order.order_number}'
+        return f'product number {self.product.id}' \
+               f' on order {self.order.order_number}'
 
 
 class PreOrder(models.Model):
@@ -114,11 +129,14 @@ class PreOrder(models.Model):
     email = models.EmailField(max_length=254, null=False, blank=False)
     phone_number = models.CharField(max_length=20, null=False, blank=False)
     country = CountryField(blank_label='Country *', null=False, blank=False)
-    postcode = models.CharField(max_length=20, null=True, blank=True)
+    postcode = models.CharField(
+        max_length=20, null=True, blank=True)
     town_or_city = models.CharField(max_length=40, null=False, blank=False)
     street_address1 = models.CharField(max_length=80, null=False, blank=False)
-    street_address2 = models.CharField(max_length=80, null=True, blank=True)
-    county = models.CharField(max_length=80, null=True, blank=True)
+    street_address2 = models.CharField(
+        max_length=80, null=True, blank=True)
+    county = models.CharField(
+        max_length=80, null=True, blank=True)
     date = models.DateTimeField(auto_now_add=True)
     delivery_cost = models.DecimalField(max_digits=6, decimal_places=2,
                                         null=False, default=0)
@@ -126,18 +144,18 @@ class PreOrder(models.Model):
                                       decimal_places=2, null=False, default=0)
     grand_total = models.DecimalField(max_digits=10, decimal_places=2,
                                       null=False, default=0)
-    
-    STATUS_CHOICES= [
+
+    STATUS_CHOICES = [
         ('PEND', 'Pending'),
         ('INV', 'Invalid or experired'),
         ('UPG', 'Upgraded to order'),
     ]
 
     status = models.CharField(max_length=9,
-                  choices=STATUS_CHOICES,
-                  default="PEND",
-                  null=False,
-                  blank=False)
+                              choices=STATUS_CHOICES,
+                              default="PEND",
+                              null=False,
+                              blank=False)
 
     def _generate_order_number(self):
         """
@@ -150,15 +168,20 @@ class PreOrder(models.Model):
         Update grand total each time a line item is added,
         accounting for delivery costs.
         """
-        self.order_total = self.lineitems.aggregate(Sum('lineitem_total'))['lineitem_total__sum'] or 0
+        self.order_total = self.lineitems.aggregate(
+            Sum('lineitem_total'))['lineitem_total__sum'] or 0
         if self.country == 'IE':
             if self.order_total < settings.IRL_FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * settings.IRL_STANDARD_DELIVERY_PERCENTAGE / 100
+                self.delivery_cost = self.order_total * (
+                    settings.IRL_STANDARD_DELIVERY_PERCENTAGE/100
+                    )
             else:
                 self.delivery_cost = 0
         else:
             if self.order_total < settings.FREE_DELIVERY_THRESHOLD:
-                self.delivery_cost = self.order_total * settings.STANDARD_DELIVERY_PERCENTAGE / 100
+                self.delivery_cost = self.order_total * (
+                    settings.STANDARD_DELIVERY_PERCENTAGE / 100
+                    )
             else:
                 self.delivery_cost = 0
         self.total = self.order_total + self.delivery_cost
@@ -201,15 +224,19 @@ class PreOrderLineItem(models.Model):
         return f'product number {self.product.id}' \
             'on order {self.order.order_number}'
 
+
 class Delivery(models.Model):
     tracking_number = models.CharField(max_length=32, null=False)
     date = models.DateTimeField(auto_now_add=True, null=True)
-    order = models.ForeignKey(Order, on_delete=models.PROTECT,
-                                     null=False, blank=False,
-                                     related_name='delivery')
+    order = models.ForeignKey(
+        Order,
+        on_delete=models.PROTECT,
+        null=False,
+        blank=False,
+        related_name='delivery'
+        )
     provider = models.CharField(max_length=50, null=False, blank=False)
     expected_wait = models.IntegerField(null=False, blank=False)
-    
+
     def __str__(self):
         return self.tracking_number
-

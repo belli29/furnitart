@@ -1,5 +1,6 @@
 from django.test import TestCase
 
+
 class TestView (TestCase):
 
     def test_index(self):
@@ -7,7 +8,7 @@ class TestView (TestCase):
         response = self.client.get('')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'home/index.html')
-    
+
     def test_contact(self):
         """testing if the contact page works and template used"""
         response = self.client.get('/contact/')

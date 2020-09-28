@@ -21,7 +21,8 @@ def profile(request):
     else:
         form = UserProfileForm(instance=profile)
     orders = profile.orders.all().order_by("-date")
-    preorders = profile.preorders.all().exclude(status="INV").exclude(status="UPG").order_by("-date")
+    preorders = profile.preorders.all()
+    preorders = preorders.exclude(status="INV").exclude(status="UPG").order_by("-date")
     template = 'profiles/profile.html'
     context = {
         'profile': profile,
