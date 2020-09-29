@@ -57,17 +57,20 @@
                             <p class=" mx-auto mt-2 pt-0 ">{{ product.description }}</p>
                             <strong class="mt-5">Size:</strong>
                             <ul>
-                                <li>High:{{product.h}}</li>
-                                <li>Wide:{{product.w}}</li>
-                                <li>Long:{{product.l}}</li>
+                                <li>High:{{product.h}} cms</li>
+                                <li>Wide:{{product.w}} cms</li>
+                                <li>Long:{{product.l}} cms</li>
                             </ul>
                             <small class="text-muted">
                                 <i class="fas fa-truck mr-1"></i>
                                 Delivery available {% if product.euro_shipping %}to all Europe  {% else%} only to Ireland{% endif %}
                             </small>
-                            <div class="mt-5">
-                                {% include 'products/includes/quantity_form.html' %}
-                            </div>
+                            {% if request.user.is_superuser%}
+                            {% else %}
+                                <div class="mt-5">
+                                    {% include 'products/includes/quantity_form.html' %}
+                                </div>
+                            {% endif %}
                             
                             <div class=" mt-5">
                                 <a href="{% url 'products' %}" class=" btn btn-outline-pr rounded-0 btn-lg ">

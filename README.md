@@ -154,6 +154,10 @@ All the logic that assigned a specific delivery fee or detected a delivery probl
 The whole checkout page had to be made responsive to the decision of the guest to pay either by PayPal or Stripe.
 This was graphically achieved with scripts, whereas different view handles the logic.
 
+- Products and order management: modals
+The seller has the possiblity to take action and send automatically an email to customers.
+In order to avoid mistakes and to make the management section more user-friendly, modal windows have been addedd.
+
 - Pictures upload
 The app is optimized for displaying pictures with the same width and height. 
 This was achived with the use of CSS media queries.

@@ -90,6 +90,7 @@ def bag_contents(request):
     # for seller banner
 
     today = timezone.now()
+    today = timezone.now().date()
     today_orders = Order.objects.all().filter(
         date__gte=today)
     today_preorders = PreOrder.objects.all().filter(
