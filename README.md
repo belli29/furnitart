@@ -155,8 +155,9 @@ The whole checkout page had to be made responsive to the decision of the guest t
 This was graphically achieved with scripts, whereas different view handles the logic.
 
 - Pictures upload
-The app is optimized for displaying pictures with the same width and height. For this reason pictures loaded by seller are automatically reshaped.
-This happens because the model Product save method has been overwritten by a custom save method. Images are, then reshaped through PIL library.
+The app is optimized for displaying pictures with the same width and height. 
+This was achived with the use of CSS media queries.
+Initially it was considered the possiblity to modify the pictures directly before saving them. This approach was eventually not followed as the CSS one was considered more user-friendly,allowing the use to see the access the full original picture.
 
 #### Known bugs
 

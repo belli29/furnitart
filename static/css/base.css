@@ -104,6 +104,11 @@ body {
     
     
 }
+
+.card-products{
+    height: 80vw ;
+}
+
 /* ------------------------------- forms */
 .form-control{
     border-radius:0;
@@ -173,7 +178,6 @@ body {
 .allauth-form-inner-content a {
 	color: black;
 }
-
 
 /* ------------------------------- testing tools */
 .test{
@@ -411,7 +415,7 @@ from https://codepen.io/designcouch/pen/Atyop */
 @media (min-width: 1200px) {
   .container {
     max-width: 80%;
-  }
+    }
 }
 
 /* fixed top navbar only on medium and up */
@@ -423,7 +427,6 @@ from https://codepen.io/designcouch/pen/Atyop */
     body {
     height: calc(100vh - 164px);
    }
-    
 }
 
 /* pad the top a bit when navbar is collapsed on mobile */
@@ -435,4 +438,22 @@ from https://codepen.io/designcouch/pen/Atyop */
     body {
         height: calc(100vh - 150px);
     }
+}
+/* setting height of pictures in relation to responsive grid width */
+
+@media only screen and (max-width: 992px) and (min-width: 576px)  {
+    .card-products {
+        height: 40vw
+    }     
+}
+
+@media only screen and (min-width: 992px) and (max-width: 1200px)  {
+    .card-products {
+        height: 30vw
+    }     
+}
+@media only screen and (min-width: 1200px)  {
+    .card-products {
+        height: 20vw
+    }     
 }
