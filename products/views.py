@@ -190,7 +190,7 @@ def add_product(request):
     context = {
         "form": form,
         "from_management": from_management,
-    }
+    add_product}
     template = 'products/add_product.html'
     return render(request, template, context)
 
