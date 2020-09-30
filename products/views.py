@@ -185,14 +185,14 @@ def add_product(request):
 
     else:
         form = ProductForm()
-        # define if the user is coming from management dashboard
-        from_management = request.GET.get("from_management", False)
-        context = {
-            "form": form,
-            "from_management": from_management,
-        }
-        template = 'products/add_product.html'
-        return render(request, template, context)
+    # define if the user is coming from management dashboard
+    from_management = request.GET.get("from_management", False)
+    context = {
+        "form": form,
+        "from_management": from_management,
+    }
+    template = 'products/add_product.html'
+    return render(request, template, context)
 
 
 @login_required
