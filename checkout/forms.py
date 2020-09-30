@@ -87,7 +87,7 @@ class DeliveryForm(forms.ModelForm):
         labels and set autofocus on first field
         """
         super().__init__(*args, **kwargs)
-
         self.fields['tracking_number'].widget.attrs['autofocus'] = True
         self.fields['expected_wait'].label = "Approx delivery days"
         self.fields['provider'].label = "Delivery Company"
+        self.fields['expected_wait'].widget.attrs['min'] = 1

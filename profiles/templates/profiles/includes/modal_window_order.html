@@ -5,21 +5,21 @@
             <div class="modal-header">
                 <div class="modal-title mx-auto order-modal">
                 {{order.order_number}}
-                {% if order.stripe_pid != "" %}
-                    <p class="text-color-pr">
-                        <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
-                        {{ order.stripe_pid }}
-                    </p>
-                {% else %}
-                    <p class="text-color-pr">
-                        This order procedes from a preorder made on<br>
-                        {{order.preorder.date}}
+                    {% if order.stripe_pid != "" %}
                         <p class="text-color-pr">
-                            <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
-                            {{ order.pp_transaction_id }}
+                            <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
+                            {{ order.stripe_pid }}
                         </p>
-                    </p>
-                {% endif %}
+                    {% else %}
+                        <p class="text-color-pr">
+                            This order procedes from a preorder made on<br>
+                            {{order.preorder.date}}
+                            <p class="text-color-pr">
+                                <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
+                                {{ order.pp_transaction_id }}
+                            </p>
+                        </p>
+                    {% endif %}
                 </div>
             </div>
             <div class="modal-body">

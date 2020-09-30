@@ -105,6 +105,15 @@ The project has also been tested manually. Below some tests.
     1. Select a product and go to checkout.
     2. Select PayPal payment and process preorder.
     3. Notice discount has been applied on the preorder confirmation.
+6. Cancelled preorders disappear from customer profile and availability of products is autoreplenished.
+    1. Log in as customer.
+    2. Create a preorder.
+    3. Check preorder is available.
+    4. Log out and log in as seller.
+    5. Mark preorder as invalid / expired. 
+    6. Check in product list that availability has been replenished.
+    7. Log out and log in as customer.
+    8. Check preorder is not available anymore in the preorder list.
 
 ### How to reproduce tests
 

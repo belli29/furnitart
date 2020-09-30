@@ -32,7 +32,8 @@
         {% endif %}
         <a class="button secondaryAction" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
         <p class="text-center">
-            <button class="primaryAction btn-outline-pr" type="submit">{% trans "Sign In" %}</button>
+            <a class="btn btn-outline-pr rounded-0 mt-1" href="{% url 'home' %}"> Go back </a>
+            <button class="btn btn-outline-pr mt-1" type="submit">{% trans "Sign In" %}</button>
         </p>
     </form>
 {% endblock %}
