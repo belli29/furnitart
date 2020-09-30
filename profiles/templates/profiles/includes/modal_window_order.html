@@ -6,15 +6,15 @@
                 <div class="modal-title mx-auto order-modal">
                 {{order.order_number}}
                     {% if order.stripe_pid != "" %}
-                        <p class="text-color-pr">
+                        <p class="text-color-pr text-center">
                             <i class="fa fa-cc-stripe fa-2x " aria-hidden="true"></i>
                             {{ order.stripe_pid }}
                         </p>
                     {% else %}
-                        <p class="text-color-pr">
+                        <p class="text-color-pr text-center">
                             This order procedes from a preorder made on<br>
                             {{order.preorder.date}}
-                            <p class="text-color-pr">
+                            <p class="text-color-pr text-center">
                                 <i class="fa fa-cc-paypal fa-2x" aria-hidden="true"></i>
                                 {{ order.pp_transaction_id }}
                             </p>
@@ -105,8 +105,8 @@
                     </div>
                     {% endfor %}
                 {% endif %}
-                <hr>  
-                <button type="button" class="btn btn-outline-dark rounded-0 " data-dismiss="modal">Close</button>
+                <hr>
+                <button type="button" class="btn btn-outline-dark rounded-0" data-dismiss="modal">Close</button>
             </div>
         </div>
     </div>
