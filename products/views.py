@@ -364,7 +364,7 @@ def invalid_pre_order(request, order_number):
     # success message
     messages.success(
         request,
-        f'pre_order {pre_order.order_number} marked as invalid or expired.'
+        f'preorder {pre_order.order_number} marked as invalid or expired.'
         'Avaialbility has been replenished'
         )
     return redirect(reverse('products_management'))
