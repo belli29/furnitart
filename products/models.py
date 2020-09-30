@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 class Category(models.Model):
     class Meta:
@@ -18,16 +19,26 @@ class Product(models.Model):
                                  blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=254)
     description = models.TextField()
-    available_quantity = models.IntegerField(default=20)
-    sold = models.IntegerField(default=0)
-    reserved = models.IntegerField(default=0)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    available_quantity = models.PositiveIntegerField(default=20)
+    sold = models.PositiveIntegerField(default=0)
+    reserved = models.PositiveIntegerField(default=0)
+    price = models.DecimalField(
+        max_digits=6, decimal_places=2, validators=[MinValueValidator(1)]
+        )
     image = models.ImageField(null=True, blank=True)
     euro_shipping = models.BooleanField(default=True)
-    l = models.IntegerField(default=20)
-    h = models.IntegerField(default=20)
-    w = models.IntegerField(default=20)
-    weight = models.IntegerField(default=20)
+    l = models.PositiveIntegerField(
+        default=10, validators=[MinValueValidator(1), MaxValueValidator(999)]
+        )
+    h = models.PositiveIntegerField(
+        default=10, validators=[MinValueValidator(1), MaxValueValidator(999)]
+        )
+    w = models.PositiveIntegerField(
+        default=10, validators=[MinValueValidator(1), MaxValueValidator(999)]
+        )
+    weight = models.PositiveIntegerField(
+        default=10, validators=[MinValueValidator(1), MaxValueValidator(99999)]
+        )
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

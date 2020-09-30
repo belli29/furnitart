@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, HttpResponse
 from django.shortcuts import redirect, reverse
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -190,7 +190,7 @@ def add_product(request):
     context = {
         "form": form,
         "from_management": from_management,
-    add_product}
+    }
     template = 'products/add_product.html'
     return render(request, template, context)
 
@@ -421,7 +421,7 @@ def toggle_shipped(request, order_id):
         else:
             messages.error(
                 request,
-                'Something went wrong. Delicery cannnot be added.'
+                'Something went wrong. Delivery cannnot be added.'
             )
     # amend order as not shipped
     else:

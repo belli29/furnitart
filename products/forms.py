@@ -20,8 +20,4 @@ class ProductForm(forms.ModelForm):
         self.fields['l'].label = "Long in cms"
         self.fields['h'].label = "High in cms"
         self.fields['w'].label = "Wide in cms"
-        self.fields['available_quantity'].widget.attrs['min'] = 1
-        self.fields['l'].widget.attrs['min'] = 1
-        self.fields['h'].widget.attrs['min'] = 1
-        self.fields['w'].widget.attrs['min'] = 1
-        self.fields['weight'].widget.attrs['min'] = 1
+

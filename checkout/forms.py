@@ -90,4 +90,4 @@ class DeliveryForm(forms.ModelForm):
         self.fields['tracking_number'].widget.attrs['autofocus'] = True
         self.fields['expected_wait'].label = "Approx delivery days"
         self.fields['provider'].label = "Delivery Company"
-        self.fields['expected_wait'].widget.attrs['min'] = 1
+

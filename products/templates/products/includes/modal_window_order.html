@@ -84,6 +84,14 @@
                     <div class="col-6">Country</div>
                     <div class="col-6 text-small">{{ order.country.name }}</div>
                 </div>
+                <div class="row">
+                    <div class="col-6">Phone Number</div>
+                    <div class="col-6 text-small">{{ order.phone_number }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Email address</div>
+                    <div class="col-6 text-small">{{ order.email }}</div>
+                </div>               
                 {% if order.shipped %}
                     {% for delivery in order.delivery.all %}
                     <hr>

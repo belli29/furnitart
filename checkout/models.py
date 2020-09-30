@@ -4,7 +4,7 @@ import uuid
 from django.db import models
 from django.db.models import Sum
 from django.conf import settings
-
+from django.core.validators import MinValueValidator
 from django_countries.fields import CountryField
 from products.models import Product
 from profiles.models import UserProfile
@@ -233,7 +233,7 @@ class Delivery(models.Model):
         related_name='delivery'
         )
     provider = models.CharField(max_length=50, null=False, blank=False)
-    expected_wait = models.IntegerField(null=False, blank=False)
+    expected_wait = models.PositiveIntegerField(null=False, blank=False)
 
     def __str__(self):
         return self.tracking_number

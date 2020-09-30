@@ -70,6 +70,14 @@
                     <div class="col-6">Country</div>
                     <div class="col-6 text-small">{{ order.country.name }}</div>
                 </div>
+                <div class="row">
+                    <div class="col-6">Phone Number</div>
+                    <div class="col-6 text-small">{{ order.phone_number }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-6">Email address</div>
+                    <div class="col-6 text-small">{{ order.email }}</div>
+                </div>      
                 <hr>  
                 <button type="button" class="btn btn-outline-dark rounded-0 mt-1 " data-dismiss="modal">Close</button>
                 <a href="" class="btn rounded-0 border-color-pr mt-1 " data-toggle="modal" data-target="#confirm-order-{{order.id}}">
