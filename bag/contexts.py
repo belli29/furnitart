@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from products.models import Product
 from checkout.models import Order, PreOrder
 from django.utils import timezone
+from django.utils.timezone import localdate
 
 
 def bag_contents(request):
@@ -88,9 +89,7 @@ def bag_contents(request):
     grand_total = delivery + total
 
     # for seller banner
-
-    today = timezone.now()
-    today = timezone.now().date()
+    today = timezone.now().replace(hour=0, minute=0, second=0)
     today_orders = Order.objects.all().filter(
         date__gte=today)
     today_preorders = PreOrder.objects.all().filter(
